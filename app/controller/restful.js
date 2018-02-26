@@ -11,14 +11,17 @@ class RestfulController extends Controller{
     async infos(){
 
         console.log(this.ctx.request.body);
-        const {page,start,limit}=this.ctx.request.body;
-        console.log(start);
+        const {page,start,limit,invokeName}=this.ctx.request.body;
+        let where=(invokeName && !/\s/.test(invokeName))?{name:invokeName}:{};
+        let wherecount=(invokeName && !/\s/.test(invokeName))?`where name='${invokeName}'`:'';
+        console.log(wherecount);
+        console.log(page,start,limit,invokeName);
         let result={};
-        let sdsd=await this.app.mysql.query('select count(1) total from invoke_info', []);
-        let [{total}]=await this.app.mysql.query('select count(1) total from invoke_info', []);
+        let [{total}]=await this.app.mysql.query(`select count(1) total from invoke_info ${wherecount}`, []);
         let [...content]=await this.app.mysql.select('invoke_info',{
             limit: limit,
             offset: start,
+            where
         });
         result.totalElements=total;
         result.content=content;
@@ -49,6 +52,14 @@ class RestfulController extends Controller{
         const entity=this.ctx.request.body;
         console.log(entity);
         this.ctx.body=await this.service.restful.invoke(entity,entity.queryMap);
+    }
+
+    async delete(){
+        const result = await this.app.mysql.delete('invoke_info', {
+            id: this.ctx.params.id
+        });
+        const updateSuccess = result.affectedRows === 1;
+        this.ctx.body={success:updateSuccess};
     }
 }
 

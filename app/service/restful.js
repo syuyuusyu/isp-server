@@ -16,8 +16,10 @@ class RestfulService extends Service{
             result.success=true;
             result.msg='成功';
         }catch (e){
-            console.log(e.toString());
+            console.log('----');
+            console.log(e);
             result.success=false;
+            result.errInfo=e.toString();
         }
         return result;
     }

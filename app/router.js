@@ -10,6 +10,7 @@ module.exports = app => {
     router.post('/invokeInfo/invokes',controller.restful.invokes);
     router.post('/invokeInfo/test',controller.restful.test);
     router.post('/invokeInfo/save',controller.restful.save);
+    router.delete('/invokeInfo/delete/:id',controller.restful.delete);
 
     //获取菜单
     router.get('/menu/currentMenu/:parentId',controller.menu.currentMenu);
