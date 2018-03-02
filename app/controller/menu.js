@@ -2,7 +2,9 @@ const Controller=require('egg').Controller;
 
 class MenuController extends Controller{
     async currentMenu(){
-        this.ctx.body=await this.app.mysql.select('menu',{
+        const roleMenuId=this.ctx.session.roleMenuId;
+        console.log(this.ctx.session);
+        this.ctx.body=await this.app.mysql.select('isp_menu',{
             where:{
                 parent_id:this.ctx.params.parentId
             }
@@ -10,9 +12,6 @@ class MenuController extends Controller{
 
     }
 
-    test(){
-        this.ctx.body={a:1};
-    }
 }
 
 module.exports=MenuController;
