@@ -7,11 +7,13 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1517886399328_119';
 
   // add your config here
-  config.middleware = ['author'];
+  config.middleware = [
+      'author',
+  ];
 
   config.author={
     ignore:'/login'
-  }
+  };
 
   config.mysql={
       client: {
@@ -39,7 +41,7 @@ module.exports = appInfo => {
             password: '',
             db: 0,
         },
-    }
+    };
 
   config.security={
       csrf: {

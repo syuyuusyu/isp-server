@@ -23,14 +23,15 @@ class HomeController extends Controller {
             menuId.forEach(m=>set.add(m.menu_id));
             set.forEach(m=>roleMenuId.push(m));
             token = jwt.sign({payload:user}, this.app.secret, {
-                expiresIn: 30
+                //expiresIn: 30
             });
+            console.log(token);
             this.app.redis.set(token,{
                 user,roles,roleMenuId
             });
-            delete user.id;
         }
         this.ctx.body={msg,user,token};
+        //return {msg,user,token};
   }
 }
 
