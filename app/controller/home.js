@@ -25,10 +25,9 @@ class HomeController extends Controller {
             token = jwt.sign({payload:user}, this.app.secret, {
                 //expiresIn: 30
             });
-            console.log(token);
-            this.app.redis.set(token,{
-                user,roles,roleMenuId
-            });
+            this.app.redis.set(token,JSON.stringify({user,roles,roleMenuId}));
+            let sd=await this.app.redis.get(token);
+            this.app.logger.info(JSON.parse(sd));
         }
         this.ctx.body={msg,user,token};
         //return {msg,user,token};

@@ -5,7 +5,6 @@ class RoleController extends Controller{
     async allRoles(){
 
         let [...content]=await this.app.mysql.select('isp_role',{});
-        console.log(content);
         this.ctx.body=content;
     }
 
@@ -53,10 +52,25 @@ class RoleController extends Controller{
             await conn.rollback(); // 一定记得捕获异常后回滚事务！！
             throw err;
         }
-        console.log(result);
         const updateSuccess = result.affectedRows === menuIds.length;
         console.log(updateSuccess);
         this.ctx.body={success:updateSuccess};
+    }
+
+    async roleMenu(){
+        let menu=await this.app.mysql.select('isp_menu',{
+            where:{
+                parent_id:this.ctx.params.id
+            }
+        });
+        this.ctx.body=menu;
+    }
+
+    async roleMenuIds(){
+
+        let menuIds=await this.app.mysql.query(`select menu_id from isp_role_menu where role_id=?`,[this.ctx.params.roleId]);
+        console.log(menuIds);
+        this.ctx.body=menuIds;
     }
 }
 

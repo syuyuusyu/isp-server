@@ -12,7 +12,7 @@ module.exports = appInfo => {
   ];
 
   config.author={
-    ignore:'/login'
+    ignore:/\/test|\/login/,
   };
 
   config.mysql={
