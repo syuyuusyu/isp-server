@@ -30,6 +30,9 @@ module.exports = app => {
     router.get('/role/roleMenu/:id',controller.role.roleMenu);
     //角色对应的菜单ID
     router.get('/role/roleMenuIds/:roleId',controller.role.roleMenuIds);
+    //用户对应角色
+    router.get('/role/userRole/:userId',controller.role.userRole);
+
 
     //获取菜单
     router.get('/menu/currentMenu/:parentId',controller.menu.currentMenu);
@@ -38,4 +41,22 @@ module.exports = app => {
     //用户
     //用户列表
     router.get('/user/allUsers',controller.user.allUers);
+    //保存用户角色
+    router.post('/user/saveUserRole',controller.user.saveUserRole);
+
+
+    //按钮
+    //对应菜单下的按钮
+    router.get('/btn/menuButton/:menuId',controller.button.menuButton);
+    //按钮对应的角色
+    router.get('/btn/buttonRole/:buttonId',controller.button.buttonRole);
+    //保存按钮对应的角色
+    router.post('/btn/saveButtonRole',controller.button.saveButtonRole);
+    //保存按钮
+    router.post('/btn/save',controller.button.save);
+    //获取所有按钮,并根据角色判断按钮是否可用
+    router.get('/btn/allButtons/',controller.button.allButtons);
+    //删除按钮
+    router.delete('/btn/delete/:id',controller.button.delete);
+
 };

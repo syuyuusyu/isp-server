@@ -26,10 +26,8 @@ class HomeController extends Controller {
                 //expiresIn: 30
             });
             this.app.redis.set(token,JSON.stringify({user,roles,roleMenuId}));
-            let sd=await this.app.redis.get(token);
-            this.app.logger.info(JSON.parse(sd));
         }
-        this.ctx.body={msg,user,token};
+        this.ctx.body={msg,user,token,roles};
         //return {msg,user,token};
   }
 }
