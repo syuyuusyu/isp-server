@@ -11,6 +11,14 @@ class MenuController extends Controller{
 
     }
 
+    async currentRoleMenu(){
+        let sql=`select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where rm.role_id in (?) order by m.id`;
+        let token=this.ctx.request.header['access-token'];
+        let sd=await this.service.authorService.getAuthor(token);
+        let result=await this.app.mysql.query(sql,[sd.roles.map(r=>r.id)]);
+        this.ctx.body=result;
+    }
+
 
 
 }

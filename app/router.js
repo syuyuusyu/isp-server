@@ -19,7 +19,7 @@ module.exports = app => {
     //获取角色列表
     router.get('/role/allRoles',controller.role.allRoles);
     //检查角色名唯一
-    router.get('/role/codeUnique/:code',controller.role.codeUnique);
+    router.get('/role/codeUnique/:code/:systemId',controller.role.codeUnique);
     //保存角色
     router.post('/role/save',controller.role.save);
     //删除角色
@@ -35,8 +35,10 @@ module.exports = app => {
 
 
     //获取菜单
+    //根据父节点ID和当前角色获取子菜单
     router.get('/menu/currentMenu/:parentId',controller.menu.currentMenu);
-    //router.get('/menu/test',controller.menu.test);
+    //获取当前角色下的所有菜单
+    router.get('/menu/currentRoleMenu/',controller.menu.currentRoleMenu);
 
     //用户
     //用户列表
@@ -59,4 +61,21 @@ module.exports = app => {
     //删除按钮
     router.delete('/btn/delete/:id',controller.button.delete);
 
+    //系统
+    //获取应用系统列表
+    router.get('/sys/allSystem',controller.system.allSystem);
+    //检查系统编码唯一性
+    router.get('/sys/checkUnique/:code',controller.system.checkUnique);
+    //保存系统
+    router.post('/sys/save',controller.system.save);
+    //删除系统
+    router.delete('/sys/delete/:id',controller.system.delete);
+
+    //系统功能
+    //获取对应系统的功能列表
+    router.get('/op/operations/:sysId',controller.operation.operations);
+    //保存功能
+    router.post('/op/save',controller.operation.save);
+    //删除功能
+    router.delete('/op/delete/:id',controller.operation.delete);
 };

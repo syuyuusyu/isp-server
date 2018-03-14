@@ -4,12 +4,15 @@ class RoleController extends Controller{
 
     async allRoles(){
 
-        let [...content]=await this.app.mysql.select('isp_role',{});
+        let [...content]=await this.app.mysql.query('select r.*,s.name sname from isp_role r JOIN isp_system s on r.system_id=s.id',[]);
         this.ctx.body=content;
     }
 
+
+
     async codeUnique(){
-        let [{total}]=await this.app.mysql.query(`select count(1) total from isp_role where code='${this.ctx.params.code}'`, []);
+        let [{total}]=await this.app.mysql.query(`select count(1) total from isp_role where code=? and system_id=?`
+            , [this.ctx.params.code,this.ctx.params.systemId]);
         this.ctx.body={total};
     }
 
