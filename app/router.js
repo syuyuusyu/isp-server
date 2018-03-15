@@ -2,7 +2,7 @@
 
 module.exports = app => {
     const { router, controller } = app;
-    router.get('/', controller.home.index);
+    router.get('/index', controller.home.index);
 
     //登录
     router.post('/login',controller.home.login);
@@ -39,6 +39,8 @@ module.exports = app => {
     router.get('/menu/currentMenu/:parentId',controller.menu.currentMenu);
     //获取当前角色下的所有菜单
     router.get('/menu/currentRoleMenu/',controller.menu.currentRoleMenu);
+    //对应角色的完整菜单树
+    router.get('/menu/menuTree',controller.menu.menuTree);
 
     //用户
     //用户列表
@@ -70,6 +72,8 @@ module.exports = app => {
     router.post('/sys/save',controller.system.save);
     //删除系统
     router.delete('/sys/delete/:id',controller.system.delete);
+    //根据ID查询
+    router.get('/sys/currentSys/:id',controller.system.currentSys);
 
     //系统功能
     //获取对应系统的功能列表

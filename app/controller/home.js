@@ -5,7 +5,7 @@ const jwt=require('jsonwebtoken');
 
 class HomeController extends Controller {
   async index() {
-    this.ctx.body = 'hi, egg';
+      await this.ctx.render('/build/index.html');
   }
 
   async login(){

@@ -3,6 +3,10 @@
 module.exports = appInfo => {
   const config  = {};
 
+  config.view={
+      defaultViewEngine: 'nunjucks',
+  },
+
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1517886399328_119';
 
@@ -12,7 +16,7 @@ module.exports = appInfo => {
   ];
 
   config.author={
-    ignore:/\/test|\/login/,
+    ignore:/\/test|\/login|\/index|\/static/,
   };
 
   config.mysql={
@@ -48,7 +52,7 @@ module.exports = appInfo => {
           ignoreJSON: true, // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
           enable:false
       },
-      domainWhiteList: [ 'http://localhost:3000', 'http://localhost:7001','http:192.168.1.193:3000']
+      domainWhiteList: [ 'http://localhost:3000', 'http://localhost:5000','http://localhost:7001','http:192.168.1.193:3000']
   };
 
   config.cors={

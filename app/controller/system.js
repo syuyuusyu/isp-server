@@ -33,6 +33,11 @@ class SystemController extends Controller{
         const updateSuccess = result.affectedRows === 1;
         this.ctx.body={success:updateSuccess};
     }
+
+    async currentSys(){
+        let content=await this.app.mysql.query('select * from isp_system where id=?',[this.ctx.params.id]);
+        this.ctx.body=content;
+    };
 }
 
 module.exports= SystemController;

@@ -3,6 +3,7 @@ const Service=require('egg').Service;
 class LoginService extends Service{
 
     async login(user){
+        console.log(user);
         let [{userExist}]=await this.app.mysql.query(`select count(1) userExist from isp_user where user_name='${user.user_name}'`);
         if(userExist===0){
             return '2';

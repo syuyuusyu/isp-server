@@ -68,7 +68,6 @@ class ButtonController extends Controller{
         let userInfo=await this.service.authorService.getAuthor(token);
         const result = await this.app.mysql.query(`select b.*,(select count(1) from isp_role_button 
             where button_id=b.id and role_id in (?)) available from isp_button b;`, [userInfo.roles.map(r=>r.id)]);
-        console.log(result);
         this.ctx.body=result;
     }
 }

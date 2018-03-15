@@ -1,6 +1,14 @@
 const Controller=require('egg').Controller;
 
 class MenuController extends Controller{
+
+    constructor(){
+        super(...arguments);
+        this.roleMenuSql='select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id';
+    }
+
+
+
     async currentMenu(){
         console.log('currentMenu');
         let sql=`select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id`;
@@ -17,6 +25,30 @@ class MenuController extends Controller{
         let sd=await this.service.authorService.getAuthor(token);
         let result=await this.app.mysql.query(sql,[sd.roles.map(r=>r.id)]);
         this.ctx.body=result;
+    }
+
+    async menuTree() {
+        const token =this.ctx.request.header['access-token'];
+        const auth=await this.service.authorService.getAuthor(token);
+        const roles=auth.roles;
+        const tree=await this.app.mysql.query(this.roleMenuSql,[1,roles.map(r=>r.id)]);
+        await this._menuTree(tree,roles);
+        this.ctx.body=tree;
+    }
+
+    async _menuTree(tree,roles){
+
+        for(let i=0;i<tree.length;i++){
+            const current=await this.app.mysql.query(this.roleMenuSql,[tree[i].id,roles.map(r=>r.id)]);
+            if(current && current.length>0){
+                tree[i].children=current;
+                await this._menuTree(tree[i].children,roles);
+            }else if(tree[i].load_method){
+                console.log(tree[i]);
+                let method=tree[i].load_method.split('.');
+                tree[i].children=await this.service[method[0]][method[1]](tree[i],roles);
+            }
+        }
     }
 
 
