@@ -16,7 +16,7 @@ module.exports = appInfo => {
   ];
 
   config.author={
-    ignore:/\/test|\/login|\/index|\/static/,
+    ignore:/\/test|\/login|\/index|\/static|^\/invoke/,
   };
 
   config.mysql={

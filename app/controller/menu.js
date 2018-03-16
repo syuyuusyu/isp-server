@@ -44,9 +44,9 @@ class MenuController extends Controller{
                 tree[i].children=current;
                 await this._menuTree(tree[i].children,roles);
             }else if(tree[i].load_method){
-                console.log(tree[i]);
                 let method=tree[i].load_method.split('.');
                 tree[i].children=await this.service[method[0]][method[1]](tree[i],roles);
+                //tree[i].children=await this.service.operation.loadPlatfrom(tree[i],roles);
             }
         }
     }

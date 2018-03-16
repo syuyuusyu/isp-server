@@ -25,7 +25,6 @@ class RestfulService extends Service{
     }
 
     async _invoke(entity,queryObj,count, result){
-        console.log('count:'+count);
         let invokeName=entity.name+'-'+count;
         result[invokeName]={};
         let url=this.parseByqueryMap(entity.url,queryObj);
