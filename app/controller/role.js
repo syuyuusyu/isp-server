@@ -70,16 +70,16 @@ class RoleController extends Controller{
     }
 
     async roleMenuIds(){
-
         let menuIds=await this.app.mysql.query(`select menu_id from isp_role_menu where role_id=?`,[this.ctx.params.roleId]);
-        console.log(menuIds);
         this.ctx.body=menuIds;
     }
 
     async userRole(){
-        let roles=await this.app.mysql.query(`select r.* from isp_role r join isp_user_role ur on r.id=ur.role_id where ur.user_id=?`,[this.ctx.params.userId])
+        let roles=await this.app.mysql.query(`select r.* from isp_role r join isp_user_role ur on r.id=ur.role_id where ur.user_id=?`,
+            [this.ctx.params.userId])
         this.ctx.body=roles;
     }
+
 
 
 }

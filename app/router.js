@@ -6,6 +6,8 @@ module.exports = app => {
 
     //登录
     router.post('/login',controller.home.login);
+    //退出
+    router.get('/logout',controller.home.logout);
 
     //接口调用
     router.get('/invokeEntityInfo',controller.restful.toPage);
@@ -76,6 +78,12 @@ module.exports = app => {
     router.delete('/sys/delete/:id',controller.system.delete);
     //根据ID查询
     router.get('/sys/currentSys/:id',controller.system.currentSys);
+    //可以访问对应系统平台的角色
+    router.get('/sys/sysRole/:sysId',controller.system.sysRole);
+    //保存可以访问对应系统平台的角色
+    router.post('/sys/saveSysRole',controller.system.saveSysRole);
+    //当前用户对应角色可以访问的系统
+    router.get('/sys/currentRoleSys',controller.system.currentRoleSys);
 
     //系统功能
     //获取对应系统的功能列表
@@ -84,4 +92,7 @@ module.exports = app => {
     router.post('/op/save',controller.operation.save);
     //删除功能
     router.delete('/op/delete/:id',controller.operation.delete);
+
+    //对外接口调用
+    router.post('/interfaces',controller.interfaces.interfaces);
 };

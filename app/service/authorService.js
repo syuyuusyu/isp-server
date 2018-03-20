@@ -8,6 +8,11 @@ class AuthorService extends Service{
         return JSON.parse(json);
     }
 
+    async getByCode(code){
+        let json= await this.app.redis.get(code);
+        return JSON.parse(json);
+    }
+
 }
 
 

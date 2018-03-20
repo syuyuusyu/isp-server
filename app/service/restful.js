@@ -34,12 +34,21 @@ class RestfulService extends Service{
         let head=this.parseByqueryMap(entity.head,queryObj);
         head=JSON.parse(head);
 
-        let invokeResult=await this.app.curl(url,{
-            method:method,
-            data:data,
-            headers:head,
-            dataType: 'json'
-        });
+        let invokeResult;
+        try{
+            invokeResult=await this.app.curl(url,{
+                method:method,
+                data:data,
+                headers:head,
+                dataType: 'json'
+            });
+        }catch (e){
+            invokeResult={
+                success:false,
+                result:'调用接口'+url+'错误,'+e.toString()
+            }
+        }
+
         if(entity.parseFun){
             try {
                 let fn=evil(entity.parseFun);
@@ -54,7 +63,7 @@ class RestfulService extends Service{
         result[invokeName].body=data;
         result[invokeName].head=head;
         result[invokeName].url=url;
-        if(entity.next){
+        if(entity.next && result[invokeName].result.map){
             let nextEntitys=await this.app.mysql.select('invoke_info',{where: {  id: entity.next.split(',') }});
             for(let netxEn of nextEntitys){
                 let currentCount=count;
