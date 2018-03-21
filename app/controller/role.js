@@ -3,8 +3,12 @@ const Controller=require('egg').Controller;
 class RoleController extends Controller{
 
     async allRoles(){
-
-        let [...content]=await this.app.mysql.query('select r.*,s.name sname from isp_role r JOIN isp_system s on r.system_id=s.id',[]);
+        let roleType=this.ctx.params.roleType;
+        let sql=`select r.*,s.name sname from isp_role r JOIN isp_system s on r.system_id=s.id where r.type=1`;
+        if(roleType==='2'){
+            sql=`select * from isp_role where type=2`;
+        }
+        let content=await this.app.mysql.query(sql,[]);
         this.ctx.body=content;
     }
 
@@ -79,6 +83,8 @@ class RoleController extends Controller{
             [this.ctx.params.userId])
         this.ctx.body=roles;
     }
+
+
 
 
 

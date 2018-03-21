@@ -70,6 +70,15 @@ class ButtonController extends Controller{
             where button_id=b.id and role_id in (?)) available from isp_button b;`, [userInfo.roles.map(r=>r.id)]);
         this.ctx.body=result;
     }
+
+    async allRoles(){
+        let sql=`select r.*,
+            case when r.type=1 then (select name from isp_system where id=r.system_id)
+            else '机构角色' end sname
+            from isp_role r`;
+        let roles=await this.app.mysql.query(sql);
+        this.ctx.body=roles;
+    }
 }
 
 module.exports= ButtonController;

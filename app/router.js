@@ -21,7 +21,7 @@ module.exports = app => {
 
     //角色
     //获取角色列表
-    router.get('/role/allRoles',controller.role.allRoles);
+    router.get('/role/allRoles/:roleType',controller.role.allRoles);
     //检查角色名唯一
     router.get('/role/codeUnique/:code/:systemId',controller.role.codeUnique);
     //保存角色
@@ -38,6 +38,7 @@ module.exports = app => {
     router.get('/role/userRole/:userId',controller.role.userRole);
 
 
+
     //获取菜单
     //根据父节点ID和当前角色获取子菜单
     router.get('/menu/currentMenu/:parentId',controller.menu.currentMenu);
@@ -48,9 +49,11 @@ module.exports = app => {
 
     //用户
     //用户列表
-    router.get('/user/allUsers',controller.user.allUers);
+    router.get('/user/allUsers/:userType',controller.user.allUers);
     //保存用户角色
     router.post('/user/saveUserRole',controller.user.saveUserRole);
+    //用户角色配置页面获取角色(根据不同用户类型获取)
+    router.get('/user/userRoleConfRoles/:userId',controller.user.userRoleConfRoles);
 
 
     //按钮
@@ -66,6 +69,8 @@ module.exports = app => {
     router.get('/btn/allButtons/',controller.button.allButtons);
     //删除按钮
     router.delete('/btn/delete/:id',controller.button.delete);
+    //按钮角色配置页面获取角色
+    router.get('/btn/allRoles',controller.button.allRoles);
 
     //系统
     //获取应用系统列表

@@ -52,7 +52,7 @@ module.exports = appInfo => {
           ignoreJSON: true, // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
           enable:false
       },
-      domainWhiteList: [ 'http://localhost:3000', 'http://localhost:5000','http://localhost:7001','http://127.0.0.1:3000']
+      domainWhiteList: [ 'http://localhost:3000', 'http://192.168.3.11:3000','http://localhost:7001','http://127.0.0.1:3000']
   };
 
   config.cors={

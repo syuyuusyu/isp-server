@@ -82,14 +82,8 @@ class SystemController extends Controller{
             systems[i].operations=operations;
             auth.systems.push(systems[i]);
             systems[i].token=loginToken;
-
         }
         this.app.redis.set(token,JSON.stringify(auth));
-        console.log(auth);
-        auth.systems.forEach(sys=>{
-           console.log(sys.url);
-           console.log(sys.operations.length);
-        });
         this.ctx.body=systems;
     }
 }

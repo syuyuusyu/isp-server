@@ -34,31 +34,22 @@ class HomeController extends Controller {
     async logout() {
         const token = this.ctx.request.header['access-token'];
         const auth = await this.service.authorService.getAuthor(token);
-        console.log('this.app.loginSystem',this.app.loginSystem);
-        console.log(auth);
         auth.systems.forEach(sys=>{
-            console.log(sys.url);
             let currentIndex=-1;
             this.app.loginSystem.forEach((code,index)=>{
                 if(sys.code===code){
                     currentIndex=index;
-                    console.log(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}`);
                     if(sys.operations.filter(o=>o.type===2).length===1){
-                        console.log('auth.user.user_name',auth.user.user_name);
-                        this.app.curl(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`,{
-                            method:'get',
-                            // data:{user:auth.user.user_name},
-                            // headers:{
-                            //     'Content-Type': 'application/json;charset=UTF-8',
-                            //     'Accept':'application/json'
-                            // },
-                            // dataType: 'json'
-                        });
+                        this.app.curl(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
+                        this.app.loginSystem.splice(currentIndex,1)
                     }
-
                 }
-            })
-        })
+            });
+            this.app.redis.del(sys.token+sys.code);
+
+        });
+        this.add.redis.del(token);
+
     }
 }
 
