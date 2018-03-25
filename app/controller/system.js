@@ -73,7 +73,11 @@ class SystemController extends Controller{
         const token =this.ctx.request.header['access-token'];
         const auth=await this.service.authorService.getAuthor(token);
         const roles=auth.roles;
-        const systems=await this.app.mysql.query(sql,[roles.map(r=>r.id)]);
+        let systems=[];
+        if(roles.length>0){
+            systems= await this.app.mysql.query(sql,[roles.map(r=>r.id)]);
+        }
+
         auth.systems=[];
         for(let i=0;i<systems.length;i++){
             const operations=await this.app.mysql.query(`select * from isp_sys_operation where system_id=?`,systems[i].id);
@@ -84,6 +88,7 @@ class SystemController extends Controller{
             systems[i].token=loginToken;
         }
         this.app.redis.set(token,JSON.stringify(auth));
+        console.log(systems);
         this.ctx.body=systems;
     }
 }

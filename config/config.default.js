@@ -38,6 +38,18 @@ module.exports = appInfo => {
       agent: false,
   };
 
+    // config.mysql={
+    //     client: {
+    //         host: '127.0.0.1',
+    //         port: '3306',
+    //         user: 'root',
+    //         password: '1234',
+    //         database: 'isp',
+    //     },
+    //     app: true,
+    //     agent: false,
+    // };
+
     config.redis = {
         client: {
             port: 6379,          // Redis port

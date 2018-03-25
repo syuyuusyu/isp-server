@@ -36,6 +36,8 @@ module.exports = app => {
     router.get('/role/roleMenuIds/:roleId',controller.role.roleMenuIds);
     //用户对应角色
     router.get('/role/userRole/:userId',controller.role.userRole);
+    //角色按钮权限页面获取菜单树和按钮
+    router.get('/btn/menuButtonTree',controller.button.menuButtonTree);
 
 
 
@@ -97,6 +99,8 @@ module.exports = app => {
     router.post('/op/save',controller.operation.save);
     //删除功能
     router.delete('/op/delete/:id',controller.operation.delete);
+    //获取对应系统的接口调用配置
+    router.get('/op/invokeOperations/:sysId',controller.operation.invokeOperations);
 
     //对外接口调用
     router.post('/interfaces',controller.interfaces.interfaces);

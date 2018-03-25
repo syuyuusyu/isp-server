@@ -66,8 +66,11 @@ class ButtonController extends Controller{
 
         let token=this.ctx.request.header['access-token'];
         let userInfo=await this.service.authorService.getAuthor(token);
-        const result = await this.app.mysql.query(`select b.*,(select count(1) from isp_role_button 
-            where button_id=b.id and role_id in (?)) available from isp_button b;`, [userInfo.roles.map(r=>r.id)]);
+        let result =[];
+        if(userInfo.roles.length>0){
+            result=await this.app.mysql.query(`select b.*,(select count(1) from isp_role_button 
+                    where button_id=b.id and role_id in (?)) available from isp_button b;`, [userInfo.roles.map(r=>r.id)]);
+        }
         this.ctx.body=result;
     }
 
@@ -78,6 +81,32 @@ class ButtonController extends Controller{
             from isp_role r`;
         let roles=await this.app.mysql.query(sql);
         this.ctx.body=roles;
+    }
+
+    //角色按钮权限页面获取菜单树和按钮
+    async menuButtonTree() {
+
+        let tree=await this.app.mysql.query(`select id,parent_id,text,'menu-fold' icon,'1' type from isp_menu where parent_id=1`);
+        await this._menuButtonTree(tree);
+        console.log('----------',tree);
+        this.ctx.body=tree;
+    }
+
+    async _menuButtonTree(tree){
+        for(let i=0;i<tree.length;i++){
+            console.log('treei',tree[i]);
+            tree[i].children=[];
+            const currentTree=await this.app.mysql.query(
+                `select id,parent_id,text,'menu-fold' icon,'1' type from isp_menu where parent_id=?`,[tree[i].id]);
+            if(currentTree.length>0){
+                tree[i].children=tree[i].children.concat(currentTree);
+                await this._menuButtonTree(currentTree);
+            }
+            const currentBtn=await this.app.mysql.query(`
+                select CONCAT(id,'${tree[i].id}') 'id',menu_id 'parent_id',text,icon,'2' type from isp_button where menu_id=?
+            `,[tree[i].id]);
+            tree[i].children=tree[i].children.concat(currentBtn);
+        }
     }
 }
 
