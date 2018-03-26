@@ -38,23 +38,23 @@ class SystemController extends Controller{
     };
 
     async sysRole(){
-        let roles=await this.app.mysql.query(`select r.* from isp_role r join isp_sys_role sr on r.id=sr.role_id where sr.system_id=?`,
-            [this.ctx.params.sysId])
-        this.ctx.body=roles;
+        let systems=await this.app.mysql.query(`select s.* from isp_system s join isp_sys_role sr on s.id=sr.system_id where sr.role_id=?`,
+            [this.ctx.params.roleId])
+        this.ctx.body=systems;
     }
 
     async saveSysRole(){
-        const {sysId,roleIds}=this.ctx.request.body;
+        const {sysIds,roleId}=this.ctx.request.body;
 
         let result;
         const conn = await this.app.mysql.beginTransaction(); // 初始化事务
 
         try {
             await conn.delete('isp_sys_role', {
-                system_id: sysId,
+                role_id: roleId,
             });  // 第一步操作
-            if(roleIds.length>0){
-                let sql=`insert into isp_sys_role(system_id,role_id) values ${roleIds.map((a)=>'('+sysId+','+a+')').reduce((a,b)=>a+','+b)}`;
+            if(sysIds.length>0){
+                let sql=`insert into isp_sys_role(role_id,system_id) values ${sysIds.map((a)=>'('+roleId+','+a+')').reduce((a,b)=>a+','+b)}`;
                 result=await conn.query(sql);  // 第二步操作
             }
 
@@ -63,7 +63,7 @@ class SystemController extends Controller{
             await conn.rollback(); // 一定记得捕获异常后回滚事务！！
             throw err;
         }
-        const updateSuccess = roleIds.length===0 || result.affectedRows === roleIds.length;
+        const updateSuccess = sysIds.length===0 || result.affectedRows === sysIds.length;
         this.ctx.body={success:updateSuccess};
 
     }

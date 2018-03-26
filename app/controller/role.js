@@ -15,8 +15,13 @@ class RoleController extends Controller{
 
 
     async codeUnique(){
+        const {value,systemId}=this.ctx.request.body;
+        if((value+'').trim()===''){
+            this.ctx.body={total:1};
+            return;
+        }
         let [{total}]=await this.app.mysql.query(`select count(1) total from isp_role where code=? and system_id=?`
-            , [this.ctx.params.code,this.ctx.params.systemId]);
+            , [value,systemId]);
         this.ctx.body={total};
     }
 

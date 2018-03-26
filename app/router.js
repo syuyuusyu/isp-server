@@ -23,7 +23,7 @@ module.exports = app => {
     //获取角色列表
     router.get('/role/allRoles/:roleType',controller.role.allRoles);
     //检查角色名唯一
-    router.get('/role/codeUnique/:code/:systemId',controller.role.codeUnique);
+    router.post('/role/codeUnique/',controller.role.codeUnique);
     //保存角色
     router.post('/role/save',controller.role.save);
     //删除角色
@@ -62,8 +62,8 @@ module.exports = app => {
     //对应菜单下的按钮
     router.get('/btn/menuButton/:menuId',controller.button.menuButton);
     //按钮对应的角色
-    router.get('/btn/buttonRole/:buttonId',controller.button.buttonRole);
-    //保存按钮对应的角色
+    router.get('/btn/buttonRole/:roleId',controller.button.buttonRole);
+    //保存角色对应的按钮
     router.post('/btn/saveButtonRole',controller.button.saveButtonRole);
     //保存按钮
     router.post('/btn/save',controller.button.save);
@@ -86,7 +86,7 @@ module.exports = app => {
     //根据ID查询
     router.get('/sys/currentSys/:id',controller.system.currentSys);
     //可以访问对应系统平台的角色
-    router.get('/sys/sysRole/:sysId',controller.system.sysRole);
+    router.get('/sys/sysRole/:roleId',controller.system.sysRole);
     //保存可以访问对应系统平台的角色
     router.post('/sys/saveSysRole',controller.system.saveSysRole);
     //当前用户对应角色可以访问的系统

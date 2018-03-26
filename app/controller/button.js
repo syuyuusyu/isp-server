@@ -9,23 +9,23 @@ class ButtonController extends Controller{
     }
 
     async buttonRole(){
-        let roles=await this.app.mysql.query(`select r.* from isp_role r join isp_role_button rb on r.id=rb.role_id where rb.button_id=?`,
-            [this.ctx.params.buttonId])
+        let roles=await this.app.mysql.query(`select r.* from isp_role_button r where r.role_id=?`,
+            [this.ctx.params.roleId]);
         this.ctx.body=roles;
     }
 
     async saveButtonRole(){
-        const {buttonId,roleIds}=this.ctx.request.body;
+        const {roleId,buttonIds}=this.ctx.request.body;
 
         let result;
         const conn = await this.app.mysql.beginTransaction(); // 初始化事务
 
         try {
             await conn.delete('isp_role_button', {
-                button_id: buttonId,
+                role_id: roleId,
             });  // 第一步操作
-            if(roleIds.length>0){
-                let sql=`insert into isp_role_button(button_id,role_id) values ${roleIds.map((a)=>'('+buttonId+','+a+')').reduce((a,b)=>a+','+b)}`;
+            if(buttonIds.length>0){
+                let sql=`insert into isp_role_button(role_id,button_id) values ${buttonIds.map((a)=>'('+roleId+','+a+')').reduce((a,b)=>a+','+b)}`;
                 console.log(sql);
                 result=await conn.query(sql);  // 第二步操作
             }
@@ -35,7 +35,7 @@ class ButtonController extends Controller{
             await conn.rollback(); // 一定记得捕获异常后回滚事务！！
             throw err;
         }
-        const updateSuccess = roleIds.length===0 || result.affectedRows === roleIds.length;
+        const updateSuccess = buttonIds.length===0 || result.affectedRows === buttonIds.length;
         this.ctx.body={success:updateSuccess};
 
     }
@@ -85,25 +85,22 @@ class ButtonController extends Controller{
 
     //角色按钮权限页面获取菜单树和按钮
     async menuButtonTree() {
-
-        let tree=await this.app.mysql.query(`select id,parent_id,text,'menu-fold' icon,'1' type from isp_menu where parent_id=1`);
+        let tree=await this.app.mysql.query(`select id,CONCAT(id,'treeid') 'key',parent_id,text,'menu-fold' icon,'1' type from isp_menu where parent_id=1`);
         await this._menuButtonTree(tree);
-        console.log('----------',tree);
         this.ctx.body=tree;
     }
 
     async _menuButtonTree(tree){
         for(let i=0;i<tree.length;i++){
-            console.log('treei',tree[i]);
             tree[i].children=[];
             const currentTree=await this.app.mysql.query(
-                `select id,parent_id,text,'menu-fold' icon,'1' type from isp_menu where parent_id=?`,[tree[i].id]);
+                `select id,CONCAT(id,'treeid') 'key',parent_id,text,'menu-fold' icon,'1' type from isp_menu where parent_id=?`,[tree[i].id]);
             if(currentTree.length>0){
                 tree[i].children=tree[i].children.concat(currentTree);
                 await this._menuButtonTree(currentTree);
             }
             const currentBtn=await this.app.mysql.query(`
-                select CONCAT(id,'${tree[i].id}') 'id',menu_id 'parent_id',text,icon,'2' type from isp_button where menu_id=?
+                select id,id 'key',menu_id 'parent_id',text,icon,'2' type from isp_button where menu_id=?
             `,[tree[i].id]);
             tree[i].children=tree[i].children.concat(currentBtn);
         }
