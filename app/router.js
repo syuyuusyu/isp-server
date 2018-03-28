@@ -101,6 +101,10 @@ module.exports = app => {
     router.delete('/op/delete/:id',controller.operation.delete);
     //获取对应系统的接口调用配置
     router.get('/op/invokeOperations/:sysId',controller.operation.invokeOperations);
+    //有权访问接口的系统
+    router.get('/op/invokePromiss/:operationId',controller.operation.invokePromiss);
+    //保存系统访问接口权限
+    router.post('/op/saveInvokePromiss',controller.operation.saveInvokePromiss);
 
     //对外接口调用
     router.post('/interfaces',controller.interfaces.interfaces);

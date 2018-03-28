@@ -4,10 +4,17 @@ module.exports = app => {
         console.log('app start');
         app.secret='n7d3t7x7';
         app.loginSystem=[];
-        //初始化单点登录token;
-        // const systems=await app.mysql.select('isp_system');
-        // for(let i=0;i<systems.length;i++){
-        //     app.redis.set(systems[i].code,JSON.stringify([]));
-        // }
+
+        let systems=await app.mysql.query(`select * from isp_system`);
+        for(let system of systems){
+            let operations=await app.mysql.query(`select o.* from isp_sys_operation o join isp_sys_promiss_operation spo 
+                on spo.operation_id=o.id where spo.system_id=?`,[system.id]);
+            await app.redis.set(system.url,JSON.stringify(operations.map(m=>m.code)));
+        }
     });
+    // app.afterStart(async ()=>{
+    //     //初始化系统调用接口权限
+    //     console.log(2222);
+    //     await app.service.authorityStore.invokePromiss();
+    // });
 };

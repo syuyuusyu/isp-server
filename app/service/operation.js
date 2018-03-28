@@ -2,6 +2,7 @@ const Service=require('egg').Service;
 
 class OperationService extends Service{
 
+    //平台功能配置菜单树
     async loadPlatfrom(current,roles){
         let platfroms=await this.app.mysql.query(
             `select s.id sysId,s.name text from isp_system s 
@@ -16,6 +17,7 @@ class OperationService extends Service{
         return platfroms;
     }
 
+    //平台接口管理菜单树
     async sysInvoke(current,roles){
         let platfroms=await this.app.mysql.query(
             `select s.id sysId,s.name text from isp_system s 
@@ -28,6 +30,18 @@ class OperationService extends Service{
             platfroms[i].page_class='InvokeTable';
         }
         return platfroms;
+    }
+
+    //保存isp_sys_operation
+    async save(entity){
+        let result={};
+        if(entity.id){
+            result = await this.app.mysql.update('isp_sys_operation', entity);
+        }else {
+            result = await this.app.mysql.insert('isp_sys_operation', entity); // 更新 posts 表中的记录
+        }
+        // 判断更新成功
+        return result.affectedRows === 1;
     }
 }
 

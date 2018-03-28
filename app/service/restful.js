@@ -15,6 +15,7 @@ class RestfulService extends Service{
             await this._invoke(entity,queryObj,count,result);
             result.success=true;
             result.msg='成功';
+            console.log(result);
         }catch (e){
             console.log('----');
             console.log(e);
