@@ -20,7 +20,6 @@ class MenuController extends Controller{
             result=await this.app.mysql.query(sql,[this.ctx.params.parentId,sd.roles.map(r=>r.id)]);
         }
         this.ctx.body=result;
-
     }
 
     async currentRoleMenu(){
