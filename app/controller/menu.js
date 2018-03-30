@@ -5,6 +5,7 @@ class MenuController extends Controller{
     constructor(){
         super(...arguments);
         this.roleMenuSql='select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id';
+        this.roleMenuSql='select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id';
     }
 
 
