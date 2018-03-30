@@ -99,6 +99,23 @@ module.exports = app => {
     router.post('/op/save',controller.operation.save);
     //删除功能
     router.delete('/op/delete/:id',controller.operation.delete);
+
+    //机构
+    //获取机构
+    router.get('/org/orgMenu/:id',controller.organiza.orgMenu);
+    //获取点击树节点时的机构
+    router.get('/org/currentOrgs/:orgId',controller.organiza.currentOrgs);
+    //获取如果是最终节点时的机构信息
+    router.get('/org/currentOrgIsLeaf/:orgId',controller.organiza.currentOrgIsLeaf);
+    //获取详细的机构信息
+    router.get('/org/currentDetailOrg/:id',controller.organiza.currentDetailedOrg);
+    //保存修改的机构信息
+    router.post('/org/save',controller.organiza.save);
+    //保存新增的机构信息
+    router.post('/org/saveAdd',controller.organiza.saveAdd);
+    //删除机构信息
+    router.delete('/org/delete/:id',controller.organiza.delete);
+
     //获取对应系统的接口调用配置
     router.get('/op/invokeOperations/:sysId',controller.operation.invokeOperations);
     //有权访问接口的系统
@@ -122,4 +139,5 @@ module.exports = app => {
 
     //对外接口调用
     router.post('/interfaces',controller.interfaces.interfaces);
+
 };
