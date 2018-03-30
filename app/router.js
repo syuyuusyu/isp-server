@@ -106,6 +106,20 @@ module.exports = app => {
     //保存系统访问接口权限
     router.post('/op/saveInvokePromiss',controller.operation.saveInvokePromiss);
 
+    //字典
+    //获取字典
+    router.get('/dic/getDictionary/:groupId',controller.dictionary.getDictionary);
+
+    //元数据
+    //获取元数据
+    router.post('/metadata/queryMetadata',controller.metadata.queryMetadata);
+    //获取元数据表信息
+    router.get('/metadata/metadataFields/:metadataId',controller.metadata.metadataFields);
+
+    //工作流
+    //云机申请记录
+    router.post('/apply/cloudApplyLog',controller.workflow.cloudApplyLog);
+
     //对外接口调用
     router.post('/interfaces',controller.interfaces.interfaces);
 };

@@ -130,7 +130,7 @@ class InterfaceService extends Service {
         const { reqdata:[{domain,path:path}]} = body;
         console.log(domain);
         let codes=await this.service.authorService.getByCode(domain);
-        if(codes.filter(c=>c===path).length>0){
+        if(codes.filter(c=>c===pathls).length>0){
             return {
                 status: '801',
                 message: `成功`,
@@ -139,6 +139,86 @@ class InterfaceService extends Service {
             return {
                 status: '806',
                 message: `没有访问权限`,
+            }
+        }
+    }
+
+    async metadata(body){
+        const {system,reqdata} =body;
+        const syatemId=this.app.systemMap[system.toLowerCase()];
+        if(!syatemId){
+            return {
+                status:'806',
+                message:'对应系统号不存在'
+            }
+        }
+        this.app.logger.info(syatemId);
+        this.app.logger.info(reqdata);
+        const conn = await this.app.mysql.beginTransaction(); // 初始化事务
+        try{
+            for(let metdata of reqdata){
+                let fields=metdata.fields;
+                delete metdata.fields;
+                let [{id}]=await conn.query(`select id from isp_metadata where name=? and system_id=?`,[metdata.name,syatemId]);
+                if(id){
+                    await conn.update('isp_metadata',{...metdata,id:id,system_id:syatemId})
+                    await conn.delete('isp_metadata_fields',{metadata_id:id});
+                    for (let field of fields){
+                        await conn.insert('isp_metadata_fields',{...field,metadata_id:id})
+                    }
+                }else{
+                    let result=await  conn.insert('isp_metadata',{...metdata,system_id:syatemId})
+                    await conn.delete('isp_metadata_fields',{metadata_id:result.insertId});
+                    for (let field of fields){
+                        await conn.insert('isp_metadata_fields',{...field,metadata_id:result.insertId})
+                    }
+                }
+            }
+            await conn.commit();
+            return {
+                status:'801',
+                message:'同步成功'
+            }
+        }catch (e){
+            await conn.rollback(); // 一定记得捕获异常后回滚事务！！
+            this.app.logger.error(e);
+            return {
+                status:'806',
+                message:'失败'
+            }
+        }
+    }
+
+    async push_interface(body){
+        const {system,reqdata} =body;
+        const syatemId=this.app.systemMap[system.toLowerCase()];
+        if(!syatemId){
+            return {
+                status:'806',
+                message:'对应系统号不存在'
+            }
+        }
+        try{
+            for(let op of reqdata){
+                let [{id}]=await this.app.mysql.query(`select id from isp_sys_operation where name=? and system_id=?`,
+                    [op.name,syatemId]);
+                if(id){
+                    await conn.update('isp_metadata',{...op,id:id});
+                }else{
+                    await conn.insert('isp_metadata',{op});
+                }
+            }
+            await conn.commit();
+            return {
+                status:'801',
+                message:'同步成功'
+            }
+        }catch (e){
+            await conn.rollback(); // 一定记得捕获异常后回滚事务！！
+            this.app.logger.error(e);
+            return {
+                status:'806',
+                message:'失败'
             }
         }
     }

@@ -15,7 +15,7 @@ class RestfulService extends Service{
             await this._invoke(entity,queryObj,count,result);
             result.success=true;
             result.msg='成功';
-            console.log(result);
+            this.app.logger.info(result);
         }catch (e){
             console.log('----');
             console.log(e);
@@ -41,7 +41,8 @@ class RestfulService extends Service{
                 method:method,
                 data:data,
                 headers:head,
-                dataType: 'json'
+                dataType: 'json',
+                timeout:20000
             });
         }catch (e){
             invokeResult={
@@ -56,11 +57,14 @@ class RestfulService extends Service{
                 let s=fn(invokeResult.data);
                 result[invokeName].result=s;
             }catch (e){
+                this.app.logger.error(e);
                 result[invokeName].result=invokeResult.data;
             }
         }else{
             result[invokeName].result=invokeResult.data;
         }
+        //this.app.logger.log(invokeResult);
+
         result[invokeName].body=data;
         result[invokeName].head=head;
         result[invokeName].url=url;

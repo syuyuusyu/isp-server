@@ -64,8 +64,8 @@ class RoleController extends Controller{
             await conn.rollback(); // 一定记得捕获异常后回滚事务！！
             throw err;
         }
+        console.log(result);
         const updateSuccess = result.affectedRows === menuIds.length;
-        console.log(updateSuccess);
         this.ctx.body={success:updateSuccess};
     }
 

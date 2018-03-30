@@ -19,6 +19,10 @@ class SystemController extends Controller{
         }else {
             result = await this.app.mysql.insert('isp_system', entity); // 更新 posts 表中的记录
         }
+        let systems=await app.mysql.query(`select * from isp_system`);
+        systems.forEach(s=>{
+           app.systemMap[s.code]=s.id;
+        });
         // 判断更新成功
         const updateSuccess = result.affectedRows === 1;
         this.ctx.body={success:updateSuccess};
@@ -27,6 +31,10 @@ class SystemController extends Controller{
     async delete(){
         const result = await this.app.mysql.delete('isp_system', {
             id: this.ctx.params.id
+        });
+        let systems=await app.mysql.query(`select * from isp_system`);
+        systems.forEach(s=>{
+            app.systemMap[s.code]=s.id;
         });
         const updateSuccess = result.affectedRows === 1;
         this.ctx.body={success:updateSuccess};

@@ -46,10 +46,10 @@ class ButtonController extends Controller{
         if(entity.id){
             result = await this.app.mysql.update('isp_button', entity);
         }else {
-            result = await this.app.mysql.insert('isp_button', entity); // 更新 posts 表中的记录
+            result = await this.app.mysql.insert('isp_button', entity);
         }
         // 判断更新成功
-        console.log(result);
+        console.log(result);//insertId
         const updateSuccess = result.affectedRows === 1;
         this.ctx.body={success:updateSuccess};
     }
