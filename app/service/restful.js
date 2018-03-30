@@ -15,6 +15,7 @@ class RestfulService extends Service{
             await this._invoke(entity,queryObj,count,result);
             result.success=true;
             result.msg='成功';
+            this.app.logger.info(result);
         }catch (e){
             console.log('----');
             console.log(e);
@@ -34,27 +35,40 @@ class RestfulService extends Service{
         let head=this.parseByqueryMap(entity.head,queryObj);
         head=JSON.parse(head);
 
-        let invokeResult=await this.app.curl(url,{
-            method:method,
-            data:data,
-            headers:head,
-            dataType: 'json'
-        });
+        let invokeResult;
+        try{
+            invokeResult=await this.app.curl(url,{
+                method:method,
+                data:data,
+                headers:head,
+                dataType: 'json',
+                timeout:20000
+            });
+        }catch (e){
+            invokeResult={
+                success:false,
+                result:'调用接口'+url+'错误,'+e.toString()
+            }
+        }
+
         if(entity.parseFun){
             try {
                 let fn=evil(entity.parseFun);
                 let s=fn(invokeResult.data);
                 result[invokeName].result=s;
             }catch (e){
+                this.app.logger.error(e);
                 result[invokeName].result=invokeResult.data;
             }
         }else{
             result[invokeName].result=invokeResult.data;
         }
+        //this.app.logger.log(invokeResult);
+
         result[invokeName].body=data;
         result[invokeName].head=head;
         result[invokeName].url=url;
-        if(entity.next){
+        if(entity.next && result[invokeName].result.map){
             let nextEntitys=await this.app.mysql.select('invoke_info',{where: {  id: entity.next.split(',') }});
             for(let netxEn of nextEntitys){
                 let currentCount=count;

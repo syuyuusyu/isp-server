@@ -3,16 +3,25 @@ const Controller=require('egg').Controller;
 class RoleController extends Controller{
 
     async allRoles(){
-
-        let [...content]=await this.app.mysql.query('select r.*,s.name sname from isp_role r JOIN isp_system s on r.system_id=s.id',[]);
+        let roleType=this.ctx.params.roleType;
+        let sql=`select r.*,s.name sname from isp_role r JOIN isp_system s on r.system_id=s.id where r.type=1`;
+        if(roleType==='2'){
+            sql=`select * from isp_role where type=2`;
+        }
+        let content=await this.app.mysql.query(sql,[]);
         this.ctx.body=content;
     }
 
 
 
     async codeUnique(){
+        const {value,systemId}=this.ctx.request.body;
+        if((value+'').trim()===''){
+            this.ctx.body={total:1};
+            return;
+        }
         let [{total}]=await this.app.mysql.query(`select count(1) total from isp_role where code=? and system_id=?`
-            , [this.ctx.params.code,this.ctx.params.systemId]);
+            , [value,systemId]);
         this.ctx.body={total};
     }
 
@@ -55,8 +64,8 @@ class RoleController extends Controller{
             await conn.rollback(); // 一定记得捕获异常后回滚事务！！
             throw err;
         }
+        console.log(result);
         const updateSuccess = result.affectedRows === menuIds.length;
-        console.log(updateSuccess);
         this.ctx.body={success:updateSuccess};
     }
 
@@ -70,16 +79,18 @@ class RoleController extends Controller{
     }
 
     async roleMenuIds(){
-
         let menuIds=await this.app.mysql.query(`select menu_id from isp_role_menu where role_id=?`,[this.ctx.params.roleId]);
-        console.log(menuIds);
         this.ctx.body=menuIds;
     }
 
     async userRole(){
-        let roles=await this.app.mysql.query(`select r.* from isp_role r join isp_user_role ur on r.id=ur.role_id where ur.user_id=?`,[this.ctx.params.userId])
+        let roles=await this.app.mysql.query(`select r.* from isp_role r join isp_user_role ur on r.id=ur.role_id where ur.user_id=?`,
+            [this.ctx.params.userId])
         this.ctx.body=roles;
     }
+
+
+
 
 
 }

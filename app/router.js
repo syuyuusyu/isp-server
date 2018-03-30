@@ -6,6 +6,8 @@ module.exports = app => {
 
     //登录
     router.post('/login',controller.home.login);
+    //退出
+    router.get('/logout',controller.home.logout);
 
     //接口调用
     router.get('/invokeEntityInfo',controller.restful.toPage);
@@ -19,9 +21,9 @@ module.exports = app => {
 
     //角色
     //获取角色列表
-    router.get('/role/allRoles',controller.role.allRoles);
+    router.get('/role/allRoles/:roleType',controller.role.allRoles);
     //检查角色名唯一
-    router.get('/role/codeUnique/:code/:systemId',controller.role.codeUnique);
+    router.post('/role/codeUnique/',controller.role.codeUnique);
     //保存角色
     router.post('/role/save',controller.role.save);
     //删除角色
@@ -34,6 +36,9 @@ module.exports = app => {
     router.get('/role/roleMenuIds/:roleId',controller.role.roleMenuIds);
     //用户对应角色
     router.get('/role/userRole/:userId',controller.role.userRole);
+    //角色按钮权限页面获取菜单树和按钮
+    router.get('/btn/menuButtonTree',controller.button.menuButtonTree);
+
 
 
     //获取菜单
@@ -46,17 +51,19 @@ module.exports = app => {
 
     //用户
     //用户列表
-    router.get('/user/allUsers',controller.user.allUers);
+    router.get('/user/allUsers/:userType',controller.user.allUers);
     //保存用户角色
     router.post('/user/saveUserRole',controller.user.saveUserRole);
+    //用户角色配置页面获取角色(根据不同用户类型获取)
+    router.get('/user/userRoleConfRoles/:userId',controller.user.userRoleConfRoles);
 
 
     //按钮
     //对应菜单下的按钮
     router.get('/btn/menuButton/:menuId',controller.button.menuButton);
     //按钮对应的角色
-    router.get('/btn/buttonRole/:buttonId',controller.button.buttonRole);
-    //保存按钮对应的角色
+    router.get('/btn/buttonRole/:roleId',controller.button.buttonRole);
+    //保存角色对应的按钮
     router.post('/btn/saveButtonRole',controller.button.saveButtonRole);
     //保存按钮
     router.post('/btn/save',controller.button.save);
@@ -64,6 +71,8 @@ module.exports = app => {
     router.get('/btn/allButtons/',controller.button.allButtons);
     //删除按钮
     router.delete('/btn/delete/:id',controller.button.delete);
+    //按钮角色配置页面获取角色
+    router.get('/btn/allRoles',controller.button.allRoles);
 
     //系统
     //获取应用系统列表
@@ -76,6 +85,12 @@ module.exports = app => {
     router.delete('/sys/delete/:id',controller.system.delete);
     //根据ID查询
     router.get('/sys/currentSys/:id',controller.system.currentSys);
+    //可以访问对应系统平台的角色
+    router.get('/sys/sysRole/:roleId',controller.system.sysRole);
+    //保存可以访问对应系统平台的角色
+    router.post('/sys/saveSysRole',controller.system.saveSysRole);
+    //当前用户对应角色可以访问的系统
+    router.get('/sys/currentRoleSys',controller.system.currentRoleSys);
 
     //系统功能
     //获取对应系统的功能列表
@@ -100,4 +115,29 @@ module.exports = app => {
     router.post('/org/saveAdd',controller.organiza.saveAdd);
     //删除机构信息
     router.delete('/org/delete/:id',controller.organiza.delete);
+
+    //获取对应系统的接口调用配置
+    router.get('/op/invokeOperations/:sysId',controller.operation.invokeOperations);
+    //有权访问接口的系统
+    router.get('/op/invokePromiss/:operationId',controller.operation.invokePromiss);
+    //保存系统访问接口权限
+    router.post('/op/saveInvokePromiss',controller.operation.saveInvokePromiss);
+
+    //字典
+    //获取字典
+    router.get('/dic/getDictionary/:groupId',controller.dictionary.getDictionary);
+
+    //元数据
+    //获取元数据
+    router.post('/metadata/queryMetadata',controller.metadata.queryMetadata);
+    //获取元数据表信息
+    router.get('/metadata/metadataFields/:metadataId',controller.metadata.metadataFields);
+
+    //工作流
+    //云机申请记录
+    router.post('/apply/cloudApplyLog',controller.workflow.cloudApplyLog);
+
+    //对外接口调用
+    router.post('/interfaces',controller.interfaces.interfaces);
+
 };

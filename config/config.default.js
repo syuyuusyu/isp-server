@@ -16,7 +16,7 @@ module.exports = appInfo => {
   ];
 
   config.author={
-    ignore:/\/test|\/login|\/index|\/static|^\/invoke/,
+    ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interface/,
   };
 
   config.mysql={
@@ -38,6 +38,18 @@ module.exports = appInfo => {
       agent: false,
   };
 
+    // config.mysql={
+    //     client: {
+    //         host: '127.0.0.1',
+    //         port: '3306',
+    //         user: 'root',
+    //         password: '1234',
+    //         database: 'isp',
+    //     },
+    //     app: true,
+    //     agent: false,
+    // };
+
     config.redis = {
         client: {
             port: 6379,          // Redis port
@@ -52,7 +64,7 @@ module.exports = appInfo => {
           ignoreJSON: true, // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
           enable:false
       },
-      domainWhiteList: [ 'http://localhost:3000', 'http://localhost:5000','http://localhost:7001','http:192.168.1.193:3000']
+      domainWhiteList: [ 'http://10.10.50.16:5000','http://10.100.5.13:5000','http://localhost:3000','http://10.100.5.13:3000','http://10.10.50.16:3000', 'http://192.168.3.11:3000','http://localhost:7001','http://127.0.0.1:3000']
   };
 
   config.cors={

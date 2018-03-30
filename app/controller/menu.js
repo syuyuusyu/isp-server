@@ -4,8 +4,9 @@ class MenuController extends Controller{
 
     constructor(){
         super(...arguments);
-        this.roleMenuSql='select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id';
-        this.roleMenuSql='select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id';
+
+        this.roleMenuSql=
+            'select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id';
     }
 
 
@@ -15,7 +16,10 @@ class MenuController extends Controller{
         let sql=`select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id`;
         let token=this.ctx.request.header['access-token'];
         let sd=await this.service.authorService.getAuthor(token);
-        let result=await this.app.mysql.query(sql,[this.ctx.params.parentId,sd.roles.map(r=>r.id)]);
+        let result=[];
+        if(sd.roles.length>0){
+            result=await this.app.mysql.query(sql,[this.ctx.params.parentId,sd.roles.map(r=>r.id)]);
+        }
         this.ctx.body=result;
 
     }
@@ -32,8 +36,12 @@ class MenuController extends Controller{
         const token =this.ctx.request.header['access-token'];
         const auth=await this.service.authorService.getAuthor(token);
         const roles=auth.roles;
-        const tree=await this.app.mysql.query(this.roleMenuSql,[1,roles.map(r=>r.id)]);
-        await this._menuTree(tree,roles);
+        let tree=[];
+        if(roles.length>0){
+            tree=await this.app.mysql.query(this.roleMenuSql,[1,roles.map(r=>r.id)]);
+            await this._menuTree(tree,roles);
+        }
+
         this.ctx.body=tree;
     }
 

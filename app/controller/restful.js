@@ -50,7 +50,6 @@ class RestfulController extends Controller{
 
     async test(){
         const entity=this.ctx.request.body;
-        console.log(entity);
         this.ctx.body=await this.service.restful.invoke(entity,entity.queryMap);
     }
 
