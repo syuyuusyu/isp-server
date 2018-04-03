@@ -5,6 +5,8 @@ module.exports = app => {
         app.secret='n7d3t7x7';
         app.loginSystem=[];
         app.systemMap={};
+        app.interfaceLog=[];
+
 
         //初始化系统调用接口权限
         let systems=await app.mysql.query(`select * from isp_system`);
