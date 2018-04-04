@@ -22,15 +22,15 @@ module.exports = appInfo => {
   config.mysql={
       client: {
           // host
-          host: '127.0.0.1',
+          host: '10.10.0.2',
           // 端口号
           port: '3306',
           // 用户名
-          user: 'root',
+          user: 'isp',
           // 密码
-          password: 'password',
+          password: '1234',
           // 数据库名
-          database: 'ispdk',
+          database: 'isp',
       },
       // 是否加载到 app 上，默认开启
       app: true,
