@@ -2,6 +2,7 @@
 
 module.exports = app => {
     const { router, controller } = app;
+    const swiftToken = app.middleware.swiftToken();
     router.get('/index', controller.home.index);
 
     //登录
@@ -136,6 +137,15 @@ module.exports = app => {
     //工作流
     //云机申请记录
     router.post('/apply/cloudApplyLog',controller.workflow.cloudApplyLog);
+
+    //获取当前用户下得swift储存信息
+    router.get('/swift/getObject/:username',controller.swift.getObject);
+    //创建文件夹
+    router.post('/swift/createFolder',controller.swift.createFolder);
+    //删除swift对象
+    router.post('/swift/delete',controller.swift.delete);
+    //下载文件
+    router.get('/swift/download',controller.swift.download);
 
     //对外接口调用
     router.post('/interfaces',controller.interfaces.interfaces);

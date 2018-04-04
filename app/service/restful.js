@@ -18,7 +18,7 @@ class RestfulService extends Service{
             this.app.logger.info(result);
         }catch (e){
             console.log('----');
-            console.log(e);
+            this.app.logger.error(e);
             result.success=false;
             result.errInfo=e.toString();
         }
@@ -44,17 +44,27 @@ class RestfulService extends Service{
                 dataType: 'json',
                 timeout:20000
             });
-        }catch (e){
-            invokeResult={
-                success:false,
-                result:'调用接口'+url+'错误,'+e.toString()
+        }catch (e2){
+            try{
+                invokeResult=await this.app.curl(url,{
+                    method:method,
+                    data:data,
+                    headers:head,
+                    //dataType: 'json',
+                    timeout:20000
+                });
+            }catch (e){
+                invokeResult={
+                    success:false,
+                    result:'调用接口'+url+'错误,'+e.toString()
+                }
             }
-        }
 
+        }
         if(entity.parseFun){
             try {
                 let fn=evil(entity.parseFun);
-                let s=fn(invokeResult.data);
+                let s=fn(invokeResult.data,invokeResult.headers,invokeResult.status);
                 result[invokeName].result=s;
             }catch (e){
                 this.app.logger.error(e);
@@ -69,7 +79,16 @@ class RestfulService extends Service{
         result[invokeName].head=head;
         result[invokeName].url=url;
         if(entity.next && result[invokeName].result.map){
-            let nextEntitys=await this.app.mysql.select('invoke_info',{where: {  id: entity.next.split(',') }});
+            let nextEntitys=//await this.app.mysql.select('invoke_info',{where: {  id: entity.next.split(',') }});
+                    this.app.invokeEntitys.filter(d=>{
+                        let flag=false;
+                        entity.next.split(',').forEach(i=>{
+                            if(i===d.id+''){
+                                flag=true;
+                            }
+                        });
+                        return flag;
+                    });
             for(let netxEn of nextEntitys){
                 let currentCount=count;
                 let promises=result[entity.name+'-'+count].result.map(r=> {

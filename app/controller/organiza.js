@@ -8,8 +8,6 @@ class OrganizationController extends Controller{
             }
         });*/
         let menu=await this.app.mysql.query('select * from isp_organization where parent_id=? /*and parent_id<>?*/',[this.ctx.params.id]);
-        console.log("orgMenu的值为：");
-        console.log(menu);
         this.ctx.body=menu;
     }
 

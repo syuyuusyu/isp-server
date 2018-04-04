@@ -32,15 +32,14 @@ class RestfulController extends Controller{
     async save(){
         const entity=this.ctx.request.body;
         let result={};
-        console.log(entity);
         if(entity.id){
             result = await this.app.mysql.update('invoke_info', entity);
         }else {
             result = await this.app.mysql.insert('invoke_info', entity); // 更新 posts 表中的记录
         }
         // 判断更新成功
-        console.log(result);
         const updateSuccess = result.affectedRows === 1;
+        this.reflashEntity();
         this.ctx.body={success:updateSuccess};
     }
 
@@ -55,14 +54,23 @@ class RestfulController extends Controller{
 
     async invoke(){
         const queryMap=this.ctx.request.body;
-        const [entity]=await this.app.mysql.select('invoke_info',{where: {  name: this.ctx.params.invokeName}});
+        const [entity]=app.invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
+            //await this.app.mysql.select('invoke_info',{where: {  name: this.ctx.params.invokeName}});
         let result=[];
-        let nextEntitys=await this.app.mysql.select('invoke_info',{where: {  id: entity.next.split(',') }});
+        let nextEntitys=this.app.invokeEntitys.filter(d=>{
+            let flag=false;
+                entity.next.split(',').forEach(i=>{
+                    if(i===d.id+''){
+                        flag=true;
+                    }
+                });
+                return flag;
+            });
+            //await this.app.mysql.select('invoke_info',{where: {  id: entity.next.split(',') }});
         for(let entity of nextEntitys){
             let r=await this.service.restful.invoke(entity,queryMap);
             const cur={};
             for(let invokeName in r){
-                console.log(invokeName);
                 if(invokeName==='msg' || invokeName==='success'){
                     continue;
                 }
@@ -95,6 +103,10 @@ class RestfulController extends Controller{
     async checkUnique(){
         let [{total}]=await this.app.mysql.query('select count(1) total from invoke_info where name=?' ,[this.ctx.params.invokeName]);
         this.ctx.body={total}
+    }
+
+    async reflashEntity(){
+        this.app.invokeEntitys=await this.app.mysql.query('select * from invoke_info');
     }
 }
 
