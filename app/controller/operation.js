@@ -34,7 +34,8 @@ class OperationController extends Controller{
 
     async saveInvokePromiss(){
         const {operationId,sysIds}=this.ctx.request.body;
-        let sql=`insert into isp_sys_promiss_operation(operation_id,system_id) values ${sysIds.map((a)=>'('+operationId+','+a+')').reduce((a,b)=>a+','+b)}`;
+        let sql=`insert into isp_sys_promiss_operation(operation_id,system_id) 
+            values ${sysIds.map((a)=>'('+operationId+','+a+')').reduce((a,b)=>a+','+b)}`;
         let result;
         const conn = await this.app.mysql.beginTransaction(); // 初始化事务
 

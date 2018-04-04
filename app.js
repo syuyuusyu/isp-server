@@ -14,6 +14,12 @@ module.exports = app => {
                 on spo.operation_id=o.id where spo.system_id=?`,[system.id]);
             await app.redis.set(system.url,JSON.stringify(operations.map(m=>m.path)));
         }
-        console.log(app.systemMap);
+
+        //初始化接口调用实体
+        app.invokeEntitys=await app.mysql.query(`select * from invoke_info`);
+    });
+
+    app.once('server', server => {
+        //app.logger.info(server.restful);
     });
 };

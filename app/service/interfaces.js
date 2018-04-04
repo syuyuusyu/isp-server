@@ -130,7 +130,7 @@ class InterfaceService extends Service {
         const { reqdata:[{domain,path:path}]} = body;
         console.log(domain);
         let codes=await this.service.authorService.getByCode(domain);
-        if(codes.filter(c=>c===pathls).length>0){
+        if(codes.filter(c=>c===path).length>0){
             return {
                 status: '801',
                 message: `成功`,
