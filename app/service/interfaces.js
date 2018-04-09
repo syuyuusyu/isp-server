@@ -42,8 +42,7 @@ class InterfaceService extends Service {
         }
         try {
             for (let u of users) {
-                console.log(u);
-                let [result] = await this.app.mysql.query(`select id from isp_user where user_name=?`, [system + u.username]);
+                let [result] = await this.app.mysql.query(`select id from isp_user where phone=?`, [system + u.username]);
                 if (result) {
                     let currentId=result.id;
                     await this.app.mysql.update('isp_user',

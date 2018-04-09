@@ -10,6 +10,7 @@ class UserController extends Controller{
             else (select name from isp_organization where id=u.org_id)  
 	        end) belong
             from isp_user u where type=?`
+        sql='select * from isp_user';
         let users=await this.app.mysql.query(sql,[userType]);
         this.ctx.body=users;
     }

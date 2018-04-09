@@ -24,6 +24,10 @@ module.exports = appInfo => {
       match: '/swift',
   };
 
+  config.multipart={
+        fileExtensions: [ '.apk','.xls','.doc','.docx','.xlsx','.pdf','.mkv' ],
+    }
+
   config.mysql={
       client: {
           // host

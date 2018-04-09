@@ -22,7 +22,7 @@ module.exports = app => {
 
     //角色
     //获取角色列表
-    router.get('/role/allRoles/:roleType',controller.role.allRoles);
+    router.get('/role/allRoles',controller.role.allRoles);
     //检查角色名唯一
     router.post('/role/codeUnique/',controller.role.codeUnique);
     //保存角色
@@ -52,7 +52,7 @@ module.exports = app => {
 
     //用户
     //用户列表
-    router.get('/user/allUsers/:userType',controller.user.allUers);
+    router.get('/user/allUsers',controller.user.allUers);
     //保存用户角色
     router.post('/user/saveUserRole',controller.user.saveUserRole);
     //用户角色配置页面获取角色(根据不同用户类型获取)
@@ -145,7 +145,13 @@ module.exports = app => {
     //删除swift对象
     router.post('/swift/delete',controller.swift.delete);
     //下载文件
-    router.get('/swift/download',controller.swift.download);
+    router.post('/swift/download',controller.swift.download);
+    //上传文件
+    router.post('/swift/upload',controller.swift.upload);
+    //获取所有容器
+    router.get('/swift/containerInfo',controller.swift.containerInfo);
+    //新建容器
+    router.post('/swift/createContainer',controller.swift.createContainer)
 
     //对外接口调用
     router.post('/interfaces',controller.interfaces.interfaces);
