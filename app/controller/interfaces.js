@@ -14,10 +14,12 @@ class InterfaceController extends Controller{
         const interfacesName=body.method;//接口名
         const repdata=JSON.stringify(body.reqdata);//请求体信息
         const system=body.system.toLowerCase();//系统名
-        let nowDate=new Date().toLocaleString();
+        let invokeDate=new Date().toLocaleString();
+        //let invokeDate=(new Date()).valueOf();
+        console.log("invokeDate的值为:",invokeDate);
         let status='';//响应状态
         let message='';//响应状态信息
-        let respdata='';//响应体
+        let respdata='无响应体';//响应体
         let systemCN;//系统中文名
         switch (system){
             case 's02':systemCN='云平台管理系统';
@@ -41,10 +43,15 @@ class InterfaceController extends Controller{
                 respdata = JSON.stringify(result.respdata);
             }
         }
-         this.app.mysql.query('insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value(?,?,?,?,?,?,?,?,?)', [system, systemCN, ip, interfacesName, repdata, respdata, status, message,nowDate]);
-        /*let interfaceInfo={system,systemCN,ip,interfacesName,repdata,respdata,status,message,nowDate};
+
+        /*let sql=`insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value (${system},${systemCN},${ip},${interfacesName},${repdata},${status},${message},${invokeDate})`;
+        console.log("sql的值为：",sql);
+        this.app.mysql.query(sql,[]);*/
+
+     //this.app.mysql.query('insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value(?,?,?,?,?,?,?,?,?)', [system, systemCN, ip, interfacesName, repdata, respdata, status, message,invokeDate]);
+        let interfaceInfo=[system,systemCN,ip,interfacesName,repdata,respdata,status,message,invokeDate];
         this.app.interfaceLog.push(interfaceInfo);
-        console.log("app.interfaceLog的值为：",this.app.interfaceLog);*/
+        //console.log("controler中app.interfaceLog的值为：",this.app.interfaceLog);
     }
 
 }
