@@ -92,6 +92,8 @@ module.exports = app => {
     router.post('/sys/saveSysRole',controller.system.saveSysRole);
     //当前用户对应角色可以访问的系统
     router.get('/sys/currentRoleSys',controller.system.currentRoleSys);
+    //申请平台访问权限获取平台列表
+    router.get('/sys/sysAccess/:userId',controller.system.sysAccess);
 
     //系统功能
     //获取对应系统的功能列表
@@ -137,6 +139,16 @@ module.exports = app => {
     //工作流
     //云机申请记录
     router.post('/apply/cloudApplyLog',controller.workflow.cloudApplyLog);
+    //发送申请平台访问权限信息
+    router.post('/msg/sendApplyPlateformMsg',controller.message.sendApplyPlateformMsg);
+    //获取信息
+    router.get('/msg/receive',controller.message.receive);
+    //批准申请平台访问权限
+    router.post('/msg/approvalPlatform',controller.message.approvalPlatform);
+    //删除消息
+    router.delete('/msg/deleteMsg/:id',controller.message.deleteMsg);
+    //否决申请
+    router.post('/msg/disApproval',controller.message.disApproval);
 
     //获取当前用户下得swift储存信息
     router.get('/swift/getObject/:username',controller.swift.getObject);
@@ -151,7 +163,9 @@ module.exports = app => {
     //获取所有容器
     router.get('/swift/containerInfo',controller.swift.containerInfo);
     //新建容器
-    router.post('/swift/createContainer',controller.swift.createContainer)
+    router.post('/swift/createContainer',controller.swift.createContainer);
+
+
 
     //对外接口调用
     router.post('/interfaces',controller.interfaces.interfaces);

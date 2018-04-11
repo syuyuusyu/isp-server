@@ -31,11 +31,11 @@ module.exports = appInfo => {
   config.mysql={
       client: {
           // host
-          host: '10.10.0.2',
+          host: '10.10.50.16',
           // 端口号
           port: '3306',
           // 用户名
-          user: 'isp',
+          user: 'root',
           // 密码
           password: '1234',
           // 数据库名

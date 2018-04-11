@@ -12,26 +12,43 @@ class SwiftController extends Controller {
     async createContainer(){
         let token = this.ctx.request.header['X-Auth-Token'];
         const {username}=this.ctx.request.body;
-        const result = await this.ctx.curl(`${this.swiftBaseUrl}/${username}/root/`,{
+        let result={};
+        const result1 = await this.ctx.curl(`${this.swiftBaseUrl}${username}/`,{
             headers: {
                 'X-Auth-Token': token,
                 "Content-Length": 0
             },
             method:'PUT'
         });
-        console.log(result);
+        if(result1.status===201){
+            const result2 = await this.ctx.curl(`${this.swiftBaseUrl}${username}/root/`,{
+                headers: {
+                    'X-Auth-Token': token,
+                    "Content-Length": 0
+                },
+                method:'PUT'
+            });
+            result.status=result2.status
+        }else{
+            result.status=result1.status
+        }
         this.ctx.body={status:result.status};
     }
 
     async containerInfo(){
         let token = this.ctx.request.header['X-Auth-Token'];
-        const result = await this.ctx.curl(`${this.swiftBaseUrl}?format=json`,{
-            headers: {'X-Auth-Token': token},
-            dataType: 'json',
-        });
-        console.log(1111);
-        console.log(result);
-        this.ctx.body=result.data;
+        let result;
+        try{
+            result= await this.ctx.curl(`${this.swiftBaseUrl}?format=json`,{
+                headers: {'X-Auth-Token': token},
+                dataType: 'json',
+            });
+            result=result.data;
+        }catch (e){
+            result={status:401}
+        }
+
+        this.ctx.body=result;
     }
 
     async getObject() {
@@ -44,7 +61,6 @@ class SwiftController extends Controller {
                 swiftBaseUrl: this.swiftBaseUrl
             }
         );
-        console.log(result[`${invokeEntity.name}-1`].result);
         this.ctx.body = result[`${invokeEntity.name}-1`].result;
     }
 
@@ -60,7 +76,6 @@ class SwiftController extends Controller {
                 filePath: encodeURI(filePath)
             }
         );
-        console.log(result);
         this.ctx.body = result[`${invokeEntity.name}-1`].result;
     }
 
@@ -76,7 +91,6 @@ class SwiftController extends Controller {
                 filePath: encodeURI(filePath)
             }
         );
-        console.log(result);
         this.ctx.body = result[`${invokeEntity.name}-1`].result;
     }
 
@@ -133,10 +147,8 @@ class SwiftController extends Controller {
                     await sendToWormhole(part);
                     throw err;
                 }
-                console.log(result);
             }
         }
-        console.log('and we are done parsing the form!');
         ctx.body={a:1};
     }
 

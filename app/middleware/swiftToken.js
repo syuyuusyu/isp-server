@@ -9,9 +9,7 @@ module.exports = (options,app) => {
             app.redis.set('swiftToken',swiftToken);
         }
         ctx.request.headers['X-Auth-Token']=swiftToken;
-        console.log(222);
         await next();
-        console.log(333);
 
         if(ctx.body && ctx.body.status && ctx.body.status===401){
             let [entity] = app.invokeEntitys.filter(d => d.id === 24);
