@@ -143,8 +143,8 @@ module.exports = app => {
     //接口调用日志
     //获取日志信息
     router.get('/interfacesLog/getInterfacesLog',controller.interfacesLog.allInterfacesLog);
-    //获取日志总数
-    router.get('/interfacesLog/logTotal',controller.interfacesLog.totalLogNumber);
+    /*//获取日志总数
+    router.get('/interfacesLog/logTotal',controller.interfacesLog.totalLogNumber);*/
     //刷新日志
     router.get('/interfacesLog/refreshLog',controller.interfacesLog.refreshLog);
     //获取所有系统

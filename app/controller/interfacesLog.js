@@ -7,10 +7,11 @@ class InterfacesLog extends Controller{
         //console.log("InterfacesLog中current的值为:",this.ctx.body);
     }
 
-    async totalLogNumber(){
+/*    async totalLogNumber(){
         let content=await this.app.mysql.query('select count(*) from  interfaces_log',[]);
+        console.log("totalLogNumber的值为:",content);
         this.ctx.body=content;
-    }
+    }*/
 
     async refreshLog(){
         const interfaceInfo=await this.app.interfaceLog;
@@ -21,7 +22,6 @@ class InterfacesLog extends Controller{
             //console.log("sql的值为：",sql);}
            result= await this.app.mysql.query(sql);
             interfaceInfo.length=0;
-           console.log("refreshLog中result的值为：",result);
         }
         //const refreshLogSuccess=result.protocol41===true;
         this.ctx.body={success:true};
@@ -40,7 +40,6 @@ class InterfacesLog extends Controller{
     }
 
     async queryLog(){
-        console.log("this.ctx.request.body的值为:",this.ctx.request.body);
         //const{systemName,interfacesName}=this.ctx.request.body;
         const systemName=this.ctx.request.body.systemName;
         const interfacesName=this.ctx.request.body.interfacesName;
@@ -57,7 +56,6 @@ class InterfacesLog extends Controller{
         }else{
            content=await this.app.mysql.query('select * from interfaces_log order by invoke_date desc',[]);
         }
-        console.log("content的值为:",content);
         this.ctx.body=content;
     }
 }
