@@ -8,7 +8,7 @@ class InterfaceService extends Service {
         if (!author) {
             return {
                 status: '806',
-                messages: '令牌token无效'
+                message: '令牌token无效'
             }
         } else {
             this.app.redis.del(token + system);
