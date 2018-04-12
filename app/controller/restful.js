@@ -11,9 +11,11 @@ class RestfulController extends Controller{
     async infos(){
 
         console.log(this.ctx.request.body);
-        const {page,start,limit,invokeName}=this.ctx.request.body;
+        const {page,start,limit,invokeName,groupName}=this.ctx.request.body;
         let where=(invokeName && !/\s/.test(invokeName))?{name:invokeName}:{};
-        let wherecount=(invokeName && !/\s/.test(invokeName))?`where name='${invokeName}'`:'';
+        where=(groupName && !/\s/.test(groupName))?{...where,groupName:groupName}:where;
+        let wherecount=(invokeName && !/\s/.test(invokeName))?`where name='${invokeName}'`:'where 1=1';
+        wherecount=wherecount+((groupName && !/\s/.test(groupName))?` and groupname='${groupName}'`:'');
         console.log(wherecount);
         console.log(page,start,limit,invokeName);
         let result={};
@@ -54,7 +56,7 @@ class RestfulController extends Controller{
 
     async invoke(){
         const queryMap=this.ctx.request.body;
-        const [entity]=app.invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
+        const [entity]=this.app.invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
             //await this.app.mysql.select('invoke_info',{where: {  name: this.ctx.params.invokeName}});
         let result=[];
         let nextEntitys=this.app.invokeEntitys.filter(d=>{
@@ -84,7 +86,7 @@ class RestfulController extends Controller{
                 result=fn(result);
 
             }catch (e){
-
+               this.ctx.logger.error(e);
             }
         }else{
 
@@ -108,6 +110,11 @@ class RestfulController extends Controller{
     async reflashEntity(){
         this.app.invokeEntitys=await this.app.mysql.query('select * from invoke_info');
     }
+
+    async groupName(){
+        this.ctx.body= await this.app.mysql.query(`select distinct groupName from invoke_info`);
+    }
+
 }
 
 function evil(fn) {

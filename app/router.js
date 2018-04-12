@@ -19,6 +19,7 @@ module.exports = app => {
     router.delete('/invokeInfo/delete/:id',controller.restful.delete);
     router.post('/invoke/:invokeName',controller.restful.invoke);
     router.get('/invokeInfo/checkUnique/:invokeName',controller.restful.checkUnique);
+    router.get('/invokeInfo/groupName',controller.restful.groupName);
 
     //角色
     //获取角色列表
