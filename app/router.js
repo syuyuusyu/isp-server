@@ -171,4 +171,17 @@ module.exports = app => {
     //对外接口调用
     router.post('/interfaces',controller.interfaces.interfaces);
 
+    //接口调用日志
+    //获取日志信息
+    router.get('/interfacesLog/getInterfacesLog',controller.interfacesLog.allInterfacesLog);
+    /*//获取日志总数
+    router.get('/interfacesLog/logTotal',controller.interfacesLog.totalLogNumber);*/
+    //刷新日志
+    router.get('/interfacesLog/refreshLog',controller.interfacesLog.refreshLog);
+    //获取所有系统
+    router.get('/interfacesLog/allSystem',controller.interfacesLog.allSystem);
+    //获取所有接口
+    router.get('/interfacesLog/allInterfaces',controller.interfacesLog.allInterfaces);
+    //根据条件查询出接口调用日志
+    router.post('/interfacesLog/queryLog',controller.interfacesLog.queryLog);
 };
