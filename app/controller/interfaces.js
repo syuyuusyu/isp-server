@@ -9,6 +9,7 @@ class InterfaceController extends Controller{
         this.ctx.body=result;
         this.log(body,result);
     }
+
     log(body,result){
         const ip=this.ctx.ip;//调用接口的ip
         const interfacesName=body.method;//接口名

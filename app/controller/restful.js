@@ -68,9 +68,11 @@ class RestfulController extends Controller{
                 });
                 return flag;
             });
-            //await this.app.mysql.select('invoke_info',{where: {  id: entity.next.split(',') }});
-        for(let entity of nextEntitys){
-            let r=await this.service.restful.invoke(entity,queryMap);
+
+        let promises=nextEntitys.map(entity=>this.service.restful.invoke(entity,queryMap));
+        let p=await Promise.all(promises);
+
+        for(let r of p){
             const cur={};
             for(let invokeName in r){
                 if(invokeName==='msg' || invokeName==='success'){
@@ -80,6 +82,7 @@ class RestfulController extends Controller{
             }
             result.push(cur);
         }
+        this.ctx.logger.info('集成就调用结果:',result);
         if(entity.parseFun){
             try {
                 let fn=evil(entity.parseFun);
@@ -91,7 +94,22 @@ class RestfulController extends Controller{
         }else{
 
         }
+        this.ctx.logger.info('运行解析函数后结果',result);
         this.ctx.body=result;
+    }
+
+    parse(obj){
+        let result={};
+        for(let o of obj){
+            for(let key in o){
+                let name='';
+                key.replace(/cloud_(\w+)-1/,(w,p1)=>{
+                    name=p1;
+                });
+                result[name]=o[key];
+            }
+        }
+        return result;
     }
 
     async delete(){

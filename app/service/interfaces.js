@@ -4,25 +4,40 @@ class InterfaceService extends Service {
 
     async verifications(body) {
         const {system, reqdata: [{token}]} = body;
-        const author = await this.service.authorService.getByCode(token + system);
-        if (!author) {
-            return {
-                status: '806',
-                message: '令牌token无效'
-            }
-        } else {
-            this.app.redis.del(token + system);
-            this.app.loginSystem.push(system);
-            return {
-                status: '801',
-                message: '成功',
-                respdata: [
-                    {
-                        username: author.user.user_name,
-                    }
-                ]
+        let author = await this.service.authorService.getByCode(token);
+        if(!author){
+            author = await this.service.authorService.getByCode(token + system);
+            if (!author) {
+                return {
+                    status: '806',
+                    message: '令牌token无效'
+                };
+            } else {
+                this.app.redis.del(token + system);
+                this.app.loginSystem.push(system);
+                return {
+                    status: '801',
+                    message: '成功',
+                    respdata: [
+                        {
+                            username: author.user.user_name,
+                        }
+                    ]
+                };
             }
         }
+
+        this.app.redis.del(token);
+        return {
+            status: '801',
+            message: '成功',
+            respdata: [
+                {
+                    username: author.user.user_name,
+                }
+            ]
+        };
+
 
     }
 
@@ -259,6 +274,17 @@ class InterfaceService extends Service {
         if(count===0){
             this.app.mysql.insert('isp_user_system', {user_id:user.id,system_id:system.id});
         }
+    }
+
+    randomString(len) {
+        len = len || 32;
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        var maxPos = $chars.length;
+        var pwd = '';
+        for (let i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
     }
 
 }

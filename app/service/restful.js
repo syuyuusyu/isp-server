@@ -26,12 +26,11 @@ class RestfulService extends Service{
     }
 
     async _invoke(entity,queryObj,count, result){
-        let invokeName=entity.name+'-'+count;
+        const invokeName=entity.name+'-'+count;
         result[invokeName]={};
         let url=this.parseByqueryMap(entity.url,queryObj);
         let method=entity.method.toUpperCase();
         let data=this.parseByqueryMap(entity.body,queryObj);
-        console.log(data);
         data=JSON.parse(data);
         let head=this.parseByqueryMap(entity.head,queryObj);
         head=JSON.parse(head);
@@ -69,6 +68,7 @@ class RestfulService extends Service{
             }
 
         }
+        this.app.logger.info('status',invokeResult.status);
         this.app.logger.info('result',invokeResult.data);
         if(entity.parseFun){
             try {
@@ -132,6 +132,8 @@ class RestfulService extends Service{
         });
         return params;
     }
+
+
 
 }
 

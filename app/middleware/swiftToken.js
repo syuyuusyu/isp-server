@@ -4,7 +4,9 @@ module.exports = (options,app) => {
         let swiftToken=await app.redis.get('swiftToken');
         if(!swiftToken) {
             let [entity] = app.invokeEntitys.filter(d => d.id === 24);
-            let result = await ctx.service.restful.invoke(entity);
+            let result = await ctx.service.restful.invoke(entity,{
+                keystoneIp:app.config.self.keystoneIp
+            });
             swiftToken = result['openstack-verify-1']['result'][0].token;
             app.redis.set('swiftToken',swiftToken);
         }
@@ -16,6 +18,7 @@ module.exports = (options,app) => {
             let result = await ctx.service.restful.invoke(entity);
             swiftToken = result['openstack-verify-1']['result'][0].token;
             app.redis.set('swiftToken',swiftToken);
+
         }
 
     };

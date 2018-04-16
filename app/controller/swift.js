@@ -4,16 +4,20 @@ const sendToWormhole = require('stream-wormhole');
 
 class SwiftController extends Controller {
 
-    constructor() {
-        super(...arguments);
-        this.swiftBaseUrl = 'http://10.10.0.1:8080/v1/AUTH_491ec2831b2146b18fb8bf0c0ab4a1e5/';
+
+    async swiftToken(){
+        this.ctx.body={status:401};
+    }
+
+    async cloudToken(){
+        this.ctx.body={code: 500, msg: '无效Token!'};
     }
 
     async createContainer(){
         let token = this.ctx.request.header['X-Auth-Token'];
         const {username}=this.ctx.request.body;
         let result={};
-        const result1 = await this.ctx.curl(`${this.swiftBaseUrl}${username}/`,{
+        const result1 = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/`,{
             headers: {
                 'X-Auth-Token': token,
                 "Content-Length": 0
@@ -21,7 +25,7 @@ class SwiftController extends Controller {
             method:'PUT'
         });
         if(result1.status===201){
-            const result2 = await this.ctx.curl(`${this.swiftBaseUrl}${username}/root/`,{
+            const result2 = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/root/`,{
                 headers: {
                     'X-Auth-Token': token,
                     "Content-Length": 0
@@ -39,7 +43,7 @@ class SwiftController extends Controller {
         let token = this.ctx.request.header['X-Auth-Token'];
         let result;
         try{
-            result= await this.ctx.curl(`${this.swiftBaseUrl}?format=json`,{
+            result= await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}?format=json`,{
                 headers: {'X-Auth-Token': token},
                 dataType: 'json',
             });
@@ -58,7 +62,7 @@ class SwiftController extends Controller {
             {
                 token: token,
                 username: this.ctx.params.username,
-                swiftBaseUrl: this.swiftBaseUrl
+                swiftBaseUrl: this.app.config.self.swiftBaseUrl
             }
         );
         this.ctx.body = result[`${invokeEntity.name}-1`].result;
@@ -72,7 +76,7 @@ class SwiftController extends Controller {
             {
                 token: token,
                 username: username,
-                swiftBaseUrl: this.swiftBaseUrl,
+                swiftBaseUrl: this.app.config.self.swiftBaseUrl,
                 filePath: encodeURI(filePath)
             }
         );
@@ -87,7 +91,7 @@ class SwiftController extends Controller {
             {
                 token: token,
                 username: username,
-                swiftBaseUrl: this.swiftBaseUrl,
+                swiftBaseUrl: this.app.config.self.swiftBaseUrl,
                 filePath: encodeURI(filePath)
             }
         );
@@ -97,7 +101,7 @@ class SwiftController extends Controller {
     async download() {
         let token = this.ctx.request.header['X-Auth-Token'];
         const {name,username} = this.ctx.request.body;
-        const result = await this.ctx.curl(`${this.swiftBaseUrl}${username}/${name}`, {
+        const result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/${name}`, {
             //writeStream: fs.createWriteStream('/Users/syu/scp/sdsd.sql'),
             streaming: true,
             headers: {'X-Auth-Token': token}
@@ -132,9 +136,9 @@ class SwiftController extends Controller {
                 // 文件处理，上传到云存储等等
                 let result;
                 try {
-                    console.log(`${this.swiftBaseUrl}${username}/${flodername}${encodeURI(part.filename)}`);
+                    console.log(`${this.app.config.self.swiftBaseUrl}${username}/${flodername}${encodeURI(part.filename)}`);
                     result = await this.ctx.curl(
-                        `${this.swiftBaseUrl}${username}/${flodername}${encodeURI(part.filename)}`,
+                        `${this.app.config.self.swiftBaseUrl}${username}/${flodername}${encodeURI(part.filename)}`,
                         {
                         //writeStream: fs.createWriteStream('/Users/syu/scp/sdsd.sql'),
                             stream: part,

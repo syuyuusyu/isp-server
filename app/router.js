@@ -2,7 +2,6 @@
 
 module.exports = app => {
     const { router, controller } = app;
-    const swiftToken = app.middleware.swiftToken();
     router.get('/index', controller.home.index);
 
     //登录
@@ -140,6 +139,8 @@ module.exports = app => {
     //工作流
     //云机申请记录
     router.post('/apply/cloudApplyLog',controller.workflow.cloudApplyLog);
+    //获取云平台token
+    router.get('/invoke/cloudToken',controller.swift.cloudToken);
     //发送申请平台访问权限信息
     router.post('/msg/sendApplyPlateformMsg',controller.message.sendApplyPlateformMsg);
     //获取信息
@@ -151,8 +152,10 @@ module.exports = app => {
     //否决申请
     router.post('/msg/disApproval',controller.message.disApproval);
 
-    //获取当前用户下得swift储存信息
+    //获取当前用户下的swift储存信息
     router.get('/swift/getObject/:username',controller.swift.getObject);
+    //获取token(定时任务轮询防止过期)
+    router.get('/swift/swiftToken',controller.swift.swiftToken);
     //创建文件夹
     router.post('/swift/createFolder',controller.swift.createFolder);
     //删除swift对象

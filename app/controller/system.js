@@ -91,14 +91,14 @@ class SystemController extends Controller{
         auth.systems=[];
         for(let i=0;i<systems.length;i++){
             const operations=await this.app.mysql.query(`select * from isp_sys_operation where system_id=?`,systems[i].id);
-            let loginToken=randomString(8);
+            console.log(this.service.interfaces);
+            let loginToken=this.service.interfaces.randomString(8);
             this.app.redis.set(loginToken+systems[i].code,JSON.stringify(auth));
             systems[i].operations=operations;
             auth.systems.push(systems[i]);
             systems[i].token=loginToken;
         }
         this.app.redis.set(token,JSON.stringify(auth));
-        console.log(systems);
         this.ctx.body=systems;
     }
 
@@ -108,17 +108,6 @@ class SystemController extends Controller{
             [this.ctx.params.userId]);
         this.ctx.body=result;
     }
-}
-
-function randomString(len) {
-    len = len || 32;
-    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
-    var maxPos = $chars.length;
-    var pwd = '';
-    for (i = 0; i < len; i++) {
-        pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
-    }
-    return pwd;
 }
 
 module.exports= SystemController;

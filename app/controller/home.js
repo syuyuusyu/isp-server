@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 class HomeController extends Controller {
     async index() {
-        await this.ctx.render('/build/index.html');
+        await this.ctx.render('/index.html');
     }
 
     async login() {
