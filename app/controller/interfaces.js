@@ -15,9 +15,18 @@ class InterfaceController extends Controller{
       const interfacesName=body.method;//接口名
       const repdata=JSON.stringify(body);//请求报文信息
       const system=body.system.toLowerCase();//系统名
-      let invokeDate=new Date().toLocaleString();
-      //let invokeDate=(new Date()).valueOf();
-      console.log("invokeDate的值为:",invokeDate);
+      //let invokeDate=new Date().toLocaleString();
+      let invokeDate=new Date();
+      //const date=invokeDate.setTime(invokeDate.getTime()+invokeDate.getTimezoneOffset()*60*1000+480*60*1000);
+      const Y=invokeDate.getFullYear()+'-';
+      const M=(invokeDate.getMonth()+1 < 10 ? '0'+(invokeDate.getMonth()+1) : invokeDate.getMonth()+1) + '-';
+      const D=invokeDate.getDate()+' ';
+      const h=invokeDate.getHours()+':';
+      const m=invokeDate.getMinutes()+':';
+      const s=invokeDate.getSeconds();
+      const date=Y+M+D+h+m+s;
+      console.log("=====值为:",date);
+
       let status='';//响应状态
       let message='';//响应状态信息
       let respdata='无响应体';//响应体
@@ -50,11 +59,10 @@ class InterfaceController extends Controller{
       this.app.mysql.query(sql,[]);*/
 
       //this.app.mysql.query('insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value(?,?,?,?,?,?,?,?,?)', [system, systemCN, ip, interfacesName, repdata, respdata, status, message,invokeDate]);
-      let interfaceInfo=[system,systemCN,ip,interfacesName,repdata,respdata,status,message,invokeDate];
+      let interfaceInfo=[system,systemCN,ip,interfacesName,repdata,respdata,status,message,date];
       this.app.interfaceLog.push(interfaceInfo);
       //console.log("controler中app.interfaceLog的值为：",this.app.interfaceLog);
     }}
-
 }
 
 module.exports=InterfaceController;

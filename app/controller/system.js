@@ -19,9 +19,9 @@ class SystemController extends Controller{
         }else {
             result = await this.app.mysql.insert('isp_system', entity); // 更新 posts 表中的记录
         }
-        let systems=await app.mysql.query(`select * from isp_system`);
+        let systems=await this.app.mysql.query(`select * from isp_system`);
         systems.forEach(s=>{
-           app.systemMap[s.code]=s.id;
+           this.app.systemMap[s.code]=s.id;
         });
         // 判断更新成功
         const updateSuccess = result.affectedRows === 1;
@@ -32,7 +32,7 @@ class SystemController extends Controller{
         const result = await this.app.mysql.delete('isp_system', {
             id: this.ctx.params.id
         });
-        let systems=await app.mysql.query(`select * from isp_system`);
+        let systems=await this.app.mysql.query(`select * from isp_system`);
         systems.forEach(s=>{
             app.systemMap[s.code]=s.id;
         });
@@ -77,14 +77,16 @@ class SystemController extends Controller{
     }
 
     async currentRoleSys(){
-        let sql=`select s.* from isp_system s join isp_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`;
+        //let sql=`select s.* from isp_system s join isp_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`;
+        let sql=`select s.* from isp_system s join isp_user_system us on us.system_id=s.id where us.user_id=?`
         const token =this.ctx.request.header['access-token'];
         const auth=await this.service.authorService.getAuthor(token);
-        const roles=auth.roles;
+        const {user,roles}=auth;
         let systems=[];
-        if(roles.length>0){
-            systems= await this.app.mysql.query(sql,[roles.map(r=>r.id)]);
-        }
+        // if(roles.length>0){
+        //     systems= await this.app.mysql.query(sql,[roles.map(r=>r.id)]);
+        // }
+        systems= await this.app.mysql.query(sql,[user.id]);
 
         auth.systems=[];
         for(let i=0;i<systems.length;i++){
@@ -98,6 +100,13 @@ class SystemController extends Controller{
         this.app.redis.set(token,JSON.stringify(auth));
         console.log(systems);
         this.ctx.body=systems;
+    }
+
+    async sysAccess(){
+        let result=await this.app.mysql.query(
+            `select s.id,s.name,(select count(1) from isp_user_system where user_id=1 and system_id=s.id) count from isp_system s`,
+            [this.ctx.params.userId]);
+        this.ctx.body=result;
     }
 }
 

@@ -14,7 +14,7 @@ class InterfacesLog extends Controller{
     if(interfaceInfo.length!==0){
       let sql=`insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) values 
         ${interfaceInfo.map(a=>{return '('+ a.map(b=>"'"+b+"'").join(',')+')'}).reduce((a,b)=>a+','+b) }`;
-      //console.log("sql的值为：",sql);}
+      console.log("sql的值为：",sql);
       result= await this.app.mysql.query(sql);
       interfaceInfo.length=0;
     }
@@ -28,8 +28,8 @@ class InterfacesLog extends Controller{
     this.ctx.body=content;
   }
 
-  async allInterfaces(){
-    let content=await this.app.mysql.query('select DISTINCT interfaces_name from interfaces_log',[]);
+  async allStatus(){
+    let content=await this.app.mysql.query('select DISTINCT response_status from interfaces_log',[]);
     //let content=await this.app.mysql.query('select * from interfaces_log',[]);
     this.ctx.body=content;
   }
@@ -37,16 +37,16 @@ class InterfacesLog extends Controller{
   async queryLog(){
     //const{systemName,interfacesName}=this.ctx.request.body;
     const systemName=this.ctx.request.body.systemName;
-    const interfacesName=this.ctx.request.body.interfacesName;
+    const statusName=this.ctx.request.body.statusName;
     let content;
-    if(systemName!==''&&interfacesName===''){
+    if(systemName!==''&&statusName===''){
       let sql=`select * from interfaces_log where system_cn=${"'"+systemName+"'"} order by invoke_date desc`;
       content=await this.app.mysql.query(sql);
-    }else if(systemName===''&&interfacesName!==''){
-      let sql=`select * from interfaces_log where interfaces_name=${"'"+interfacesName+"'"} order by invoke_date desc`;
+    }else if(systemName===''&&statusName!==''){
+      let sql=`select * from interfaces_log where response_status=${"'"+statusName+"'"} order by invoke_date desc`;
       content=await this.app.mysql.query(sql);
-    }else if(systemName!==''&&interfacesName!==''){
-      let sql=`select * from interfaces_log where system_cn=${"'"+systemName+"'"} and interfaces_name=${"'"+interfacesName+"'"} order by invoke_date desc`;
+    }else if(systemName!==''&&statusName!==''){
+      let sql=`select * from interfaces_log where system_cn=${"'"+systemName+"'"} and response_status=${"'"+statusName+"'"} order by invoke_date desc`;
       content=await this.app.mysql.query(sql);
     }else{
       content=await this.app.mysql.query('select * from interfaces_log order by invoke_date desc',[]);

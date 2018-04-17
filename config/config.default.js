@@ -4,20 +4,31 @@ module.exports = appInfo => {
   const config  = {};
 
   config.view={
-    defaultViewEngine: 'nunjucks',
-  },
+
+      defaultViewEngine: 'nunjucks',
+  };
+
 
     // use for cookie sign key, should change to your own and keep security
     config.keys = appInfo.name + '_1517886399328_119';
 
   // add your config here
   config.middleware = [
-    'author',
+      'author',
+      'swiftToken'
   ];
 
   config.author={
     ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interface|^\/userRegister\/uniqueUser|^\/userRegister\/uniquePhone|^\/userRegister\/uniqueEmail/,
   };
+
+  config.swiftToken={
+      match: '/swift',
+  };
+
+  config.multipart={
+        fileExtensions: [ '.apk','.xls','.doc','.docx','.xlsx','.pdf','.mkv' ],
+    }
 
   config.mysql={
     client: {

@@ -6,13 +6,12 @@ class MenuController extends Controller{
         super(...arguments);
 
         this.roleMenuSql=
-            'select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id';
+            'select distinct m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id';
     }
 
 
 
     async currentMenu(){
-        //console.log('currentMenu');
         let sql=`select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id`;
         let token=this.ctx.request.header['access-token'];
         let sd=await this.service.authorService.getAuthor(token);
@@ -33,8 +32,7 @@ class MenuController extends Controller{
 
     async menuTree() {
         const token =this.ctx.request.header['access-token'];
-        const auth=await this.service.authorService.getAuthor(token);
-        const roles=auth.roles;
+        const {roles}=await this.service.authorService.getAuthor(token);
         let tree=[];
         if(roles.length>0){
             tree=await this.app.mysql.query(this.roleMenuSql,[1,roles.map(r=>r.id)]);
