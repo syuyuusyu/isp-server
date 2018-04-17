@@ -14,7 +14,8 @@ module.exports = appInfo => {
   config.middleware = [
     'author',
     'swiftToken',
-    'cloudToken'
+    'cloudToken',
+    'bigDataToken'
 
   ];
 
@@ -28,6 +29,10 @@ module.exports = appInfo => {
 
   config.cloudToken = {
     match: /\/invoke\/cloud/
+  };
+
+  config.bigDataToken = {
+    match: /\/invoke\/data/
   };
 
 
@@ -90,6 +95,7 @@ module.exports = appInfo => {
 
   config.self = {
     cloudIp: '10.10.50.12',
+    bigDataIp: '10.10.0.2:8888',
     keystoneIp: '10.10.0.1:5000',
     swiftBaseUrl: 'http://10.10.0.1:8080/v1/AUTH_491ec2831b2146b18fb8bf0c0ab4a1e5/',
   };

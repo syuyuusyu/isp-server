@@ -141,6 +141,8 @@ module.exports = app => {
     router.post('/apply/cloudApplyLog',controller.workflow.cloudApplyLog);
     //获取云平台token
     router.get('/invoke/cloudToken',controller.swift.cloudToken);
+    //获取大数据平台token
+    router.get('/invoke/dataToken',controller.swift.dataToken);
     //发送申请平台访问权限信息
     router.post('/msg/sendApplyPlateformMsg',controller.message.sendApplyPlateformMsg);
     //获取信息

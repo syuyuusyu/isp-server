@@ -24,17 +24,7 @@ module.exports = (options,app) => {
         await next();
 
         if(ctx.body && ctx.body.code && ctx.body.code===500){
-            let [entity] = app.invokeEntitys.filter(d => d.id === 47);
-            let result = await ctx.service.restful.invoke(entity,{
-                ip:app.config.self.cloudIp,
-                username:'demo',
-                password:'demo',
-                domain:'domain'
-            });
-            cloudToken = result['cloud_token-1']['result'].token;
-            ctx.logger.info('cloudToken失效,重新获取',cloudToken);
-            app.redis.set(user.user_name+'-cloudToken',cloudToken);
-
+            app.redis.del(user.user_name+'-cloudToken');
         }
 
     };
