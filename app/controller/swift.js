@@ -13,6 +13,10 @@ class SwiftController extends Controller {
         this.ctx.body={code: 500, msg: '无效Token!'};
     }
 
+    async dataToken(){
+        this.ctx.body={code: 500, msg: '无效Token!'};
+    }
+
     async createContainer(){
         let token = this.ctx.request.header['X-Auth-Token'];
         const {username}=this.ctx.request.body;
