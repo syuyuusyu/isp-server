@@ -10,10 +10,12 @@ module.exports = (options,app) => {
             swiftToken = result['openstack-verify-1']['result'][0].token;
             app.redis.set('swiftToken',swiftToken);
         }
+        ctx.logger.info('swiftToken',swiftToken);
         ctx.request.headers['X-Auth-Token']=swiftToken;
         await next();
 
         if(ctx.body && ctx.body.status && ctx.body.status===401){
+            ctx.logger.info('del swiftToken');
             app.redis.del('swiftToken');
 
         }

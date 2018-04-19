@@ -12,6 +12,7 @@ module.exports = (options,app) => {
                 password:'demo',
                 domain:'domain'
             });
+            console.log(result);
             cloudToken = result['cloud_token-1']['result'].token;
             console.log('cloudToken',cloudToken);
             app.redis.set(user.user_name+'-cloudToken',cloudToken);

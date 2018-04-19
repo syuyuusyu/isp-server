@@ -5,6 +5,7 @@ module.exports = app => {
         app.secret='n7d3t7x7';
         app.loginSystem=[];
         app.systemMap={};
+        app.systemUrl={};
         app.interfaceLog=[];
 
 
@@ -12,6 +13,7 @@ module.exports = app => {
         let systems=await app.mysql.query(`select * from isp_system`);
         for(let system of systems){
             app.systemMap[system.code]=system.id;
+            app.systemUrl[system.code]=system.url;
             let operations=await app.mysql.query(`select o.* from isp_sys_operation o join isp_sys_promiss_operation spo 
                 on spo.operation_id=o.id where spo.system_id=?`,[system.id]);
             await app.redis.set(system.url,JSON.stringify(operations.map(m=>m.path)));

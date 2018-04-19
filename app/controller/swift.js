@@ -5,58 +5,59 @@ const sendToWormhole = require('stream-wormhole');
 class SwiftController extends Controller {
 
 
-    async swiftToken(){
-        this.ctx.body={status:401};
+    async swiftToken() {
+        this.ctx.body = {status: 401};
     }
 
-    async cloudToken(){
-        this.ctx.body={code: 500, msg: '无效Token!'};
+    async cloudToken() {
+        this.ctx.body = {code: 500, msg: '无效Token!'};
     }
 
-    async dataToken(){
-        this.ctx.body={code: 500, msg: '无效Token!'};
+    async dataToken() {
+        this.ctx.body = {status: 40101};
     }
 
-    async createContainer(){
+    async createContainer() {
         let token = this.ctx.request.header['X-Auth-Token'];
-        const {username}=this.ctx.request.body;
-        let result={};
-        const result1 = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/`,{
+        const {username} = this.ctx.request.body;
+        let result = {};
+        const result1 = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/`, {
             headers: {
                 'X-Auth-Token': token,
                 "Content-Length": 0
             },
-            method:'PUT'
+            method: 'PUT'
         });
-        if(result1.status===201){
-            const result2 = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/root/`,{
+        if (result1.status === 201) {
+            const result2 = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/root/`, {
                 headers: {
                     'X-Auth-Token': token,
                     "Content-Length": 0
                 },
-                method:'PUT'
+                method: 'PUT'
             });
-            result.status=result2.status
-        }else{
-            result.status=result1.status
+            result.status = result2.status
+        } else {
+            result.status = result1.status
         }
-        this.ctx.body={status:result.status};
+        this.ctx.body = {status: result.status};
     }
 
-    async containerInfo(){
+    async containerInfo() {
+        console.log(this.ctx.oss);
         let token = this.ctx.request.header['X-Auth-Token'];
         let result;
-        try{
-            result= await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}?format=json`,{
+        try {
+            result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}?format=json`, {
                 headers: {'X-Auth-Token': token},
                 dataType: 'json',
             });
-            result=result.data;
-        }catch (e){
-            result={status:401}
+            result = result.data;
+        } catch (e) {
+            result = {status: 401}
         }
 
-        this.ctx.body=result;
+        this.ctx.body = result;
     }
 
     async getObject() {
@@ -104,12 +105,18 @@ class SwiftController extends Controller {
 
     async download() {
         let token = this.ctx.request.header['X-Auth-Token'];
-        const {name,username} = this.ctx.request.body;
-        const result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/${name}`, {
-            //writeStream: fs.createWriteStream('/Users/syu/scp/sdsd.sql'),
+        const {name, username} = this.ctx.request.body;
+        let filename = name.split('/').filter(d => d).pop() + (/\/$/.test(name) ? '/' : '');
+        this.ctx.logger.info('start curl', filename);
+        let encodeUrl = `${username}/${name}`.split('/').map(d => encodeURI(d)).join('/');
+        console.log(encodeUrl);
+        console.log(`${this.app.config.self.swiftBaseUrl}${username}/${name}`);
+        const result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${encodeUrl}`, {
+            //writeStream: fs.createWriteStream('/Users/syu/Movies/test/'+filename),
             streaming: true,
             headers: {'X-Auth-Token': token}
         });
+        this.ctx.logger.info('end curl');
         this.ctx.set(result.header);
         this.ctx.set('Content-Type', 'application/octet-stream');
         this.ctx.set('Accept', 'application/octet-stream');
@@ -122,10 +129,12 @@ class SwiftController extends Controller {
     async upload() {
 
         const ctx = this.ctx;
-        console.log(ctx.request.header);
+        //console.log(ctx.getFileStream());
         const token = ctx.request.header['X-Auth-Token'];
         const username = ctx.request.header['user-name'];
         const flodername = ctx.request.header['folder-path'];
+        const Length = ctx.request.header['content-length'];
+
 
         const parts = ctx.multipart();
         let part;
@@ -140,16 +149,20 @@ class SwiftController extends Controller {
                 // 文件处理，上传到云存储等等
                 let result;
                 try {
-                    console.log(`${this.app.config.self.swiftBaseUrl}${username}/${flodername}${encodeURI(part.filename)}`);
+                    ctx.logger.info(`${this.app.config.self.swiftBaseUrl}${username}/${flodername}${part.filename}`);
                     result = await this.ctx.curl(
                         `${this.app.config.self.swiftBaseUrl}${username}/${flodername}${encodeURI(part.filename)}`,
                         {
                         //writeStream: fs.createWriteStream('/Users/syu/scp/sdsd.sql'),
                             stream: part,
-                            headers: {'X-Auth-Token': token},
+                            headers: {'X-Auth-Token': token,
+                                //'Content-Length':0,
+                                //'Transfer-Encoding':'chunked'
+                            },
                             method:'PUT',
-                            timeout:200000
+                            timeout:2000000
                         });
+
                 } catch (err) {
                     // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
                     await sendToWormhole(part);
@@ -157,7 +170,37 @@ class SwiftController extends Controller {
                 }
             }
         }
-        ctx.body={a:1};
+        this.ctx.logger.info('上传完成');
+        ctx.body = {a: 1};
+    }
+
+    async upload2() {
+        const ctx = this.ctx;
+        const stream = await ctx.getFileStream();
+        const token = ctx.request.header['X-Auth-Token'];
+        const username = ctx.request.header['user-name'];
+        const flodername = ctx.request.header['folder-path'];
+        const Length = ctx.request.header['content-length'];
+        const filename=ctx.request.header['filename'];
+        let result;
+        try {
+            ctx.logger.info(`${this.app.config.self.swiftBaseUrl}${username}/${flodername}${filename}`);
+            result = await this.ctx.curl(
+                `${this.app.config.self.swiftBaseUrl}${username}/${flodername}${filename}`,
+                {
+                    //writeStream: fs.createWriteStream('/Users/syu/scp/sdsd.sql'),
+                    stream: stream,
+                    headers: {'X-Auth-Token': token, 'Content-Length': 0, 'Transfer-Encoding': 'chunked'},
+                    method: 'PUT',
+                    timeout: 2000000
+                });
+
+            console.log(result);
+        } catch (err) {
+            // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
+            await sendToWormhole(stream);
+            throw err;
+        }
     }
 
 }

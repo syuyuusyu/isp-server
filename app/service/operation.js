@@ -3,11 +3,10 @@ const Service=require('egg').Service;
 class OperationService extends Service{
 
     //平台功能配置菜单树
-    async loadPlatfrom(current,roles){
-        let platfroms=await this.app.mysql.query(
-            `select s.id sysId,s.name text from isp_system s 
-            join isp_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`,
-        [roles.map(r=>r.id)]);
+    async loadPlatfrom(current,user,roles){
+        let sql=`select s.id sysId,s.name text from isp_system s `;
+        //let sql=`select s.id sysId,s.name text from isp_system s join isp_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`
+        let platfroms=await this.app.mysql.query(sql,[roles.map(r=>r.id)]);
         for(let i=0;i<platfroms.length;i++){
             platfroms[i].id=platfroms[i].sysId+'-'+current.id;
             platfroms[i].path='/sys_operation/'+platfroms[i].sysId;
@@ -18,11 +17,10 @@ class OperationService extends Service{
     }
 
     //平台接口管理菜单树
-    async sysInvoke(current,roles){
+    async sysInvoke(current,user,roles){
         let platfroms=await this.app.mysql.query(
-            `select s.id sysId,s.name text from isp_system s 
-            join isp_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`,
-            [roles.map(r=>r.id)]);
+            `select s.id sysId,s.name text from isp_system s`,
+            []);
         for(let i=0;i<platfroms.length;i++){
             platfroms[i].id=platfroms[i].sysId+'-'+current.id;
             platfroms[i].path='/sys_invoke/'+platfroms[i].sysId;

@@ -22,6 +22,7 @@ class SystemController extends Controller{
         let systems=await this.app.mysql.query(`select * from isp_system`);
         systems.forEach(s=>{
            this.app.systemMap[s.code]=s.id;
+           this.app.systemUrl[s.code]=s.url;
         });
         // 判断更新成功
         const updateSuccess = result.affectedRows === 1;

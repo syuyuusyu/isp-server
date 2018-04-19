@@ -16,7 +16,7 @@ module.exports = (options,app) => {
         }
         ctx.request.body={
             ...ctx.request.body,
-            ip:app.config.self.bigDataIp,
+            ip:app.systemUrl['s03'],
             token:bigDataToken
         };
         await next();
