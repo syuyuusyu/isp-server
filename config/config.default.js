@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = appInfo => {
+
     const config = {};
 
     config.view = {
@@ -75,7 +76,7 @@ module.exports = appInfo => {
     config.redis = {
         client: {
             port: 6379,          // Redis port
-            host: '127.0.0.1',   // Redis host
+            host: '10.10.50.16',   // Redis host
             password: '',
             db: 0,
         },
@@ -105,7 +106,5 @@ module.exports = appInfo => {
 
 
     return config;
+
 };
-
-
-
