@@ -20,31 +20,17 @@ class SwiftController extends Controller {
     async createContainer() {
         let token = this.ctx.request.header['X-Auth-Token'];
         const {username} = this.ctx.request.body;
-        let result = {};
-        const result1 = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/`, {
+        const result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/`, {
             headers: {
                 'X-Auth-Token': token,
                 "Content-Length": 0
             },
             method: 'PUT'
         });
-        if (result1.status === 201) {
-            const result2 = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/root/`, {
-                headers: {
-                    'X-Auth-Token': token,
-                    "Content-Length": 0
-                },
-                method: 'PUT'
-            });
-            result.status = result2.status
-        } else {
-            result.status = result1.status
-        }
         this.ctx.body = {status: result.status};
     }
 
     async containerInfo() {
-        console.log(this.ctx.oss);
         let token = this.ctx.request.header['X-Auth-Token'];
         let result;
         try {
