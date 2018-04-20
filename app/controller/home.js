@@ -30,6 +30,7 @@ class HomeController extends Controller {
                 //expiresIn: 30
             });
             this.app.redis.set(token, JSON.stringify({user, roles, roleMenuId}));
+            this.service.systemLog.loginLog(this.ctx.request.body.user_name,this.ctx.ip);
         }
         this.ctx.body = {msg, user, token, roles};
         //return {msg,user,token};
@@ -38,6 +39,7 @@ class HomeController extends Controller {
     async logout() {
         const token = this.ctx.request.header['access-token'];
         const auth = await this.service.authorService.getAuthor(token);
+        this.service.systemLog.logoutLog(auth.user.user_name,this.ctx.ip);
         if(auth.systems){
             auth.systems.forEach(sys=>{
                 let currentIndex=-1;

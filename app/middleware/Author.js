@@ -2,8 +2,10 @@ const jwt=require('jsonwebtoken');
 
 module.exports = (options,app) => {
     return async function author(ctx, next) {
+        /*console.log("ctx的值为:",ctx);*/
         ctx.logger.info('author');
         let s=await asyncVerify(ctx.request.header['access-token'], 'n7d3t7x7',next);
+       ctx.service.systemLog.operateLog(ctx);
     };
 };
 

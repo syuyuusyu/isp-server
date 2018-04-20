@@ -38,7 +38,6 @@ class MenuController extends Controller{
             tree=await this.app.mysql.query(this.roleMenuSql,[1,roles.map(r=>r.id)]);
             await this._menuTree(tree,roles);
         }
-
         this.ctx.body=tree;
     }
 

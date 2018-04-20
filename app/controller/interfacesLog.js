@@ -14,7 +14,6 @@ class InterfacesLog extends Controller{
     if(interfaceInfo.length!==0){
       let sql=`insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) values 
         ${interfaceInfo.map(a=>{return '('+ a.map(b=>"'"+b+"'").join(',')+')'}).reduce((a,b)=>a+','+b) }`;
-      console.log("sql的值为：",sql);
       result= await this.app.mysql.query(sql);
       interfaceInfo.length=0;
     }

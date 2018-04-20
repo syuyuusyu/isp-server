@@ -192,4 +192,14 @@ module.exports = app => {
   router.get('/userRegister/uniquePhone/:phoneNumber',controller.userRegister.phoneUnique);
   //校验注册的电话号码是否唯一
   router.get('/userRegister/uniqueEmail/:email',controller.userRegister.emailUnique);
+
+  //系统日志
+  //获取所有系统日志
+  router.get('/systyemLog/getAllSystemLog',controller.systemLog.allSystemLog);
+  //获取所有登录用户
+  router.get('/systyemLog/getAllLoginName',controller.systemLog.allLoginName);
+  //获取所有操作类型
+  router.get('/systyemLog/getAllOperateType',controller.systemLog.allOperateType);
+  //根据条件查询出系统日志
+  router.post('/systyemLog/querySystemLog',controller.systemLog.querySystemLog);
 };
