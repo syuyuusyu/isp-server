@@ -37,9 +37,11 @@ class SwiftController extends Controller {
             result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}?format=json`, {
                 headers: {'X-Auth-Token': token},
                 dataType: 'json',
+                timeout:20000
             });
             result = result.data;
         } catch (e) {
+            this.ctx.logger.error(e);
             result = {status: 401}
         }
 
@@ -135,9 +137,9 @@ class SwiftController extends Controller {
                 // 文件处理，上传到云存储等等
                 let result;
                 try {
-                    ctx.logger.info(`${this.app.config.self.swiftBaseUrl}${username}/${flodername}${part.filename}`);
+                    ctx.logger.info(`${this.app.config.self.swiftBaseUrl}${username}${flodername}${part.filename}`);
                     result = await this.ctx.curl(
-                        `${this.app.config.self.swiftBaseUrl}${username}/${flodername}${encodeURI(part.filename)}`,
+                        `${this.app.config.self.swiftBaseUrl}${username}${flodername}${encodeURI(part.filename)}`,
                         {
                         //writeStream: fs.createWriteStream('/Users/syu/scp/sdsd.sql'),
                             stream: part,

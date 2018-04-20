@@ -5,21 +5,20 @@ module.exports = (options,app) => {
         let {user}=await ctx.service.authorService.getByCode(authorToken);
         let cloudToken=await app.redis.get(user.user_name+'-cloudToken');
         if(!cloudToken) {
-            let [entity] = app.invokeEntitys.filter(d => d.id === 47);
+            const ispToken=ctx.service.interfaces.randomString(8);
+            app.redis.set(ispToken,JSON.stringify(user));
+            let [entity] = app.invokeEntitys.filter(d => d.id === 59);
             let result = await ctx.service.restful.invoke(entity,{
-                ip:app.config.self.cloudIp,
-                username:'demo',
-                password:'demo',
-                domain:'domain'
+                ip:app.systemUrl['s02'],
+                ispToken:ispToken,
             });
-            console.log(result);
-            cloudToken = result['cloud_token-1']['result'].token;
+            cloudToken = result['cloud_isptoken-1']['result'].token;
             console.log('cloudToken',cloudToken);
             app.redis.set(user.user_name+'-cloudToken',cloudToken);
         }
         ctx.request.body={
             ...ctx.request.body,
-            ip:app.config.self.cloudIp,
+            ip:app.systemUrl['s02'],
             token:cloudToken
         };
         await next();

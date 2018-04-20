@@ -9,15 +9,11 @@ class RestfulController extends Controller{
     }
 
     async infos(){
-
-        console.log(this.ctx.request.body);
         const {page,start,limit,invokeName,groupName}=this.ctx.request.body;
         let where=(invokeName && !/\s/.test(invokeName))?{name:invokeName}:{};
         where=(groupName && !/\s/.test(groupName))?{...where,groupName:groupName}:where;
         let wherecount=(invokeName && !/\s/.test(invokeName))?`where name='${invokeName}'`:'where 1=1';
         wherecount=wherecount+((groupName && !/\s/.test(groupName))?` and groupname='${groupName}'`:'');
-        console.log(wherecount);
-        console.log(page,start,limit,invokeName);
         let result={};
         let [{total}]=await this.app.mysql.query(`select count(1) total from invoke_info ${wherecount}`, []);
         let [...content]=await this.app.mysql.select('invoke_info',{

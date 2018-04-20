@@ -3,11 +3,12 @@ const Service = require('egg').Service;
 class InterfaceService extends Service {
 
     async verifications(body) {
-        const {system, reqdata: [{token}]} = body;
-        let author = await this.service.authorService.getByCode(token);
-        if(!author){
-            author = await this.service.authorService.getByCode(token + system);
-            if (!author) {
+        let {system, reqdata: [{token}]} = body;
+        system=system.toLowerCase();
+        let user = await this.service.authorService.getByCode(token);
+        if(!user){
+            user = await this.service.authorService.getByCode(token + system);
+            if (!user) {
                 return {
                     status: '806',
                     message: '令牌token无效'
@@ -20,7 +21,7 @@ class InterfaceService extends Service {
                     message: '成功',
                     respdata: [
                         {
-                            username: author.user.user_name,
+                            username: user.user_name,
                         }
                     ]
                 };
@@ -33,7 +34,7 @@ class InterfaceService extends Service {
             message: '成功',
             respdata: [
                 {
-                    username: author.user.user_name,
+                    username: user.user_name,
                 }
             ]
         };

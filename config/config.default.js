@@ -17,7 +17,6 @@ module.exports = appInfo => {
         'swiftToken',
         'cloudToken',
         'bigDataToken'
-
     ];
 
     config.author = {
@@ -76,7 +75,7 @@ module.exports = appInfo => {
     config.redis = {
         client: {
             port: 6379,          // Redis port
-            host: '127.0.0.1',   // Redis host
+            host: '10.10.50.16',   // Redis host
             password: '',
             db: 0,
         },
@@ -96,14 +95,9 @@ module.exports = appInfo => {
     };
 
     config.self={
-        cloudIp:'10.10.50.12',
-        bigDataIp:'10.10.0.2:8888',
         keystoneIp:'10.10.0.1:5000',
-        swiftBaseUrl :'http://10.10.0.1:8080/v1/AUTH_491ec2831b2146b18fb8bf0c0ab4a1e5/',
+        swiftBaseUrl :'http://10.10.0.1:8080/v1/AUTH_8caa6e28cf7049d48b9c5274c8cb524e/',
     };
-
-
-
 
     return config;
 
