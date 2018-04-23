@@ -41,7 +41,6 @@ class OrganizationController extends Controller{
 
     async save(){
         const entity=this.ctx.request.body;
-        console.log(entity);
         let result={};
         if(entity.id){
             result = await this.app.mysql.update('isp_organization', entity);
@@ -49,7 +48,6 @@ class OrganizationController extends Controller{
             result = await this.app.mysql.insert('isp_organization', {entity,is_detailed:1}); // 更新 posts 表中的记录
         }*/
         // 判断更新成功
-        console.log(result);
         const updateSuccess = result.affectedRows === 1;
         this.ctx.body={success:updateSuccess};
     }
@@ -76,8 +74,6 @@ class OrganizationController extends Controller{
                 id:this.ctx.params.id
             }
         });
-       /* console.log("resultAccept的值为：");
-        console.log(resultAccept[0].parent_id);*/
         //查询要删除的节点的父节点有几个子节点，如果只有一个子节点（即要删除的节点），那么将父节点的is_leaf置为1
         if(resultAccept[0].parent_id){
             const resultParentId= await this.app.mysql.select('isp_organization',{
@@ -85,7 +81,6 @@ class OrganizationController extends Controller{
                     parent_id:resultAccept[0].parent_id
                 }
             });
-            //console.log("resultParentId的值为：",resultParentId);
             if(resultParentId.length==1){
                 await this.app.mysql.query('update isp_organization set is_leaf=? where id=?',[1,resultAccept[0].parent_id]);
             }

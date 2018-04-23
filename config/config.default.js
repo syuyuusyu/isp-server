@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = appInfo => {
-
     const config = {};
 
     config.view = {
@@ -19,8 +18,8 @@ module.exports = appInfo => {
         'bigDataToken'
     ];
 
-    config.author = {
-        ignore: /\/test|\/login|\/index|\/static|^\/interfaces/,
+    config.author={
+      ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interface|^\/userRegister\/uniqueUser|^\/userRegister\/uniquePhone|^\/userRegister\/uniqueEmail/,
     };
 
     config.swiftToken = {

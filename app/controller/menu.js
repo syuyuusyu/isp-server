@@ -12,7 +12,6 @@ class MenuController extends Controller{
 
 
     async currentMenu(){
-        //console.log('currentMenu');
         let sql=`select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id`;
         let token=this.ctx.request.header['access-token'];
         let sd=await this.service.authorService.getAuthor(token);
@@ -39,7 +38,6 @@ class MenuController extends Controller{
             tree=await this.app.mysql.query(this.roleMenuSql,[1,roles.map(r=>r.id)]);
             await this._menuTree(tree,user,roles);
         }
-
         this.ctx.body=tree;
     }
 

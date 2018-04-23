@@ -53,7 +53,6 @@ class OperationController extends Controller{
         if(updateSuccess){
             this.service.authorService.invokePromiss();
         }
-        console.log(updateSuccess);
         this.ctx.body={success:updateSuccess};
     }
 }

@@ -187,8 +187,26 @@ module.exports = app => {
     router.get('/interfacesLog/refreshLog',controller.interfacesLog.refreshLog);
     //获取所有系统
     router.get('/interfacesLog/allSystem',controller.interfacesLog.allSystem);
-    //获取所有接口
-    router.get('/interfacesLog/allInterfaces',controller.interfacesLog.allInterfaces);
+    //获取所有响应状态
+    router.get('/interfacesLog/allStatus',controller.interfacesLog.allStatus);
     //根据条件查询出接口调用日志
     router.post('/interfacesLog/queryLog',controller.interfacesLog.queryLog);
+
+  //用户注册
+  //校验注册的用户是否唯一
+  router.get('/userRegister/uniqueUser/:userName',controller.userRegister.userUnique);
+  //校验注册的电话号码是否唯一
+  router.get('/userRegister/uniquePhone/:phoneNumber',controller.userRegister.phoneUnique);
+  //校验注册的电话号码是否唯一
+  router.get('/userRegister/uniqueEmail/:email',controller.userRegister.emailUnique);
+
+  //系统日志
+  //获取所有系统日志
+  router.get('/systyemLog/getAllSystemLog',controller.systemLog.allSystemLog);
+  //获取所有登录用户
+  router.get('/systyemLog/getAllLoginName',controller.systemLog.allLoginName);
+  //获取所有操作类型
+  router.get('/systyemLog/getAllOperateType',controller.systemLog.allOperateType);
+  //根据条件查询出系统日志
+  router.post('/systyemLog/querySystemLog',controller.systemLog.querySystemLog);
 };

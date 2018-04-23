@@ -1,16 +1,7 @@
-//import InterfacesLog from '../service/InterfacesLog';
-const Controller =require('egg').Controller;
+const Service = require('egg').Service;
 
-class InterfaceController extends Controller{
-  async interfaces(){
-    const body=this.ctx.request.body;
-    const result=await this.service.interfaces[body.method](body);
-
-    this.ctx.body=result;
-    //this.log(body,result);
-    this.service.interfacesLog.log(body,result);
-  }
-  /*log(body,result){
+class InterfacesLog extends Service{
+   log (body,result){
     if(body.method==='keyverify'){
       const ip=this.ctx.ip;//调用接口的ip
       const interfacesName=body.method;//接口名
@@ -21,12 +12,11 @@ class InterfaceController extends Controller{
       //const date=invokeDate.setTime(invokeDate.getTime()+invokeDate.getTimezoneOffset()*60*1000+480*60*1000);
       const Y=invokeDate.getFullYear()+'-';
       const M=(invokeDate.getMonth()+1 < 10 ? '0'+(invokeDate.getMonth()+1) : invokeDate.getMonth()+1) + '-';
-      const D=invokeDate.getDate()+' ';
-      const h=invokeDate.getHours()+':';
-      const m=invokeDate.getMinutes()+':';
-      const s=invokeDate.getSeconds();
+      const D=(invokeDate.getDate()+1<10? '0'+(invokeDate.getDate()):invokeDate.getDate())+' ';
+      const h=(invokeDate.getHours()+1<10? '0'+(invokeDate.getHours()):invokeDate.getHours())+':';
+      const m=(invokeDate.getMinutes()+1<10? '0'+(invokeDate.getMinutes()):invokeDate.getMinutes())+':';
+      const s=(invokeDate.getSeconds()+1<10? '0'+(invokeDate.getSeconds()):invokeDate.getSeconds());
       const date=Y+M+D+h+m+s;
-      console.log("=====值为:",date);
 
       let status='';//响应状态
       let message='';//响应状态信息
@@ -55,15 +45,14 @@ class InterfaceController extends Controller{
         }
       }
 
-      /!*let sql=`insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value (${system},${systemCN},${ip},${interfacesName},${repdata},${status},${message},${invokeDate})`;
+      /*let sql=`insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value (${system},${systemCN},${ip},${interfacesName},${repdata},${status},${message},${invokeDate})`;
       console.log("sql的值为：",sql);
-      this.app.mysql.query(sql,[]);*!/
+      this.app.mysql.query(sql,[]);*/
 
       //this.app.mysql.query('insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value(?,?,?,?,?,?,?,?,?)', [system, systemCN, ip, interfacesName, repdata, respdata, status, message,invokeDate]);
       let interfaceInfo=[system,systemCN,ip,interfacesName,repdata,respdata,status,message,date];
       this.app.interfaceLog.push(interfaceInfo);
-      //console.log("controler中app.interfaceLog的值为：",this.app.interfaceLog);
-    }}*/
+    }
+  }
 }
-
-module.exports=InterfaceController;
+module.exports = InterfacesLog;
