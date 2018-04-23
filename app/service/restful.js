@@ -34,9 +34,9 @@ class RestfulService extends Service{
         data=JSON.parse(data);
         let head=this.parseByqueryMap(entity.head,queryObj);
         head=JSON.parse(head);
-        this.app.logger.info('url:',url);
-        this.app.logger.info('head:',head);
-        this.app.logger.info('body:',data);
+        this.ctx.logger.info('url:',url);
+        this.ctx.logger.info('head:',head);
+        this.ctx.logger.info('body:',data);
 
 
         let invokeResult;
@@ -68,8 +68,8 @@ class RestfulService extends Service{
             }
 
         }
-        this.app.logger.info('status',invokeResult.status);
-        this.app.logger.info('result',invokeResult.data);
+        this.ctx.logger.info('status',invokeResult.status);
+        this.ctx.logger.info('result',invokeResult.data);
         if(entity.parseFun){
             try {
                 let fn=evil(entity.parseFun);
@@ -77,7 +77,7 @@ class RestfulService extends Service{
                 //response,responsehead,responsestatus,requesthead,requestdata,url
                 result[invokeName].result=s;
             }catch (e){
-                this.app.logger.error(e);
+                this.ctx.logger.error(e);
                 result[invokeName].result=invokeResult.data;
             }
         }else{
