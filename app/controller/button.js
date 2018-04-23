@@ -2,7 +2,7 @@ const Controller=require('egg').Controller;
 
 class ButtonController extends Controller{
     async menuButton(){
-        let buttons=await this.app.mysql.select('t_button',{
+        let buttons=await this.app.mysql.select('isp_button',{
             where:{menu_id:this.ctx.params.menuId}
         });
         this.ctx.body=buttons;
