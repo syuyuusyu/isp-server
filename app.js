@@ -1,7 +1,12 @@
 module.exports = app => {
     app.beforeStart(async () => {
-        // 应用会等待这个函数执行完成才启动
-        console.log('app start');
+        //清除redis缓存
+        let redisKeys=await app.redis.keys('*');
+        for(let key of redisKeys){
+            console.log(key);
+            await app.redis.del(key);
+        }
+
         app.secret='n7d3t7x7';
         app.loginSystem=[];
         app.systemMap={};
@@ -21,6 +26,8 @@ module.exports = app => {
 
         //初始化接口调用实体
         app.invokeEntitys=await app.mysql.query(`select * from invoke_info`);
+
+        app.logger.info('app start');
     });
 
     app.once('server', server => {

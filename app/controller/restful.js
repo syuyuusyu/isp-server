@@ -64,7 +64,7 @@ class RestfulController extends Controller{
                 });
                 return flag;
             });
-
+        console.log(nextEntitys);
         let promises=nextEntitys.map(entity=>this.service.restful.invoke(entity,queryMap));
         let p=await Promise.all(promises);
 
