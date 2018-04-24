@@ -10,7 +10,8 @@ module.exports = (options,app) => {
         if(token && author){
             await next();
         }else{
-            ctx.status===401;
+            ctx.logger.info('token失效!!!');
+            ctx.status=401;
             ctx.body={status:401,message:'token失效'};
         }
 

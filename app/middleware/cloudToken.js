@@ -24,8 +24,11 @@ module.exports = (options,app) => {
         await next();
 
         if(ctx.body && ctx.body.code && ctx.body.code===500){
+            ctx.logger.info('del cloudToken');
             app.redis.del(user.user_name+'-cloudToken');
         }
 
     };
 };
+
+

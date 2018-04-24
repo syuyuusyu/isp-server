@@ -9,6 +9,12 @@ module.exports = app => {
         app.interfaceLog=[];
         app.allRouter=[];
 
+        //清空redis
+        const keys=await app.redis.keys('*');
+        for(let key of keys){
+            app.redis.del(key);
+        }
+
 
         //初始化系统调用接口权限
         let systems=await app.mysql.query(`select * from isp_system`);
