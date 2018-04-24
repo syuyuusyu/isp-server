@@ -5,6 +5,7 @@ module.exports = (options,app) => {
         /*console.log("ctx的值为:",ctx);*/
         ctx.logger.info('author');
         await asyncVerify(ctx,ctx.request.header['access-token'], 'n7d3t7x7',next);
+        ctx.service.systemLog.operateLog(ctx);
     };
 };
 

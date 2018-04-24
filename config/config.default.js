@@ -43,15 +43,15 @@ module.exports = appInfo => {
     config.mysql = {
         client: {
             // host
-            host: '10.10.50.16',
+            host: '127.0.0.1',
             // 端口号
             port: '3306',
             // 用户名
             user: 'root',
             // 密码
-            password: '1234',
+            password: 'password',
             // 数据库名
-            database: 'isp',
+            database: 'ispdk',
         },
         // 是否加载到 app 上，默认开启
         app: true,
@@ -74,7 +74,7 @@ module.exports = appInfo => {
     config.redis = {
         client: {
             port: 6379,          // Redis port
-            host: '10.10.50.16',   // Redis host
+            host: '127.0.0.1',   // Redis host
             password: '',
             db: 0,
         },

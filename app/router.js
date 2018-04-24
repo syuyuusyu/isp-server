@@ -209,4 +209,14 @@ module.exports = app => {
   router.get('/systyemLog/getAllOperateType',controller.systemLog.allOperateType);
   //根据条件查询出系统日志
   router.post('/systyemLog/querySystemLog',controller.systemLog.querySystemLog);
+
+  //待办日志
+  //获取所有待办日志
+  router.get('/daibanLog/getAllDaibanLog',controller.daibanLog.allDaibanLog);
+  //获取所有登录用户
+  router.get('/daibanLog/getAllLoginName',controller.daibanLog.allLoginName);
+  //获取所有待办状态
+  router.get('/daibanLog/getDaibanStatus',controller.daibanLog.allDaibanStatus);
+  //根据条件查询出待办日志
+  router.post('/daibanLog/queryDaibanLog',controller.daibanLog.queryDaibanLog);
 };

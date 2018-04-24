@@ -27,7 +27,6 @@ class SystemLog extends Service{
 
    let requestRouter=ctx.url;
    requestRouter=requestRouter.replace(/\d+/,'');
-    //console.log("requestRouter为:",requestRouter);
    const allRouter=this.app.allRouter;
    if((allRouter.search(requestRouter))!==-1){
      //console.log("进来啦")
