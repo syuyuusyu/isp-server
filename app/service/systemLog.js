@@ -27,7 +27,6 @@ class SystemLog extends Service{
 
    let requestRouter=ctx.url;
    requestRouter=requestRouter.replace(/\d+/,'');
-    //console.log("requestRouter为:",requestRouter);
    const allRouter=this.app.allRouter;
    if((allRouter.search(requestRouter))!==-1){
      //console.log("进来啦")
@@ -75,19 +74,10 @@ class SystemLog extends Service{
      const content=await this.app.mysql.query('select router_info,router_type from router_map where router_name=?',[requestRouter]);
      const router_type=content[0].router_type;
      const router_info=content[0].router_info;
-     console.log("content为:",router_type,router_info);
+     //console.log("content为:",router_type,router_info);
      this.app.mysql.query('insert into system_log(login_name,operate_type,operate_ip,operate_detail) value(?,?,?,?)',[logoinUser,router_type,requestUrl,router_info]);
-   }}
-
-
-  /* for(let i=0;i<content.length;i++){
-      const routerName=content[i].router_name;
-      if(requestRouter===routerName){
-        while(requestRouter==='/role/save'){
-
-        }
-      }
-    }*/
+    }
+   }
   }
 }
 module.exports = SystemLog;
