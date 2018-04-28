@@ -21,6 +21,8 @@ class AuthorService extends Service{
             this.app.systemUrl[system.code]=system.url;
             let operations=await this.app.mysql.query(`select o.* from isp_sys_operation o join isp_sys_promiss_operation spo 
                 on spo.operation_id=o.id where spo.system_id=?`,[system.id]);
+            this.ctx.logger.info(system.url);
+            this.ctx.logger.info(JSON.stringify(operations.map(m=>m.path)));
             await this.app.redis.set(system.url,JSON.stringify(operations.map(m=>m.path)));
         }
     }

@@ -3,7 +3,9 @@ const Service = require('egg').Service;
 class InterfaceService extends Service {
 
     async verifications(body) {
+
         let {system, reqdata: [{token}]} = body;
+        console.log(body);
         system=system.toLowerCase();
         let user = await this.service.authorService.getByCode(token);
         if(!user){
@@ -141,7 +143,8 @@ class InterfaceService extends Service {
         const { reqdata:[{domain,path:path}]} = body;
         console.log(domain);
         let codes=await this.service.authorService.getByCode(domain);
-        if(codes.filter(c=>c===path).length>0){
+
+        if(codes && codes.filter(c=>c===path).length>0){
             return {
                 status: '801',
                 message: `成功`,
@@ -203,6 +206,7 @@ class InterfaceService extends Service {
     async push_interface(body){
         const {system,reqdata} =body;
         const syatemId=this.app.systemMap[system.toLowerCase()];
+        console.log(syatemId);
         if(!syatemId){
             return {
                 status:'806',
@@ -211,21 +215,22 @@ class InterfaceService extends Service {
         }
         try{
             for(let op of reqdata){
-                let [{id}]=await this.app.mysql.query(`select id from isp_sys_operation where name=? and system_id=?`,
+                console.log(op);
+                let [result]=await this.app.mysql.query(`select id from isp_sys_operation where name=? and system_id=?`,
                     [op.name,syatemId]);
-                if(id){
-                    await conn.update('isp_metadata',{...op,id:id});
+                if(result && result.id){
+                    await this.app.mysql.update('isp_sys_operation',{...op,id:id,type:3,system_id:syatemId});
                 }else{
-                    await conn.insert('isp_metadata',{op});
+                    await this.app.mysql.insert('isp_sys_operation',{...op,type:3,system_id:syatemId});
                 }
             }
-            await conn.commit();
+
             return {
                 status:'801',
                 message:'同步成功'
             }
         }catch (e){
-            await conn.rollback(); // 一定记得捕获异常后回滚事务！！
+         // 一定记得捕获异常后回滚事务！！
             this.app.logger.error(e);
             return {
                 status:'806',

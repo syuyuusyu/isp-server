@@ -19,7 +19,7 @@ module.exports = appInfo => {
     ];
 
     config.author={
-      ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interface|^\/userRegister/,
+      ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister\/uniqueUser|^\/userRegister\/uniquePhone|^\/userRegister\/uniqueEmail/,
     };
 
     config.swiftToken = {

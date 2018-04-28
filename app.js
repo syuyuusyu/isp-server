@@ -9,6 +9,12 @@ module.exports = app => {
         app.interfaceLog=[];
         app.allRouter=[];
 
+        //清空redis
+        const keys=await app.redis.keys('*');
+        for(let key of keys){
+            app.redis.del(key);
+        }
+
 
         //初始化系统调用接口权限
         let systems=await app.mysql.query(`select * from isp_system`);
@@ -23,12 +29,12 @@ module.exports = app => {
         //初始化接口调用实体
         app.invokeEntitys=await app.mysql.query(`select * from invoke_info`);
 
-      //初始化获取所有增，改，查的路由
-      let content=await app.mysql.query(`select router_name from router_map`);
-      for(let i=0;i<content.length;i++){
-        app.allRouter.push(content[i].router_name)
-      }
-      app.allRouter=app.allRouter.toString();
+        //初始化获取所有增，改，查的路由
+        let content=await app.mysql.query(`select router_name from router_map`);
+        for(let i=0;i<content.length;i++){
+            app.allRouter.push(content[i].router_name)
+        }
+        app.allRouter=app.allRouter.toString();
     });
 
     app.once('server', server => {
