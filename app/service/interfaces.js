@@ -5,12 +5,13 @@ class InterfaceService extends Service {
     async verifications(body) {
 
         let {system, reqdata: [{token}]} = body;
-        console.log(body);
+        this.ctx.logger.info(body);
         system=system.toLowerCase();
         let user = await this.service.authorService.getByCode(token);
         if(!user){
             user = await this.service.authorService.getByCode(token + system);
             if (!user) {
+                this.ctx.logger.info('令牌token无效');
                 return {
                     status: '806',
                     message: '令牌token无效'
@@ -18,6 +19,7 @@ class InterfaceService extends Service {
             } else {
                 this.app.redis.del(token + system);
                 this.app.loginSystem.push(system);
+                this.ctx.logger.info('成功');
                 return {
                     status: '801',
                     message: '成功',
@@ -31,6 +33,7 @@ class InterfaceService extends Service {
         }
 
         this.app.redis.del(token);
+        this.ctx.logger.info('成功');
         return {
             status: '801',
             message: '成功',
@@ -206,7 +209,6 @@ class InterfaceService extends Service {
     async push_interface(body){
         const {system,reqdata} =body;
         const syatemId=this.app.systemMap[system.toLowerCase()];
-        console.log(syatemId);
         if(!syatemId){
             return {
                 status:'806',
@@ -240,6 +242,7 @@ class InterfaceService extends Service {
     }
 
     async synuserresult(body){
+        this.ctx.logger.info('接收用户同步结果:',body);
         const {system,reqdata:[{status,username,msg}]}=body;
         let [systementity]=await this.app.mysql.query(`select * from isp_system where code=?`,[system.toLowerCase()]);
         let [user]=await this.app.mysql.query(`select * from isp_user where user_name=?`,[username]);

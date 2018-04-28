@@ -138,4 +138,22 @@ function evil(fn) {
     return new Fn('return ' + fn)();
 }
 
+function sdsd(){
+    let all=[
+        [[1],[2],[3],[1]],
+        [[3],[4],[5],[1]],
+        [[4],[5],[6],[1]]
+    ];
+    var result=[],index=0;
+    while(all[0].length>0){
+        result[index]=0;
+        for(var i=0;i<all.length;i++){
+            var temp=all[i].shift()[0];
+            result[index]+=temp;
+        }
+        index++;
+    }
+    console.log(result);
+}
+
 module.exports=RestfulController;
