@@ -97,7 +97,6 @@ class SwiftController extends Controller {
         let filename = name.split('/').filter(d => d).pop() + (/\/$/.test(name) ? '/' : '');
         this.ctx.logger.info('start curl', filename);
         let encodeUrl = `${username}/${name}`.split('/').map(d => encodeURI(d)).join('/');
-        console.log(encodeUrl);
         console.log(`${this.app.config.self.swiftBaseUrl}${username}/${name}`);
         const result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${encodeUrl}`, {
             //writeStream: fs.createWriteStream('/Users/syu/Movies/test/'+filename),

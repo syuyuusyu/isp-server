@@ -1,6 +1,8 @@
 module.exports = app => {
     app.beforeStart(async () => {
         // 应用会等待这个函数执行完成才启动
+
+
         console.log('app start');
         app.secret='n7d3t7x7';
         app.loginSystem=[];
@@ -10,10 +12,10 @@ module.exports = app => {
         app.allRouter=[];
 
         //清空redis
-        const keys=await app.redis.keys('*');
-        for(let key of keys){
-            app.redis.del(key);
-        }
+        // const keys=await app.redis.keys('*');
+        // for(let key of keys){
+        //     app.redis.del(key);
+        // }
 
 
         //初始化系统调用接口权限

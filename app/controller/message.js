@@ -44,6 +44,7 @@ class MessageController extends Controller{
         const token=this.ctx.request.header['access-token'];
         const {user:currentUser}=await this.service.authorService.getAuthor(token);
         const message=this.ctx.request.body;
+        this.ctx.logger.info('调用用户同步接口',message);
         message.message=`${message.message}\n
             用户${currentUser.name}于${new Date()}批准了该申请`;
         let result;
@@ -52,6 +53,7 @@ class MessageController extends Controller{
             const systems=await this.app.mysql.query(
                 `select s.*,so.path from isp_system s join isp_sys_operation so on s.id=so.system_id where so.type=5 and s.id in(?)`,
                 [message.memo.split(',')]);
+
             let [invokeEntity] =this.app.invokeEntitys.filter(d => d.id === 31);
             let [user]=await this.app.mysql.query(`select * from isp_user where id=?`,[message.send_user_id]);
             for(let sys of systems){

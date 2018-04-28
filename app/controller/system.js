@@ -104,7 +104,7 @@ class SystemController extends Controller{
 
     async sysAccess(){
         let result=await this.app.mysql.query(
-            `select s.id,s.name,(select count(1) from isp_user_system where user_id=1 and system_id=s.id) count from isp_system s`,
+            `select s.id,s.name,(select count(1) from isp_user_system where user_id=? and system_id=s.id) count from isp_system s`,
             [this.ctx.params.userId]);
         this.ctx.body=result;
     }

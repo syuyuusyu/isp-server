@@ -19,13 +19,22 @@ module.exports = (options,app) => {
         ctx.request.body={
             ...ctx.request.body,
             ip:app.systemUrl['s02'],
-            token:cloudToken
+            token:cloudToken,
+            domain:'http://192.168.3.11:7001'
         };
-        await next();
-
-        if(ctx.body && ctx.body.code && ctx.body.code===500){
-            ctx.logger.info('del cloudToken');
-            app.redis.del(user.user_name+'-cloudToken');
+        console.log('cloudToken 24',cloudToken);
+        if(cloudToken) {
+            await next();
+            if (ctx.body && ctx.body.code && ctx.body.code === 500) {
+                ctx.logger.info('del cloudToken');
+                app.redis.del(user.user_name + '-cloudToken');
+            }
+            if(ctx.body && !ctx.body.ok ){
+                ctx.logger.info('del cloudToken');
+                app.redis.del(user.user_name + '-cloudToken');
+            }
+        }else{
+            ctx.body={code:500,msg:'获取token失败'}
         }
 
     };
