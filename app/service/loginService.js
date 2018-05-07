@@ -5,7 +5,7 @@ const crypto = require('crypto');
 class LoginService extends Service{
 
     async login(user){
-        console.log("user的值为:",user);
+        console.log(user);
         let [{userExist}]=await this.app.mysql.query(`select count(1) userExist from isp_user where user_name='${user.user_name}'`);
         if(userExist===0){
             return '2';
@@ -19,7 +19,6 @@ class LoginService extends Service{
         const hmac = crypto.createHmac('sha256', salt);
         const loginPwHmac=hmac.update(user.passwd).digest('hex');//加密后的前端输入的密码
         const comparePw=(loginPwDB===loginPwHmac);
-        console.log("comparePw的值为:",comparePw);
         if(userExist===1&&comparePw===false){
           return '3'
         }
