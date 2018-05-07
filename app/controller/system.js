@@ -73,6 +73,8 @@ class SystemController extends Controller{
             throw err;
         }
         const updateSuccess = sysIds.length===0 || result.affectedRows === sysIds.length;
+        //刷新系统访问接口权限
+        this.ctx.service.authorService.invokePromiss();
         this.ctx.body={success:updateSuccess};
 
     }
