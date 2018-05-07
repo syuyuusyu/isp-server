@@ -37,7 +37,7 @@ class SwiftController extends Controller {
             result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}?format=json`, {
                 headers: {'X-Auth-Token': token},
                 dataType: 'json',
-                timeout:20000
+                timeout:400000
             });
             result = result.data;
         } catch (e) {
@@ -136,9 +136,9 @@ class SwiftController extends Controller {
                 // 文件处理，上传到云存储等等
                 let result;
                 try {
-                    ctx.logger.info(`${this.app.config.self.swiftBaseUrl}${username}${flodername}${part.filename}`);
+                    ctx.logger.info(`${this.app.config.self.swiftBaseUrl}${username}${flodername.startsWith('/')?flodername:'/'+flodername}${encodeURI(part.filename)}`);
                     result = await this.ctx.curl(
-                        `${this.app.config.self.swiftBaseUrl}${username}${flodername}${encodeURI(part.filename)}`,
+                        `${this.app.config.self.swiftBaseUrl}${username}${flodername.startsWith('/')?flodername:'/'+flodername}${encodeURI(part.filename)}`,
                         {
                         //writeStream: fs.createWriteStream('/Users/syu/scp/sdsd.sql'),
                             stream: part,
@@ -182,7 +182,6 @@ class SwiftController extends Controller {
                     timeout: 2000000
                 });
 
-            console.log(result);
         } catch (err) {
             // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
             await sendToWormhole(stream);

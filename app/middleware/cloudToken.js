@@ -20,16 +20,17 @@ module.exports = (options,app) => {
             ...ctx.request.body,
             ip:app.systemUrl['s02'],
             token:cloudToken,
-            domain:'http://192.168.3.11:7001'
+            domain:app.systemUrl['s01']
         };
         console.log('cloudToken 24',cloudToken);
         if(cloudToken) {
             await next();
+            ctx.logger.info(ctx.body);
             if (ctx.body && ctx.body.code && ctx.body.code === 500) {
                 ctx.logger.info('del cloudToken');
                 app.redis.del(user.user_name + '-cloudToken');
             }
-            if(ctx.body && !ctx.body.ok ){
+            if(ctx.body && ctx.body.ok===false ){
                 ctx.logger.info('del cloudToken');
                 app.redis.del(user.user_name + '-cloudToken');
             }

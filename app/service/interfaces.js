@@ -5,7 +5,7 @@ class InterfaceService extends Service {
     async verifications(body) {
 
         let {system, reqdata: [{token}]} = body;
-        this.ctx.logger.info(body);
+        this.ctx.logger.info(8,body);
         system=system.toLowerCase();
         let user = await this.service.authorService.getByCode(token);
         if(!user){
@@ -144,10 +144,16 @@ class InterfaceService extends Service {
     //keyverify
     async keyverify(body) {
         const { reqdata:[{domain,path:path}]} = body;
-        console.log(domain);
+        this.ctx.logger.info('接口权限认证:body',body);
         let codes=await this.service.authorService.getByCode(domain);
-
-        if(codes && codes.filter(c=>c===path).length>0){
+        this.ctx.logger.info('接口权限认证:codes',codes);
+        if(codes && codes.filter(c=>{
+                let rep=/(?:\{)\w+(?:\})/;
+                let a=c.replace(rep,(w,p)=>{
+                    return '.*?'
+                });
+                return new RegExp(a).test(path);
+            }).length>0){
             return {
                 status: '801',
                 message: `成功`,

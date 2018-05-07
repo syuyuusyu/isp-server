@@ -49,7 +49,17 @@ class RestfulService extends Service{
                 timeout:20000
             });
         }catch (e2){
+            this.app.logger.error('--------');
+            this.app.logger.error(invokeResult);
             this.app.logger.error(e2);
+            if(e2.toString().startsWith('ResponseTimeoutError')){
+                console.log('nodejs.ResponseTimeoutError');
+                result[invokeName].body=data;
+                result[invokeName].head=head;
+                result[invokeName].url=url;
+                result[invokeName].result=[];
+                return;
+            }
             try{
                 invokeResult=await this.app.curl(url,{
                     method:method,
@@ -87,7 +97,7 @@ class RestfulService extends Service{
         result[invokeName].body=data;
         result[invokeName].head=head;
         result[invokeName].url=url;
-        if(entity.next && result[invokeName].result.map){
+        if(entity.next && result[invokeName].result.map ){
             let nextEntitys=//await this.app.mysql.select('invoke_info',{where: {  id: entity.next.split(',') }});
                     this.app.invokeEntitys.filter(d=>{
                         let flag=false;

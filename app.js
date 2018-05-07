@@ -1,6 +1,49 @@
 module.exports = app => {
     app.beforeStart(async () => {
         // 应用会等待这个函数执行完成才启动
+        const aq=`[ { 'cloud_servers_list-1': 
+     [ [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object],
+       [Object] ],
+    'cloud_servers_status-2': [],
+    'cloud_servers_status-3': [],
+    'cloud_servers_status-4': [],
+    'cloud_servers_status-5': [],
+    'cloud_servers_status-6': [],
+    'cloud_servers_status-7': [],
+    'cloud_servers_status-8': [],
+    'cloud_servers_status-9': [],
+    'cloud_servers_status-10': [],
+    'cloud_servers_status-11': [],
+    'cloud_servers_status-12': [],
+    'cloud_servers_status-13': [],
+    'cloud_servers_status-14': [],
+    'cloud_servers_status-15': [],
+    'cloud_servers_status-16': [],
+    'cloud_servers_status-17': [],
+    'cloud_servers_status-18': [],
+    'cloud_servers_status-19': [],
+    'cloud_servers_status-20': [],
+    'cloud_servers_status-21': [] } ]`;
+
+        //parse(JSON.parse(aq));
 
 
         console.log('app start');
@@ -43,3 +86,25 @@ module.exports = app => {
         //app.logger.info(server.restful);
     });
 };
+
+
+
+function parse(obj){
+    obj=obj[0];
+    let serverlist=[];
+    let status=[];
+    for(let key in obj){
+        if(key.indexOf('cloud_servers_list')===0){
+            serverlist=obj[key];
+        }
+        if(key.indexOf('cloud_servers_status')===0){
+            status.push(obj[key]);
+        }
+    }
+    for(let i=0;i<serverlist.length;i++){
+        serverlist[i].status=status.filter(d=>d.serverId===serverlist[i].serverId)[0].status;
+        delete serverlist[i].links;
+        delete serverlist[i].serverId;
+    };
+    return serverlist;
+}

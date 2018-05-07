@@ -6,10 +6,10 @@ module.exports = (options,app) => {
         let bigDataToken=await app.redis.get(user.user_name+'-bigDataToken');
         if(!bigDataToken) {
             let [entity] = app.invokeEntitys.filter(d => d.id === 48);
+            const ispToken=ctx.service.interfaces.randomString(8);
             let result = await ctx.service.restful.invoke(entity,{
-                ip:app.config.self.bigDataIp,
-                username:'admin',
-                password:'123456',
+                ip:app.systemUrl['s03'],
+                ispToken:ispToken
             });
             bigDataToken = result['data_token-1']['result'].token;
             app.redis.set(user.user_name+'-bigDataToken',bigDataToken);
