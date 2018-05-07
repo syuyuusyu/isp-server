@@ -5,7 +5,6 @@ class InterfaceService extends Service {
     async verifications(body) {
 
         let {system, reqdata: [{token}]} = body;
-        this.ctx.logger.info(8,body);
         system=system.toLowerCase();
         let user = await this.service.authorService.getByCode(token);
         if(!user){
@@ -144,7 +143,7 @@ class InterfaceService extends Service {
     //keyverify
     async keyverify(body) {
         const { reqdata:[{domain,path:path}]} = body;
-        this.ctx.logger.info('接口权限认证:body',body);
+
         let codes=await this.service.authorService.getByCode(domain);
         this.ctx.logger.info('接口权限认证:codes',codes);
         if(codes && codes.filter(c=>{
@@ -248,7 +247,6 @@ class InterfaceService extends Service {
     }
 
     async synuserresult(body){
-        this.ctx.logger.info('接收用户同步结果:',body);
         const {system,reqdata:[{status,username,msg}]}=body;
         let [systementity]=await this.app.mysql.query(`select * from isp_system where code=?`,[system.toLowerCase()]);
         let [user]=await this.app.mysql.query(`select * from isp_user where user_name=?`,[username]);

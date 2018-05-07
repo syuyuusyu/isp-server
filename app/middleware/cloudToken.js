@@ -34,6 +34,10 @@ module.exports = (options,app) => {
                 ctx.logger.info('del cloudToken');
                 app.redis.del(user.user_name + '-cloudToken');
             }
+            if(ctx.status && ctx.body.status===40101 ){
+                ctx.logger.info('del cloudToken');
+                app.redis.del(user.user_name + '-cloudToken');
+            }
         }else{
             ctx.body={code:500,msg:'获取token失败'}
         }
