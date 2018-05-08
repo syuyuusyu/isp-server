@@ -6,7 +6,7 @@ class MenuController extends Controller{
         super(...arguments);
 
         this.roleMenuSql=
-            'select distinct m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.id';
+            'select distinct m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where m.parent_id=? and rm.role_id in (?) order by m.menu_order';
     }
 
 
@@ -24,7 +24,7 @@ class MenuController extends Controller{
     }
 
     async currentRoleMenu(){
-        let sql=`select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where rm.role_id in (?) order by m.id`;
+        let sql=`select m.* from isp_menu m join isp_role_menu rm on rm.menu_id=m.id where rm.role_id in (?) order by m.id,`;
         let token=this.ctx.request.header['access-token'];
         let sd=await this.service.authorService.getAuthor(token);
         let result=await this.app.mysql.query(sql,[sd.roles.map(r=>r.id)]);
