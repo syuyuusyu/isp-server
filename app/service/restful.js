@@ -38,30 +38,11 @@ class RestfulService extends Service{
                 dataType: 'json',
                 timeout:20000
             });
-        }catch (e2){
+        }catch (e){
             this.ctx.logger.error('调用接口错误!!',url);
             this.ctx.logger.info(invokeResult);
-            this.ctx.logger.info(e2);
-            if(e2.toString().startsWith('ResponseTimeoutError')){
-                this.ctx.logger.info('接口超时');
-                result[invokeName].body=data;
-                result[invokeName].head=head;
-                result[invokeName].url=url;
-                result[invokeName].result=[];
-                return;
-            }
-            try{
-                invokeResult=await this.app.curl(url,{
-                    method:method,
-                    data:data,
-                    headers:head,
-                    //dataType: 'json',
-                    timeout:20000
-                });
-            }catch (e){
-                this.ctx.logger.error('通过非json方式调用接口错误!!',url);
-                throw e;
-            }
+            this.ctx.logger.info(e);
+            throw e;
 
         }
         this.ctx.logger.info('status',invokeResult.status);
