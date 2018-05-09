@@ -204,7 +204,7 @@ module.exports = app => {
     //校验注册的电话号码是否唯一
     router.get('/userRegister/uniqueEmail/:email',controller.userRegister.emailUnique);
     //保存用户注册信息
-    router.post('/userRegister/svae',controller.userRegister.save);
+    router.post('/userRegister/save',controller.userRegister.save);
 
     //系统日志
     //获取所有系统日志
