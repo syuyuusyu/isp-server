@@ -50,8 +50,9 @@ class HomeController extends Controller {
                             auth.user.user_name=auth.user.user_name.replace(/^s\d{2}(\w+)/,(w,p)=>{
                                 return p;
                             });
+                            console.log(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
                             this.app.curl(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
-                            this.app.loginSystem.splice(currentIndex,1)
+                            this.app.loginSystem.splice(currentIndex,1);
                         }
                     }
                 });
@@ -64,6 +65,36 @@ class HomeController extends Controller {
         this.ctx.body={};
 
     }
+}
+
+function parse(obj){
+    if(obj.code && obj.code===500){
+        return obj;
+    }
+    let result=[];
+    for(let row in obj.rows){
+        let o={
+            id:row.id,
+            name:row.name,
+            status:row.status,
+            flavorName:row.flavor.name,
+            netName:'',
+            netWork:[]
+        };
+        if(row.addresses.addresses){
+            for(let key in row.addresses.addresses){
+                o.netName=key;
+                for(let net in row.addresses.addresses[key]){
+                    o.netWork.push({
+                        type:net['OS-EXT-IPS:type'],
+                        ip:net['addr']
+                    })
+                }
+            }
+        }
+        result.push(o);
+    }
+    return result;
 }
 
 module.exports = HomeController;

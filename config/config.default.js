@@ -51,7 +51,7 @@ module.exports = appInfo => {
             // 密码
             password: '1234',
             // 数据库名
-            database: 'isp-2',
+            database: 'isp',
         },
         // 是否加载到 app 上，默认开启
         app: true,

@@ -34,7 +34,7 @@ module.exports = (options,app) => {
                 ctx.logger.info('del cloudToken');
                 app.redis.del(user.user_name + '-cloudToken');
             }
-            if(ctx.status && ctx.body.status===40101 ){
+            if(ctx.body && ctx.body.status && ctx.body.status===40101 ){
                 ctx.logger.info('del cloudToken');
                 app.redis.del(user.user_name + '-cloudToken');
             }

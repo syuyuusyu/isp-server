@@ -11,17 +11,7 @@ class RestfulService extends Service{
     async invoke(entity,queryObj){
         let count=1,
             result={};
-        try{
-            await this._invoke(entity,queryObj,count,result);
-            result.success=true;
-            result.msg='成功';
-            //this.app.logger.info(result);
-        }catch (e){
-            console.log('----');
-            this.app.logger.error(e);
-            result.success=false;
-            result.errInfo=e.toString();
-        }
+        await this._invoke(entity,queryObj,count,result);
         return result;
     }
 
@@ -49,11 +39,11 @@ class RestfulService extends Service{
                 timeout:20000
             });
         }catch (e2){
-            this.app.logger.error('--------');
-            this.app.logger.error(invokeResult);
-            this.app.logger.error(e2);
+            this.ctx.logger.error('调用接口错误!!',url);
+            this.ctx.logger.info(invokeResult);
+            this.ctx.logger.info(e2);
             if(e2.toString().startsWith('ResponseTimeoutError')){
-                console.log('nodejs.ResponseTimeoutError');
+                this.ctx.logger.info('接口超时');
                 result[invokeName].body=data;
                 result[invokeName].head=head;
                 result[invokeName].url=url;
@@ -69,12 +59,8 @@ class RestfulService extends Service{
                     timeout:20000
                 });
             }catch (e){
-                this.app.logger.error(e);
-                invokeResult={
-                    success:false,
-                    result:'调用接口'+url+'错误,'+e.toString()
-                }
-
+                this.ctx.logger.error('通过非json方式调用接口错误!!',url);
+                throw e;
             }
 
         }
@@ -87,7 +73,10 @@ class RestfulService extends Service{
                 //response,responsehead,responsestatus,requesthead,requestdata,url
                 result[invokeName].result=s;
             }catch (e){
-                this.ctx.logger.error(e);
+                this.ctx.logger.error('运行解析函数错误');
+                this.ctx.logger.info('response,responsehead,responsestatus,requesthead,requestdata,url');
+                this.ctx.logger.info('解析参数\n',invokeResult.data,'\n',invokeResult.headers,'\n',invokeResult.status,'\n',head,'\n',data,'\n',url);
+                this.ctx.logger.info('解析析函',entity.parseFun);
                 result[invokeName].result=invokeResult.data;
             }
         }else{

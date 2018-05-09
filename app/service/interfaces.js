@@ -145,7 +145,7 @@ class InterfaceService extends Service {
         const { reqdata:[{domain,path:path}]} = body;
 
         let codes=await this.service.authorService.getByCode(domain);
-        this.ctx.logger.info('接口权限认证:codes',codes);
+        //this.ctx.logger.info('接口权限认证:codes',codes);
         if(codes && codes.filter(c=>{
                 let rep=/(?:\{)\w+(?:\})/;
                 let a=c.replace(rep,(w,p)=>{
