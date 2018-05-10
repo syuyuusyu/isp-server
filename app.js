@@ -37,11 +37,17 @@ module.exports = app => {
         }
         app.allRouter=app.allRouter.toString();
         console.log('app start');
+
     });
 
     app.once('server', server => {
         //app.logger.info(server.restful);
     });
 };
+
+
+
+
+
 
 
