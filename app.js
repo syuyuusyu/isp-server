@@ -1,8 +1,8 @@
 module.exports = app => {
     app.beforeStart(async () => {
         // 应用会等待这个函数执行完成才启动
+        console.log('init app');
 
-        console.log('app start');
         app.secret='n7d3t7x7';
         app.loginSystem=[];
         app.systemMap={};
@@ -36,11 +36,18 @@ module.exports = app => {
             app.allRouter.push(content[i].router_name)
         }
         app.allRouter=app.allRouter.toString();
+        console.log('app start');
+
     });
 
     app.once('server', server => {
         //app.logger.info(server.restful);
     });
 };
+
+
+
+
+
 
 

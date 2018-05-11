@@ -145,7 +145,7 @@ class InterfaceService extends Service {
         const { reqdata:[{domain,path:path}]} = body;
 
         let codes=await this.service.authorService.getByCode(domain);
-        this.ctx.logger.info('接口权限认证:codes',codes);
+        //this.ctx.logger.info('接口权限认证:codes',codes);
         if(codes && codes.filter(c=>{
                 let rep=/(?:\{)\w+(?:\})/;
                 let a=c.replace(rep,(w,p)=>{
@@ -181,12 +181,12 @@ class InterfaceService extends Service {
             for(let metdata of reqdata){
                 let fields=metdata.fields;
                 delete metdata.fields;
-                let [{id}]=await conn.query(`select id from isp_metadata where name=? and system_id=?`,[metdata.name,syatemId]);
-                if(id){
-                    await conn.update('isp_metadata',{...metdata,id:id,system_id:syatemId})
-                    await conn.delete('isp_metadata_fields',{metadata_id:id});
+                let [met]=await conn.query(`select id from isp_metadata where name=? and system_id=?`,[metdata.name,syatemId]);
+                if(met && met.id){
+                    await conn.update('isp_metadata',{...metdata,id:met.id,system_id:syatemId})
+                    await conn.delete('isp_metadata_fields',{metadata_id:met.id});
                     for (let field of fields){
-                        await conn.insert('isp_metadata_fields',{...field,metadata_id:id})
+                        await conn.insert('isp_metadata_fields',{...field,metadata_id:met.id})
                     }
                 }else{
                     let result=await  conn.insert('isp_metadata',{...metdata,system_id:syatemId})
@@ -226,7 +226,7 @@ class InterfaceService extends Service {
                 let [result]=await this.app.mysql.query(`select id from isp_sys_operation where name=? and system_id=?`,
                     [op.name,syatemId]);
                 if(result && result.id){
-                    await this.app.mysql.update('isp_sys_operation',{...op,id:id,type:3,system_id:syatemId});
+                    await this.app.mysql.update('isp_sys_operation',{...op,id:result.id,type:3,system_id:syatemId});
                 }else{
                     await this.app.mysql.insert('isp_sys_operation',{...op,type:3,system_id:syatemId});
                 }

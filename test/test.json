@@ -1,0 +1,1730 @@
+{
+  "total": 21,
+  "rows": [
+    {
+      "id": "77f5ea31-c246-4223-a346-76af1188d404",
+      "name": "ttt",
+      "addresses": {
+        "addresses": {
+          "demo-net": [
+            {
+              "version": 4,
+              "addr": "10.100.5.17",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:4a:6a:50",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/77f5ea31-c246-4223-a346-76af1188d404"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/77f5ea31-c246-4223-a346-76af1188d404"
+        }
+      ],
+      "flavor": {
+        "id": "d61db4b1-da84-49cc-ba9c-eed79eccff13",
+        "name": "1C1G1G",
+        "ram": 1024,
+        "vcpus": 1,
+        "disk": 1,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/d61db4b1-da84-49cc-ba9c-eed79eccff13"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/d61db4b1-da84-49cc-ba9c-eed79eccff13"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "0b2ea6ef0f20317380bbf1f64f7b5a5baa50399158aa8f6b082e5b43",
+      "updated": "2018-05-08 11:28:10",
+      "created": "2018-05-08 11:26:23",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "491ec2831b2146b18fb8bf0c0ab4a1e5",
+      "user_id": "f42e2c2aeb614234ae25bbafd81a92d8",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS03",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000083",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS03",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-05-08 11:28:10",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "9406426f-1c86-40f4-9170-302aea9fd5b6"
+        }
+      ]
+    },
+    {
+      "id": "deb27461-a69f-4270-8888-8873097b091b",
+      "name": "mapgis-oracle",
+      "addresses": {
+        "addresses": {
+          "yzy0net": [
+            {
+              "version": 4,
+              "addr": "10.100.6.3",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:dd:28:99",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.13",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:dd:28:99",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/deb27461-a69f-4270-8888-8873097b091b"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/deb27461-a69f-4270-8888-8873097b091b"
+        }
+      ],
+      "flavor": {
+        "id": "6b9bce5b-6489-44d5-aa68-f4085a0da80f",
+        "name": "4C32G100G",
+        "ram": 32768,
+        "vcpus": 4,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/6b9bce5b-6489-44d5-aa68-f4085a0da80f"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/6b9bce5b-6489-44d5-aa68-f4085a0da80f"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "308454ad9fdd569c2db8369f2ee8607ca478df908729e4e16907f1b3",
+      "updated": "2018-05-07 17:00:13",
+      "created": "2018-05-07 16:42:03",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "616103de118045498e61da9b2b1ff512",
+      "user_id": "e093046d20d940378148d9e6e2d70603",
+      "key_name": "mapgis-oracle",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS06",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000082",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS06",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-05-07 16:47:04",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "91a0d7bd-593a-423d-99bb-f821cea46c35"
+        },
+        {
+          "id": "74a124a7-6807-4124-a057-8ed325d6c519"
+        }
+      ]
+    },
+    {
+      "id": "4c70d6d6-2923-4bb3-89a6-173c4f1ce249",
+      "name": "mapgis-web",
+      "addresses": {
+        "addresses": {
+          "yzy0net": [
+            {
+              "version": 4,
+              "addr": "10.100.6.12",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:32:61:c3",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.29",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:32:61:c3",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/4c70d6d6-2923-4bb3-89a6-173c4f1ce249"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/4c70d6d6-2923-4bb3-89a6-173c4f1ce249"
+        }
+      ],
+      "flavor": {
+        "id": "e123e533-e663-4d55-83e1-7fb2c3278759",
+        "name": "4C16G100G",
+        "ram": 16384,
+        "vcpus": 4,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/e123e533-e663-4d55-83e1-7fb2c3278759"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/e123e533-e663-4d55-83e1-7fb2c3278759"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "73266fe79551c17d7ea560d5c0ffcc704dde976a16af082906b210b7",
+      "updated": "2018-05-07 17:00:02",
+      "created": "2018-05-07 16:40:24",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "616103de118045498e61da9b2b1ff512",
+      "user_id": "e093046d20d940378148d9e6e2d70603",
+      "key_name": "mapgis-web",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS04",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000081",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS04",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-05-07 16:45:11",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "2e94ca55-5296-49d3-8e7e-9cdd5b4cc9c8"
+        },
+        {
+          "id": "f062eecf-ccc0-4821-8bc3-6e4310e27176"
+        }
+      ]
+    },
+    {
+      "id": "d0dec37d-fb16-46d7-b21c-0070bd71a8e7",
+      "name": "mapgis-igserver",
+      "addresses": {
+        "addresses": {
+          "yzy0net": [
+            {
+              "version": 4,
+              "addr": "10.100.6.7",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:9f:a0:58",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.22",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:9f:a0:58",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/d0dec37d-fb16-46d7-b21c-0070bd71a8e7"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/d0dec37d-fb16-46d7-b21c-0070bd71a8e7"
+        }
+      ],
+      "flavor": {
+        "id": "b2b29350-6c54-4fce-bff2-d01e220c6a16",
+        "name": "8C32G100G",
+        "ram": 32768,
+        "vcpus": 8,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/b2b29350-6c54-4fce-bff2-d01e220c6a16"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/b2b29350-6c54-4fce-bff2-d01e220c6a16"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "73266fe79551c17d7ea560d5c0ffcc704dde976a16af082906b210b7",
+      "updated": "2018-05-08 11:06:43",
+      "created": "2018-05-07 16:39:12",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "616103de118045498e61da9b2b1ff512",
+      "user_id": "e093046d20d940378148d9e6e2d70603",
+      "key_name": "mapgis-igserver",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS04",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000080",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS04",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-05-07 16:43:33",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "1918d10b-7707-4b74-af0f-1493124ac8f0"
+        },
+        {
+          "id": "0ba22bae-3b1d-449d-9d3b-ace57ab302e0"
+        }
+      ]
+    },
+    {
+      "id": "a396cc3f-6857-4245-8653-6c0b649a4b8f",
+      "name": "mapgis-cloud",
+      "addresses": {
+        "addresses": {
+          "yzy0net": [
+            {
+              "version": 4,
+              "addr": "10.100.6.4",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:44:62:8d",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.3",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:44:62:8d",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/a396cc3f-6857-4245-8653-6c0b649a4b8f"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/a396cc3f-6857-4245-8653-6c0b649a4b8f"
+        }
+      ],
+      "flavor": {
+        "id": "1bc6dfe0-48a4-4e1b-988d-1987b956d340",
+        "name": "8C64G100G",
+        "ram": 65536,
+        "vcpus": 8,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/1bc6dfe0-48a4-4e1b-988d-1987b956d340"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/1bc6dfe0-48a4-4e1b-988d-1987b956d340"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "e1c9949ec947db2db1e69b883b008148e1c2963ceb7b3dcf30cbbe6a",
+      "updated": "2018-05-07 16:58:04",
+      "created": "2018-05-07 16:24:58",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "616103de118045498e61da9b2b1ff512",
+      "user_id": "e093046d20d940378148d9e6e2d70603",
+      "key_name": "mapgis-cloud",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS02",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000007f",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS02",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-05-07 16:29:05",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "59b4cc6b-e97b-42c6-9456-70b3b736f97a"
+        },
+        {
+          "id": "8145b062-5538-4ebd-8a4e-ce95ba1cf2ac"
+        }
+      ]
+    },
+    {
+      "id": "088061ff-8284-45ee-b9d2-a6e7638b7b33",
+      "name": "supermap-mongodb2",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.4",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:2c:14:56",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/088061ff-8284-45ee-b9d2-a6e7638b7b33"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/088061ff-8284-45ee-b9d2-a6e7638b7b33"
+        }
+      ],
+      "flavor": {
+        "id": "6b9bce5b-6489-44d5-aa68-f4085a0da80f",
+        "name": "4C32G100G",
+        "ram": 32768,
+        "vcpus": 4,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/6b9bce5b-6489-44d5-aa68-f4085a0da80f"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/6b9bce5b-6489-44d5-aa68-f4085a0da80f"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "234b287e38f8bf539a77f34f2cf48c2f43fd832b7ad63478d6651e40",
+      "updated": "2018-05-07 12:15:35",
+      "created": "2018-05-07 11:39:50",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "aba15fc5cd9d49e2bce23ba1ac9533d0",
+      "user_id": "056ca992768b45b19a147a6aa20c6195",
+      "key_name": "supermap-mongodb2",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS03",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000007a",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS03",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-05-07 11:41:48",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "ae6c6940-8ada-4910-9530-c758cf4e6db1"
+        },
+        {
+          "id": "f11a66ca-7a17-491a-b203-eaa77c3fbbf9"
+        }
+      ]
+    },
+    {
+      "id": "5c2115a8-3a6b-470e-97be-bfb524d23b02",
+      "name": "supermap-mongodb1",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.24",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:69:3f:c3",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/5c2115a8-3a6b-470e-97be-bfb524d23b02"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/5c2115a8-3a6b-470e-97be-bfb524d23b02"
+        }
+      ],
+      "flavor": {
+        "id": "6b9bce5b-6489-44d5-aa68-f4085a0da80f",
+        "name": "4C32G100G",
+        "ram": 32768,
+        "vcpus": 4,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/6b9bce5b-6489-44d5-aa68-f4085a0da80f"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/6b9bce5b-6489-44d5-aa68-f4085a0da80f"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "01a12886c257727a7afee40ffdee396f1eb3cbd448d9ced65b01fd4c",
+      "updated": "2018-05-07 12:15:14",
+      "created": "2018-05-07 11:35:10",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "aba15fc5cd9d49e2bce23ba1ac9533d0",
+      "user_id": "056ca992768b45b19a147a6aa20c6195",
+      "key_name": "supermap-mongodb1",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS02",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000079",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS02",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-05-07 11:37:18",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "bac2ddef-c937-43e7-bc51-63f47a685855"
+        },
+        {
+          "id": "f8aafe5d-c36f-4b58-b831-0a1323067429"
+        }
+      ]
+    },
+    {
+      "id": "c2c9c3fc-ca80-48eb-b7f6-fa6d5fdb4530",
+      "name": "test",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.8",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:4e:69:91",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/c2c9c3fc-ca80-48eb-b7f6-fa6d5fdb4530"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/c2c9c3fc-ca80-48eb-b7f6-fa6d5fdb4530"
+        }
+      ],
+      "flavor": {
+        "id": "56f4596e-0b35-4cca-b28e-710afb0d6f1f",
+        "name": "2C4G10G",
+        "ram": 4096,
+        "vcpus": 2,
+        "disk": 10,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/56f4596e-0b35-4cca-b28e-710afb0d6f1f"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/56f4596e-0b35-4cca-b28e-710afb0d6f1f"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "af60cf9da181ee4b95f689ba0cb55e619f43e0bbe016e56fed831aeb",
+      "updated": "2018-04-26 17:40:19",
+      "created": "2018-04-26 17:39:00",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "ab6b97c60166479baaff4a6688d114cf",
+      "user_id": "dc84b6d406ec4c2591d800b68c3b2bbe",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS02",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000067",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS02",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-04-26 17:40:19",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "a375a0d4-9c74-4183-88e4-463c30db78ab"
+        }
+      ]
+    },
+    {
+      "id": "52194d08-4e7e-498f-8d1c-1bdf07777077",
+      "name": "supermap-oracle",
+      "addresses": {
+        "addresses": {
+          "supermap-net": [
+            {
+              "version": 4,
+              "addr": "10.100.7.10",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:fa:e3:b2",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.40",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:fa:e3:b2",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/52194d08-4e7e-498f-8d1c-1bdf07777077"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/52194d08-4e7e-498f-8d1c-1bdf07777077"
+        }
+      ],
+      "flavor": {
+        "id": "b2b29350-6c54-4fce-bff2-d01e220c6a16",
+        "name": "8C32G100G",
+        "ram": 32768,
+        "vcpus": 8,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/b2b29350-6c54-4fce-bff2-d01e220c6a16"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/b2b29350-6c54-4fce-bff2-d01e220c6a16"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "122551d571e6c64e989a38b04fe80d277f3b441e73d5830dbc46aa06",
+      "updated": "2018-04-25 14:06:14",
+      "created": "2018-04-25 14:00:23",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "aba15fc5cd9d49e2bce23ba1ac9533d0",
+      "user_id": "056ca992768b45b19a147a6aa20c6195",
+      "key_name": "supermap-oracle",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS06",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000061",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS06",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-04-25 14:03:43",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "3a4c29a7-b157-4557-9c6d-67e6431cf216"
+        },
+        {
+          "id": "9dc72926-45a2-4749-bc3a-84d6dd04976c"
+        }
+      ]
+    },
+    {
+      "id": "4bf1b405-bd3e-43d0-8ee6-10cff4ab7627",
+      "name": "supermap-ftp",
+      "addresses": {
+        "addresses": {
+          "supermap-net": [
+            {
+              "version": 4,
+              "addr": "10.100.7.8",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:ae:b4:7e",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.33",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:ae:b4:7e",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/4bf1b405-bd3e-43d0-8ee6-10cff4ab7627"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/4bf1b405-bd3e-43d0-8ee6-10cff4ab7627"
+        }
+      ],
+      "flavor": {
+        "id": "3d87b655-ed1f-4703-946a-1b6c6fd4a220",
+        "name": "8C16G100G",
+        "ram": 16348,
+        "vcpus": 8,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/3d87b655-ed1f-4703-946a-1b6c6fd4a220"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/3d87b655-ed1f-4703-946a-1b6c6fd4a220"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "234b287e38f8bf539a77f34f2cf48c2f43fd832b7ad63478d6651e40",
+      "updated": "2018-04-25 13:50:20",
+      "created": "2018-04-25 13:38:24",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "aba15fc5cd9d49e2bce23ba1ac9533d0",
+      "user_id": "056ca992768b45b19a147a6aa20c6195",
+      "key_name": "supermap-ftp",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS03",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000060",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS03",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-04-25 13:41:51",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "7318e82b-1c0d-446e-9dc3-a87936e5138b"
+        },
+        {
+          "id": "2c825a3f-6c5f-432c-b032-4d25c8ea9e66"
+        }
+      ]
+    },
+    {
+      "id": "33ad6f69-edef-45e3-9e5a-8d190ddbe9a6",
+      "name": "ELK",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.31",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:de:2a:fa",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/33ad6f69-edef-45e3-9e5a-8d190ddbe9a6"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/33ad6f69-edef-45e3-9e5a-8d190ddbe9a6"
+        }
+      ],
+      "flavor": {
+        "id": "bf1dece7-5657-434d-a46d-65f155e54af6",
+        "name": "8C16G200G",
+        "ram": 16384,
+        "vcpus": 8,
+        "disk": 200,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "b27acfa5a4689772c3f3b1a261690448a81f30921164d4208c230b7e",
+      "updated": "2018-04-27 16:38:44",
+      "created": "2018-04-24 11:16:43",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "491ec2831b2146b18fb8bf0c0ab4a1e5",
+      "user_id": "f42e2c2aeb614234ae25bbafd81a92d8",
+      "key_name": "ELK",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS04",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000053",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS04",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-04-24 11:17:58",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "e3d15e5e-cc54-4605-acf8-011ff07d4590"
+        }
+      ]
+    },
+    {
+      "id": "5d1350af-17e4-43cd-8963-b5377d3ab8ae",
+      "name": "Test-cloud",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.2",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:c3:46:9d",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/5d1350af-17e4-43cd-8963-b5377d3ab8ae"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/5d1350af-17e4-43cd-8963-b5377d3ab8ae"
+        }
+      ],
+      "flavor": {
+        "id": "3d87b655-ed1f-4703-946a-1b6c6fd4a220",
+        "name": "8C16G100G",
+        "ram": 16348,
+        "vcpus": 8,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/3d87b655-ed1f-4703-946a-1b6c6fd4a220"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/3d87b655-ed1f-4703-946a-1b6c6fd4a220"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "c28eb6f77520f29a0b8e4c4e06e50060d350b212ac31e5067cae3b7a",
+      "updated": "2018-04-28 11:05:24",
+      "created": "2018-04-23 15:05:47",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "f78ade7293b3478f9e78bb25ad8ea69e",
+      "user_id": "3ac2082bb7f346259408990cbcf41daf",
+      "key_name": "Test-cloud",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS03",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000004f",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS03",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-04-23 15:07:16",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "6d8db383-7125-4bdb-a7d1-ee7a365dbece"
+        }
+      ]
+    },
+    {
+      "id": "75e8512b-427b-4b5f-8cbc-e09c25f3e2f9",
+      "name": "Test-zhjc",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.21",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:42:9e:c4",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/75e8512b-427b-4b5f-8cbc-e09c25f3e2f9"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/75e8512b-427b-4b5f-8cbc-e09c25f3e2f9"
+        }
+      ],
+      "flavor": {
+        "id": "3d87b655-ed1f-4703-946a-1b6c6fd4a220",
+        "name": "8C16G100G",
+        "ram": 16348,
+        "vcpus": 8,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/3d87b655-ed1f-4703-946a-1b6c6fd4a220"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/3d87b655-ed1f-4703-946a-1b6c6fd4a220"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "ee91a53e41cd3e154a8d40aa0e0be2beca71b516f783081d0837a0b1",
+      "updated": "2018-04-28 11:05:52",
+      "created": "2018-04-23 15:04:16",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "f78ade7293b3478f9e78bb25ad8ea69e",
+      "user_id": "3ac2082bb7f346259408990cbcf41daf",
+      "key_name": "Test-zhjc",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS02",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000004e",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS02",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-04-23 15:06:01",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "2a63b3f9-60f0-44f6-b3bc-68b782ca6298"
+        }
+      ]
+    },
+    {
+      "id": "fe2f3f67-5372-4943-995b-04e3c2c11d8e",
+      "name": "supermap-mongodb",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.15",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:d6:29:12",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/fe2f3f67-5372-4943-995b-04e3c2c11d8e"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/fe2f3f67-5372-4943-995b-04e3c2c11d8e"
+        }
+      ],
+      "flavor": {
+        "id": "3d87b655-ed1f-4703-946a-1b6c6fd4a220",
+        "name": "8C16G100G",
+        "ram": 16348,
+        "vcpus": 8,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/3d87b655-ed1f-4703-946a-1b6c6fd4a220"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/3d87b655-ed1f-4703-946a-1b6c6fd4a220"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "122551d571e6c64e989a38b04fe80d277f3b441e73d5830dbc46aa06",
+      "updated": "2018-05-02 09:23:50",
+      "created": "2018-04-19 15:36:15",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "aba15fc5cd9d49e2bce23ba1ac9533d0",
+      "user_id": "056ca992768b45b19a147a6aa20c6195",
+      "key_name": "supermap-mongodb",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS06",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000004d",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS06",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-04-19 15:37:32",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "0f016a6e-841a-4384-9c31-efd11bb6c9c4"
+        },
+        {
+          "id": "1209b610-85e6-4917-8f03-fc9d384e4e0d"
+        }
+      ]
+    },
+    {
+      "id": "77339944-54e2-42d9-87f2-d804277ac49a",
+      "name": "supermap-iexpress",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.28",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:38:e7:f5",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/77339944-54e2-42d9-87f2-d804277ac49a"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/77339944-54e2-42d9-87f2-d804277ac49a"
+        }
+      ],
+      "flavor": {
+        "id": "f648a6d6-ca96-4110-bb78-c0ac1ac195c9",
+        "name": "4C8G100G",
+        "ram": 8192,
+        "vcpus": 4,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/f648a6d6-ca96-4110-bb78-c0ac1ac195c9"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/f648a6d6-ca96-4110-bb78-c0ac1ac195c9"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "122551d571e6c64e989a38b04fe80d277f3b441e73d5830dbc46aa06",
+      "updated": "2018-04-27 21:10:28",
+      "created": "2018-04-13 15:04:00",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "aba15fc5cd9d49e2bce23ba1ac9533d0",
+      "user_id": "056ca992768b45b19a147a6aa20c6195",
+      "key_name": "supermap-iexpress",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS06",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000003a",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS06",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-04-13 15:05:41",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "17f70b9e-cfc9-4590-90c6-563d9cfe87a0"
+        }
+      ]
+    },
+    {
+      "id": "4845bc16-0d7a-43ec-a576-1b362cd0b16a",
+      "name": "supermap-imanager",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.19",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:57:ab:49",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/4845bc16-0d7a-43ec-a576-1b362cd0b16a"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/4845bc16-0d7a-43ec-a576-1b362cd0b16a"
+        }
+      ],
+      "flavor": {
+        "id": "7e2fdba3-99ba-4836-a242-b1364be6fca0",
+        "name": "16C32G500G",
+        "ram": 32768,
+        "vcpus": 16,
+        "disk": 500,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/7e2fdba3-99ba-4836-a242-b1364be6fca0"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/7e2fdba3-99ba-4836-a242-b1364be6fca0"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "ae46c5c037e6addede3ad3d1b625ecddaba3c60f31445f5a6a04bb50",
+      "updated": "2018-04-27 21:15:08",
+      "created": "2018-04-12 14:17:57",
+      "metadata": {},
+      "config_drive": "True",
+      "tenant_id": "aba15fc5cd9d49e2bce23ba1ac9533d0",
+      "user_id": "056ca992768b45b19a147a6aa20c6195",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS05",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000033",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS05",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-04-12 14:20:41",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "3d8313c5-3295-4ddc-974c-42befaf8770c"
+        },
+        {
+          "id": "6cba5b34-2c10-44fc-964c-359bfc9111ce"
+        }
+      ]
+    },
+    {
+      "id": "5722a08c-3086-40ff-a2c5-ae7eb18602bc",
+      "name": "supermap-desktop",
+      "addresses": {
+        "addresses": {
+          "public-net": [
+            {
+              "version": 4,
+              "addr": "10.10.50.17",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:fe:ab:59",
+              "OS-EXT-IPS:type": "fixed"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/5722a08c-3086-40ff-a2c5-ae7eb18602bc"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/5722a08c-3086-40ff-a2c5-ae7eb18602bc"
+        }
+      ],
+      "flavor": {
+        "id": "f648a6d6-ca96-4110-bb78-c0ac1ac195c9",
+        "name": "4C8G100G",
+        "ram": 8192,
+        "vcpus": 4,
+        "disk": 100,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/f648a6d6-ca96-4110-bb78-c0ac1ac195c9"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/f648a6d6-ca96-4110-bb78-c0ac1ac195c9"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "shutoff",
+      "progress": 0,
+      "hostId": "958f1c82142bffe4a390bbaac4e9c1db52854297c98c082648833428",
+      "updated": "2018-04-28 10:28:50",
+      "created": "2018-03-28 19:37:40",
+      "metadata": {},
+      "config_drive": "",
+      "tenant_id": "aba15fc5cd9d49e2bce23ba1ac9533d0",
+      "user_id": "056ca992768b45b19a147a6aa20c6195",
+      "key_name": "supermap-desktop",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "4",
+      "OS-EXT-STS:vm_state": "stopped",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS04",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000001e",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS04",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-03-28 19:45:35",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "6d76b222-47dc-43d6-beff-8f277977cf90"
+        }
+      ]
+    },
+    {
+      "id": "12906eaf-a2df-494a-bb54-b4928239a380",
+      "name": "zhjc",
+      "addresses": {
+        "addresses": {
+          "demo-net": [
+            {
+              "version": 4,
+              "addr": "10.100.5.13",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:61:1c:03",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.16",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:61:1c:03",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/12906eaf-a2df-494a-bb54-b4928239a380"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/12906eaf-a2df-494a-bb54-b4928239a380"
+        }
+      ],
+      "flavor": {
+        "id": "bf1dece7-5657-434d-a46d-65f155e54af6",
+        "name": "8C16G200G",
+        "ram": 16384,
+        "vcpus": 8,
+        "disk": 200,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "0ebe0a395e5549398846792331e609ec70e8ba18a4fdc79027cd5eb6",
+      "updated": "2018-05-02 17:10:11",
+      "created": "2018-03-23 14:19:14",
+      "metadata": {},
+      "config_drive": "",
+      "tenant_id": "491ec2831b2146b18fb8bf0c0ab4a1e5",
+      "user_id": "f42e2c2aeb614234ae25bbafd81a92d8",
+      "key_name": "zhjc",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS06",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-00000010",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS06",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-03-23 14:24:19",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "d17d88cb-a204-4179-b4a8-0038467b9b5d"
+        }
+      ]
+    },
+    {
+      "id": "bb731ddf-e51f-4330-a88a-d53b777921b7",
+      "name": "sqlserver",
+      "addresses": {
+        "addresses": {
+          "demo-net": [
+            {
+              "version": 4,
+              "addr": "10.100.5.12",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:b7:b3:ba",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.32",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:b7:b3:ba",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/bb731ddf-e51f-4330-a88a-d53b777921b7"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/bb731ddf-e51f-4330-a88a-d53b777921b7"
+        }
+      ],
+      "flavor": {
+        "id": "bf1dece7-5657-434d-a46d-65f155e54af6",
+        "name": "8C16G200G",
+        "ram": 16384,
+        "vcpus": 8,
+        "disk": 200,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "f3d49159922c1dff6a8b1aa84b40f5d8d260bbf411effce592f996f6",
+      "updated": "2018-05-02 14:52:31",
+      "created": "2018-03-16 11:38:18",
+      "metadata": {},
+      "config_drive": "",
+      "tenant_id": "491ec2831b2146b18fb8bf0c0ab4a1e5",
+      "user_id": "f42e2c2aeb614234ae25bbafd81a92d8",
+      "key_name": "sqlserver",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS05",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000000e",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS05",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-03-16 11:44:20",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "712106aa-b72d-4d00-966b-d117369365fa"
+        }
+      ]
+    },
+    {
+      "id": "053ca287-2b70-4934-a3b4-dc36f6af6e95",
+      "name": "oracle12",
+      "addresses": {
+        "addresses": {
+          "demo-net": [
+            {
+              "version": 4,
+              "addr": "10.100.5.16",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:ae:eb:6f",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.7",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:ae:eb:6f",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/053ca287-2b70-4934-a3b4-dc36f6af6e95"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/053ca287-2b70-4934-a3b4-dc36f6af6e95"
+        }
+      ],
+      "flavor": {
+        "id": "bf1dece7-5657-434d-a46d-65f155e54af6",
+        "name": "8C16G200G",
+        "ram": 16384,
+        "vcpus": 8,
+        "disk": 200,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "0b2ea6ef0f20317380bbf1f64f7b5a5baa50399158aa8f6b082e5b43",
+      "updated": "2018-05-02 14:40:28",
+      "created": "2018-03-16 11:21:36",
+      "metadata": {},
+      "config_drive": "",
+      "tenant_id": "491ec2831b2146b18fb8bf0c0ab4a1e5",
+      "user_id": "f42e2c2aeb614234ae25bbafd81a92d8",
+      "key_name": "oracle12",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS03",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000000d",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS03",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-03-16 11:26:14",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "4839988f-682e-426f-9488-48c679c681ba"
+        }
+      ]
+    },
+    {
+      "id": "72990aae-8e8e-4aae-9044-3ffb5fb3a10f",
+      "name": "bzhcloud",
+      "addresses": {
+        "addresses": {
+          "demo-net": [
+            {
+              "version": 4,
+              "addr": "10.100.5.18",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:98:59:9f",
+              "OS-EXT-IPS:type": "fixed"
+            },
+            {
+              "version": 4,
+              "addr": "10.10.50.12",
+              "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:98:59:9f",
+              "OS-EXT-IPS:type": "floating"
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://controller:8774/v2.1/servers/72990aae-8e8e-4aae-9044-3ffb5fb3a10f"
+        },
+        {
+          "rel": "bookmark",
+          "href": "http://controller:8774/servers/72990aae-8e8e-4aae-9044-3ffb5fb3a10f"
+        }
+      ],
+      "flavor": {
+        "id": "bf1dece7-5657-434d-a46d-65f155e54af6",
+        "name": "8C16G200G",
+        "ram": 16384,
+        "vcpus": 8,
+        "disk": 200,
+        "swap": 0,
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://controller:8774/v2.1/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          },
+          {
+            "rel": "bookmark",
+            "href": "http://controller:8774/flavors/bf1dece7-5657-434d-a46d-65f155e54af6"
+          }
+        ],
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "rxtx_factor": 1,
+        "OS-FLV-DISABLED:disabled": false,
+        "os-flavor-access:is_public": true
+      },
+      "accessIPv4": "",
+      "accessIPv6": "",
+      "status": "active",
+      "progress": 0,
+      "hostId": "b27acfa5a4689772c3f3b1a261690448a81f30921164d4208c230b7e",
+      "updated": "2018-04-18 14:19:15",
+      "created": "2018-03-16 10:11:51",
+      "metadata": {},
+      "config_drive": "",
+      "tenant_id": "491ec2831b2146b18fb8bf0c0ab4a1e5",
+      "user_id": "f42e2c2aeb614234ae25bbafd81a92d8",
+      "key_name": "bzhcloud",
+      "security_groups": [
+        {
+          "name": "default"
+        }
+      ],
+      "OS-EXT-STS:power_state": "1",
+      "OS-EXT-STS:vm_state": "active",
+      "OS-EXT-SRV-ATTR:host": "YNDKCHR01OS04",
+      "OS-EXT-SRV-ATTR:instance_name": "instance-0000000b",
+      "OS-EXT-SRV-ATTR:hypervisor_hostname": "YNDKCHR01OS04",
+      "OS-DCF:diskConfig": "AUTO",
+      "OS-EXT-AZ:availability_zone": "nova",
+      "OS-SRV-USG:launched_at": "2018-03-16 10:18:28",
+      "os-extended-volumes:volumes_attached": [
+        {
+          "id": "8b64ee31-428a-4ccd-8935-bb4ebb698e62"
+        }
+      ]
+    }
+  ]
+}

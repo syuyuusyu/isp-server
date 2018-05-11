@@ -35,7 +35,7 @@ class SystemController extends Controller{
         });
         let systems=await this.app.mysql.query(`select * from isp_system`);
         systems.forEach(s=>{
-            app.systemMap[s.code]=s.id;
+            this.app.systemMap[s.code]=s.id;
         });
         const updateSuccess = result.affectedRows === 1;
         this.ctx.body={success:updateSuccess};
