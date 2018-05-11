@@ -16,7 +16,7 @@ class HomeController extends Controller {
         let token = '';
         if (msg === '1') {
             [user] = await  this.app.mysql.query(
-                `select id,name,user_name,phone,email from isp_user where user_name='${this.ctx.request.body.user_name}'`);
+                `select id,name,user_name,phone,ID_number,email from isp_user where user_name='${this.ctx.request.body.user_name}'`);
             roles = await this.app.mysql.query(`select r.* from isp_role r join isp_user_role u on r.id=u.role_id  where u.user_id=${user.id}`);
             const set = new Set();
             let menuId=[];
