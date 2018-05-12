@@ -204,7 +204,7 @@ module.exports = app => {
     //校验注册的电话号码是否唯一
     router.get('/userRegister/uniqueEmail/:email',controller.userRegister.emailUnique);
     //保存用户注册信息
-    router.post('/userRegister/svae',controller.userRegister.save);
+    router.post('/userRegister/save',controller.userRegister.save);
 
     //系统日志
     //获取所有系统日志
@@ -225,4 +225,14 @@ module.exports = app => {
     router.get('/daibanLog/getDaibanStatus',controller.daibanLog.allDaibanStatus);
     //根据条件查询出待办日志
     router.post('/daibanLog/queryDaibanLog',controller.daibanLog.queryDaibanLog);
+
+    //修改用户信息
+    //校验初始密码是否正确
+    router.get('/modifyUser/checkOriginalPw/:originalPw',controller.modifyUser.checkOriginalPw);
+    //校验输入的身份证编号是否已存在
+    router.get('/modifyUser/checkIDnumberUnique/:IDnumber',controller.modifyUser.checkIDnumberUnique);
+    //校验输入的邮箱是否已存在
+    router.get('/modifyUser/checkEmailUnique/:email',controller.modifyUser.checkEmailUnique);
+    //保存用户修改信息
+    router.post('/modifyUser/save',controller.modifyUser.save);
 };
