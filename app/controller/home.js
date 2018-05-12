@@ -67,34 +67,7 @@ class HomeController extends Controller {
     }
 }
 
-function parse(obj){
-    if(obj.code && obj.code===500){
-        return obj;
-    }
-    let result=[];
-    for(let row in obj.rows){
-        let o={
-            id:row.id,
-            name:row.name,
-            status:row.status,
-            flavorName:row.flavor.name,
-            netName:'',
-            netWork:[]
-        };
-        if(row.addresses.addresses){
-            for(let key in row.addresses.addresses){
-                o.netName=key;
-                for(let net in row.addresses.addresses[key]){
-                    o.netWork.push({
-                        type:net['OS-EXT-IPS:type'],
-                        ip:net['addr']
-                    })
-                }
-            }
-        }
-        result.push(o);
-    }
-    return result;
-}
 
 module.exports = HomeController;
+
+
