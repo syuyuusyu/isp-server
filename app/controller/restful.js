@@ -82,7 +82,7 @@ class RestfulController extends Controller{
                 result.push(cur);
             }
             this.ctx.logger.info('集成就调用结果:',result);
-            if(entity.parseFun){
+            if(entity.parseFun && !queryMap.doNotParse){
                 try {
                     let fn=evil(entity.parseFun);
                     result=fn(result);
