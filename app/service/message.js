@@ -5,9 +5,9 @@ class MessageService extends Service{
     async save(entity){
         let result={};
         if(entity.id){
-            result = await this.app.mysql.update('isp_message', entity);
+            result = await this.app.mysql.update('t_message', entity);
         }else {
-            result = await this.app.mysql.insert('isp_message', entity); // 更新 posts 表中的记录
+            result = await this.app.mysql.insert('t_message', entity); // 更新 posts 表中的记录
         }
         return  result.affectedRows === 1;
     }

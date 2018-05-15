@@ -18,10 +18,10 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
---  Table structure for `invoke_info`
+--  Table structure for `t_invoke_info`
 -- ----------------------------
-DROP TABLE IF EXISTS `invoke_info`;
-CREATE TABLE `invoke_info` (
+DROP TABLE IF EXISTS `t_invoke_info`;
+CREATE TABLE `t_invoke_info` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `descrption` varchar(200) DEFAULT NULL,

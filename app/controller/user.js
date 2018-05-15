@@ -6,11 +6,11 @@ class UserController extends Controller{
         let userType=this.ctx.params.userType;
         let sql=`select u.*,(
             case when u.type=1 
-            then (select name from isp_system where id=u.system_id) 
-            else (select name from isp_organization where id=u.org_id)  
+            then (select name from t_system where id=u.system_id) 
+            else (select name from t_organization where id=u.org_id)  
 	        end) belong
-            from isp_user u where type=?`
-        sql='select * from isp_user';
+            from t_user u where type=? `
+        sql='select * from t_user where stateflag=1';
         let users=await this.app.mysql.query(sql,[userType]);
         this.ctx.body=users;
     }
@@ -22,11 +22,11 @@ class UserController extends Controller{
         const conn = await this.app.mysql.beginTransaction(); // 初始化事务
 
         try {
-            await conn.delete('isp_user_role', {
+            await conn.delete('t_user_role', {
                 user_id: userId,
             });  // 第一步操作
             if(roleIds.length>0){
-                let sql=`insert into isp_user_role(user_id,role_id) values ${roleIds.map((a)=>'('+userId+','+a+')').reduce((a,b)=>a+','+b)}`;
+                let sql=`insert into t_user_role(user_id,role_id) values ${roleIds.map((a)=>'('+userId+','+a+')').reduce((a,b)=>a+','+b)}`;
                 result=await conn.query(sql);  // 第二步操作
             }
 
@@ -41,12 +41,12 @@ class UserController extends Controller{
 
     async userRoleConfRoles(){
         let userId=this.ctx.params.userId;
-        let [user]=await this.app.mysql.query(`select * from isp_user where id=?`,[userId]);
+        let [user]=await this.app.mysql.query(`select * from t_user where id=?`,[userId]);
         let roles=[];
         if(user.type==='1'){
-            roles=await this.app.mysql.query(`select * from isp_role where type=1 and system_id=?`,[user.system_id]);
+            roles=await this.app.mysql.query(`select * from t_role where type=1 and system_id=? and stateflag=1`,[user.system_id]);
         }else{
-            roles=await this.app.mysql.query(`select * from isp_role where type=2`,[]);
+            roles=await this.app.mysql.query(`select * from t_role where type=2 and stateflag=1`,[]);
         }
         this.ctx.body=roles;
     }

@@ -4,8 +4,8 @@ class OperationService extends Service{
 
     //平台功能配置菜单树
     async loadPlatfrom(current,user,roles){
-        let sql=`select s.id sysId,s.name text from isp_system s `;
-        //let sql=`select s.id sysId,s.name text from isp_system s join isp_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`
+        let sql=`select s.id sysId,s.name text from t_system s where stateflag=1`;
+        //let sql=`select s.id sysId,s.name text from t_system s join t_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`
         let platfroms=await this.app.mysql.query(sql,[roles.map(r=>r.id)]);
         for(let i=0;i<platfroms.length;i++){
             platfroms[i].id=platfroms[i].sysId+'-'+current.id;
@@ -19,7 +19,7 @@ class OperationService extends Service{
     //平台接口管理菜单树
     async sysInvoke(current,user,roles){
         let platfroms=await this.app.mysql.query(
-            `select s.id sysId,s.name text from isp_system s`,
+            `select s.id sysId,s.name text from t_system s where stateflag=1`,
             []);
         for(let i=0;i<platfroms.length;i++){
             platfroms[i].id=platfroms[i].sysId+'-'+current.id;
@@ -30,13 +30,13 @@ class OperationService extends Service{
         return platfroms;
     }
 
-    //保存isp_sys_operation
+    //保存t_sys_operation
     async save(entity){
         let result={};
         if(entity.id){
-            result = await this.app.mysql.update('isp_sys_operation', entity);
+            result = await this.app.mysql.update('t_sys_operation', entity);
         }else {
-            result = await this.app.mysql.insert('isp_sys_operation', entity); // 更新 posts 表中的记录
+            result = await this.app.mysql.insert('t_sys_operation', entity); // 更新 posts 表中的记录
         }
         // 判断更新成功
         return result.affectedRows === 1;

@@ -49,7 +49,7 @@ class InterfaceService extends Service {
     async synuser(body) {
         let {system, reqdata: users} = body;
         system = system.toLocaleLowerCase();
-        let [sysEntity] = await this.app.mysql.query(`select * from isp_system where code=?`, [system]);
+        let [sysEntity] = await this.app.mysql.query(`select * from t_system where code=?`, [system]);
         if (!sysEntity) {
             return {
                 status: '806',
@@ -58,10 +58,10 @@ class InterfaceService extends Service {
         }
         try {
             for (let u of users) {
-                let [result] = await this.app.mysql.query(`select id from isp_user where phone=?`, [system + u.username]);
+                let [result] = await this.app.mysql.query(`select id from t_user where phone=?`, [system + u.username]);
                 if (result) {
                     let currentId=result.id;
-                    await this.app.mysql.update('isp_user',
+                    await this.app.mysql.update('t_user',
                         {
                             id: currentId,
                             system_id: sysEntity.id,
@@ -71,7 +71,7 @@ class InterfaceService extends Service {
                         });
                 } else {
                     const Literal = this.app.mysql.literals.Literal;
-                    await this.app.mysql.insert('isp_user',
+                    await this.app.mysql.insert('t_user',
                         {
                             system_id: sysEntity.id, type: '1',
                             user_name: system + u.username, name: u.name, passwd: new Literal(`password('123456')`)
@@ -96,7 +96,7 @@ class InterfaceService extends Service {
     async synrole(body){
         let {system, reqdata: roles} = body;
         system = system.toLocaleLowerCase();
-        let [sysEntity] = await this.app.mysql.query(`select * from isp_system where code=?`, [system]);
+        let [sysEntity] = await this.app.mysql.query(`select * from t_system where code=?`, [system]);
         if (!sysEntity) {
             return {
                 status: '806',
@@ -106,11 +106,11 @@ class InterfaceService extends Service {
         try {
             for (let r of roles) {
                 console.log(system + r.rolename);
-                let [result] = await this.app.mysql.query(`select id from isp_role where code=?`, [system + r.rolename]);
+                let [result] = await this.app.mysql.query(`select id from t_role where code=?`, [system + r.rolename]);
                 console.log(result);
                 if (result) {
                     let currentId=result.id;
-                    await this.app.mysql.update('isp_role',
+                    await this.app.mysql.update('t_role',
                         {
                             id: currentId,
                             system_id: sysEntity.id,
@@ -119,7 +119,7 @@ class InterfaceService extends Service {
                             type: '1'
                         });
                 } else {
-                    await this.app.mysql.insert('isp_role',
+                    await this.app.mysql.insert('t_role',
                         {
                             system_id: sysEntity.id, type: '1',
                             code: system + r.rolename, name: r.name,
@@ -181,18 +181,18 @@ class InterfaceService extends Service {
             for(let metdata of reqdata){
                 let fields=metdata.fields;
                 delete metdata.fields;
-                let [met]=await conn.query(`select id from isp_metadata where name=? and system_id=?`,[metdata.name,syatemId]);
+                let [met]=await conn.query(`select id from t_metadata where name=? and system_id=?`,[metdata.name,syatemId]);
                 if(met && met.id){
-                    await conn.update('isp_metadata',{...metdata,id:met.id,system_id:syatemId})
-                    await conn.delete('isp_metadata_fields',{metadata_id:met.id});
+                    await conn.update('t_metadata',{...metdata,id:met.id,system_id:syatemId})
+                    await conn.delete('t_metadata_fields',{metadata_id:met.id});
                     for (let field of fields){
-                        await conn.insert('isp_metadata_fields',{...field,metadata_id:met.id})
+                        await conn.insert('t_metadata_fields',{...field,metadata_id:met.id})
                     }
                 }else{
-                    let result=await  conn.insert('isp_metadata',{...metdata,system_id:syatemId})
-                    await conn.delete('isp_metadata_fields',{metadata_id:result.insertId});
+                    let result=await  conn.insert('t_metadata',{...metdata,system_id:syatemId})
+                    await conn.delete('t_metadata_fields',{metadata_id:result.insertId});
                     for (let field of fields){
-                        await conn.insert('isp_metadata_fields',{...field,metadata_id:result.insertId})
+                        await conn.insert('t_metadata_fields',{...field,metadata_id:result.insertId})
                     }
                 }
             }
@@ -223,12 +223,12 @@ class InterfaceService extends Service {
         try{
             for(let op of reqdata){
                 console.log(op);
-                let [result]=await this.app.mysql.query(`select id from isp_sys_operation where name=? and system_id=?`,
+                let [result]=await this.app.mysql.query(`select id from t_sys_operation where name=? and system_id=?`,
                     [op.name,syatemId]);
                 if(result && result.id){
-                    await this.app.mysql.update('isp_sys_operation',{...op,id:result.id,type:3,system_id:syatemId});
+                    await this.app.mysql.update('t_sys_operation',{...op,id:result.id,type:3,system_id:syatemId});
                 }else{
-                    await this.app.mysql.insert('isp_sys_operation',{...op,type:3,system_id:syatemId});
+                    await this.app.mysql.insert('t_sys_operation',{...op,type:3,system_id:syatemId});
                 }
             }
 
@@ -248,8 +248,8 @@ class InterfaceService extends Service {
 
     async synuserresult(body){
         const {system,reqdata:[{status,username,msg}]}=body;
-        let [systementity]=await this.app.mysql.query(`select * from isp_system where code=?`,[system.toLowerCase()]);
-        let [user]=await this.app.mysql.query(`select * from isp_user where user_name=?`,[username]);
+        let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
+        let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
         if(!systementity || !user){
             return {
                 status:'806',
@@ -282,10 +282,10 @@ class InterfaceService extends Service {
     }
 
     async _addsysPromision(system,user){
-        let [{count}]=await this.app.mysql.query('select count(1) count from isp_user_system where user_id=? and system_id=?',[user.id,system.id]);
+        let [{count}]=await this.app.mysql.query('select count(1) count from t_user_system where user_id=? and system_id=?',[user.id,system.id]);
         console.log('_addsysPromision',count);
         if(count===0){
-            this.app.mysql.insert('isp_user_system', {user_id:user.id,system_id:system.id});
+            this.app.mysql.insert('t_user_system', {user_id:user.id,system_id:system.id});
         }
     }
 

@@ -4,11 +4,11 @@ class RoleController extends Controller {
 
   async allRoles() {
     // let roleType=this.ctx.params.roleType;
-    // let sql=`select r.*,s.name sname from isp_role r JOIN isp_system s on r.system_id=s.id where r.type=1`;
+    // let sql=`select r.*,s.name sname from t_role r JOIN t_system s on r.system_id=s.id where r.type=1`;
     // if(roleType==='2'){
-    //     sql=`select * from isp_role where type=2`;
+    //     sql=`select * from t_role where type=2`;
     // }
-    const sql = 'select * from isp_role';
+    const sql = 'select * from t_role where stateflag=1';
     const content = await this.app.mysql.query(sql, []);
     this.ctx.body = content;
   }
@@ -20,42 +20,27 @@ class RoleController extends Controller {
       this.ctx.body = { total: 1 };
       return;
     }
-    const [{ total }] = await this.app.mysql.query('select count(1) total from isp_role where code=? and system_id=?'
+    const [{ total }] = await this.app.mysql.query('select count(1) total from t_role where code=? and system_id=? and stateflag=1'
       , [ value, systemId ]);
     this.ctx.body = { total };
   }
 
   async save() {
-    const entity = this.ctx.request.body;
-    let result = {};
-    console.log(entity);
-    if (entity.id) {
-      result = await this.app.mysql.update('isp_role', entity);
-    } else {
-      result = await this.app.mysql.insert('isp_role', entity); // 更新 posts 表中的记录
-    }
-    // 判断更新成功
-    console.log(result);
-    const updateSuccess = result.affectedRows === 1;
-    this.ctx.body = { success: updateSuccess };
+      this.ctx.body = { success: await this.ctx.service.saveOrDelete.save('t_role',this.ctx.request.body)};
   }
 
   async delete() {
-    const result = await this.app.mysql.delete('isp_role', {
-      id: this.ctx.params.id,
-    });
-    const updateSuccess = result.affectedRows === 1;
-    this.ctx.body = { success: updateSuccess };
+      this.ctx.body = { success: await this.ctx.service.saveOrDelete.delete('t_role',this.ctx.params.id) };
   }
 
   async saveRoleMenu() {
     const { roleId, menuIds } = this.ctx.request.body;
-    const sql = `insert into isp_role_menu(role_id,menu_id) values ${menuIds.map(a => '(' + roleId + ',' + a + ')').reduce((a, b) => a + ',' + b)}`;
+    const sql = `insert into t_role_menu(role_id,menu_id) values ${menuIds.map(a => '(' + roleId + ',' + a + ')').reduce((a, b) => a + ',' + b)}`;
     let result;
     const conn = await this.app.mysql.beginTransaction(); // 初始化事务
 
     try {
-      await conn.delete('isp_role_menu', {
+      await conn.delete('t_role_menu', {
         role_id: roleId,
       }); // 第一步操作
       result = await conn.query(sql); // 第二步操作
@@ -70,7 +55,7 @@ class RoleController extends Controller {
   }
 
   async roleMenu() {
-    const menu = await this.app.mysql.select('isp_menu', {
+    const menu = await this.app.mysql.select('t_menu', {
       where: {
         parent_id: this.ctx.params.id,
       },
@@ -79,12 +64,12 @@ class RoleController extends Controller {
   }
 
   async roleMenuIds() {
-    const menuIds = await this.app.mysql.query('select menu_id from isp_role_menu where role_id=?', [ this.ctx.params.roleId ]);
+    const menuIds = await this.app.mysql.query('select menu_id from t_role_menu where role_id=? and stateflag=1', [ this.ctx.params.roleId ]);
     this.ctx.body = menuIds;
   }
 
   async userRole() {
-    const roles = await this.app.mysql.query('select r.* from isp_role r join isp_user_role ur on r.id=ur.role_id where ur.user_id=?',
+    const roles = await this.app.mysql.query('select r.* from t_role r join t_user_role ur on r.id=ur.role_id where ur.user_id=? and r.stateflag=1',
       [ this.ctx.params.userId ]);
     this.ctx.body = roles;
   }

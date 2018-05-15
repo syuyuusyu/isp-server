@@ -7,7 +7,7 @@ class ModifyUser extends Controller {
     let token = this.ctx.request.header['access-token'];
     let sd = await this.service.authorService.getAuthor(token);
     let logoinUser = sd.user.user_name;
-    let result = await this.app.mysql.query('select passwd,salt from isp_user where user_name=?', [logoinUser]);
+    let result = await this.app.mysql.query('select passwd,salt from t_user where user_name=?', [logoinUser]);
     const salt = result[0].salt;
     const loginPwDB = result[0].passwd;//库中用户的密码
     const hmac = crypto.createHmac('sha256', salt);
@@ -17,12 +17,12 @@ class ModifyUser extends Controller {
   }
 
   async checkIDnumberUnique() {
-    let [{total}] = await this.app.mysql.query('select count(1) total from isp_user where ID_number=?', [this.ctx.params.IDnumber]);
+    let [{total}] = await this.app.mysql.query('select count(1) total from t_user where ID_number=?', [this.ctx.params.IDnumber]);
     this.ctx.body = {total}
   }
 
   async checkEmailUnique() {
-    let [{total}] = await this.app.mysql.query('select count(1) total from isp_user where email=?', [this.ctx.params.email]);
+    let [{total}] = await this.app.mysql.query('select count(1) total from t_user where email=?', [this.ctx.params.email]);
     this.ctx.body = {total}
   }
 
@@ -41,7 +41,7 @@ class ModifyUser extends Controller {
           user_name: entity.userName
         }
       };
-      result = await this.app.mysql.update('isp_user', row, options);
+      result = await this.app.mysql.update('t_user', row, options);
     }else if(entity.newPassword!==''&&entity.confirmNewPassword!==''){//当修改密码时更新用户名，密码，身份证号，邮箱，salt
       const row = {
         name: entity.nickName,
@@ -55,7 +55,7 @@ class ModifyUser extends Controller {
           user_name: entity.userName
         }
       };
-      result = await this.app.mysql.update('isp_user', row, options);
+      result = await this.app.mysql.update('t_user', row, options);
     }
     const updateSuccess = result.affectedRows === 1;
     this.ctx.body={success:updateSuccess};
