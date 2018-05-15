@@ -16,12 +16,12 @@ class HomeController extends Controller {
         let token = '';
         if (msg === '1') {
             [user] = await  this.app.mysql.query(
-                `select id,name,user_name,phone,ID_number,email from isp_user where user_name='${this.ctx.request.body.user_name}'`);
-            roles = await this.app.mysql.query(`select r.* from isp_role r join isp_user_role u on r.id=u.role_id  where u.user_id=${user.id}`);
+                `select id,name,user_name,phone,ID_number,email from t_user where user_name='${this.ctx.request.body.user_name}' and stateflag=1`);
+            roles = await this.app.mysql.query(`select r.* from t_role r join t_user_role u on r.id=u.role_id  where u.user_id=${user.id} and r.stateflag=1 and u.stateflag=1`);
             const set = new Set();
             let menuId=[];
             if(roles.length>0){
-                menuId = await this.app.mysql.query(`select menu_id from isp_role_menu where role_id in (?)`, [roles.map(m => m.id)]);
+                menuId = await this.app.mysql.query(`select menu_id from t_role_menu where role_id in (?) and stateflag=1`, [roles.map(m => m.id)]);
             }
 
             menuId.forEach(m => set.add(m.menu_id));

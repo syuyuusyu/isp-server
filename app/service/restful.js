@@ -68,7 +68,7 @@ class RestfulService extends Service{
         result[invokeName].head=head;
         result[invokeName].url=url;
         if(entity.next && result[invokeName].result.map ){
-            let nextEntitys=//await this.app.mysql.select('invoke_info',{where: {  id: entity.next.split(',') }});
+            let nextEntitys=//await this.app.mysql.select('t_invoke_info',{where: {  id: entity.next.split(',') }});
                     this.app.invokeEntitys.filter(d=>{
                         let flag=false;
                         entity.next.split(',').forEach(i=>{

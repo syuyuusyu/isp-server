@@ -2,53 +2,70 @@ const Controller=require('egg').Controller;
 
 class SystemController extends Controller{
     async allSystem(){
-        let content=await this.app.mysql.query('select * from isp_system',[]);
+        let content=await this.app.mysql.query('select * from t_system',[]);
         this.ctx.body=content;
     }
 
     async checkUnique(){
-        let [{total}]=await this.app.mysql.query('select count(1) total from isp_system where code=?' ,[this.ctx.params.code]);
+        let [{total}]=await this.app.mysql.query('select count(1) total from t_system where code=?' ,[this.ctx.params.code]);
         this.ctx.body={total}
     }
 
-    async save(){
-        const entity=this.ctx.request.body;
-        let result={};
-        if(entity.id){
-            result = await this.app.mysql.update('isp_system', entity);
-        }else {
-            result = await this.app.mysql.insert('isp_system', entity); // 更新 posts 表中的记录
-        }
-        let systems=await this.app.mysql.query(`select * from isp_system`);
+    // async save(){
+    //     const entity=this.ctx.request.body;
+    //     let result={};
+    //     if(entity.id){
+    //         result = await this.app.mysql.update('t_system', entity);
+    //     }else {
+    //         result = await this.app.mysql.insert('t_system', entity); // 更新 posts 表中的记录
+    //     }
+    //     let systems=await this.app.mysql.query(`select * from t_system`);
+    //     systems.forEach(s=>{
+    //        this.app.systemMap[s.code]=s.id;
+    //        this.app.systemUrl[s.code]=s.url;
+    //     });
+    //     // 判断更新成功
+    //     const updateSuccess = result.affectedRows === 1;
+    //     this.ctx.body={success:updateSuccess};
+    // }
+    //
+    // async delete(){
+    //     const result = await this.app.mysql.delete('t_system', {
+    //         id: this.ctx.params.id
+    //     });
+    //     let systems=await this.app.mysql.query(`select * from t_system`);
+    //     systems.forEach(s=>{
+    //         this.app.systemMap[s.code]=s.id;
+    //     });
+    //     const updateSuccess = result.affectedRows === 1;
+    //     this.ctx.body={success:updateSuccess};
+    // }
+
+    async save() {
+        this.ctx.body = { success: await this.ctx.service.saveOrDelete.save('t_system',this.ctx.request.body)};
+        let systems=await this.app.mysql.query(`select * from t_system where stateflage=1`);
         systems.forEach(s=>{
-           this.app.systemMap[s.code]=s.id;
-           this.app.systemUrl[s.code]=s.url;
+            this.app.systemMap[s.code]=s.id;
+            this.app.systemUrl[s.code]=s.url;
         });
-        // 判断更新成功
-        const updateSuccess = result.affectedRows === 1;
-        this.ctx.body={success:updateSuccess};
     }
 
-    async delete(){
-        const result = await this.app.mysql.delete('isp_system', {
-            id: this.ctx.params.id
-        });
-        let systems=await this.app.mysql.query(`select * from isp_system`);
+    async delete() {
+        this.ctx.body = { success: await this.ctx.service.saveOrDelete.delete('t_system',this.ctx.params.id) };
+        let systems=await this.app.mysql.query(`select * from t_system where stateflage=1`);
         systems.forEach(s=>{
             this.app.systemMap[s.code]=s.id;
         });
-        const updateSuccess = result.affectedRows === 1;
-        this.ctx.body={success:updateSuccess};
     }
 
     async currentSys(){
-        let content=await this.app.mysql.query('select * from isp_system where id=?',[this.ctx.params.id]);
+        let content=await this.app.mysql.query('select * from t_system where id=?',[this.ctx.params.id]);
         this.ctx.body=content;
     };
 
     async sysRole(){
-        let systems=await this.app.mysql.query(`select s.* from isp_system s join isp_sys_role sr on s.id=sr.system_id where sr.role_id=?`,
-            [this.ctx.params.roleId])
+        let systems=await this.app.mysql.query(`select s.* from t_system s join t_sys_role sr on s.id=sr.system_id where sr.role_id=?`,
+            [this.ctx.params.roleId]);
         this.ctx.body=systems;
     }
 
@@ -59,11 +76,11 @@ class SystemController extends Controller{
         const conn = await this.app.mysql.beginTransaction(); // 初始化事务
 
         try {
-            await conn.delete('isp_sys_role', {
+            await conn.delete('t_sys_role', {
                 role_id: roleId,
             });  // 第一步操作
             if(sysIds.length>0){
-                let sql=`insert into isp_sys_role(role_id,system_id) values ${sysIds.map((a)=>'('+roleId+','+a+')').reduce((a,b)=>a+','+b)}`;
+                let sql=`insert into t_sys_role(role_id,system_id) values ${sysIds.map((a)=>'('+roleId+','+a+')').reduce((a,b)=>a+','+b)}`;
                 result=await conn.query(sql);  // 第二步操作
             }
 
@@ -80,8 +97,8 @@ class SystemController extends Controller{
     }
 
     async currentRoleSys(){
-        //let sql=`select s.* from isp_system s join isp_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`;
-        let sql=`select s.* from isp_system s join isp_user_system us on us.system_id=s.id where us.user_id=?`
+        //let sql=`select s.* from t_system s join t_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`;
+        let sql=`select s.* from t_system s join t_user_system us on us.system_id=s.id where us.user_id=?`
         const token =this.ctx.request.header['access-token'];
         const auth=await this.service.authorService.getAuthor(token);
         const {user,roles}=auth;
@@ -93,7 +110,7 @@ class SystemController extends Controller{
 
         auth.systems=[];
         for(let i=0;i<systems.length;i++){
-            const operations=await this.app.mysql.query(`select * from isp_sys_operation where system_id=?`,systems[i].id);
+            const operations=await this.app.mysql.query(`select * from t_sys_operation where system_id=?`,systems[i].id);
             let loginToken=this.service.interfaces.randomString(8);
             this.app.redis.set(loginToken+systems[i].code,JSON.stringify(user));
             systems[i].operations=operations;
@@ -106,7 +123,7 @@ class SystemController extends Controller{
 
     async sysAccess(){
         let result=await this.app.mysql.query(
-            `select s.id,s.name,(select count(1) from isp_user_system where user_id=? and system_id=s.id) count from isp_system s`,
+            `select s.id,s.name,(select count(1) from t_user_system where user_id=? and system_id=s.id) count from t_system s`,
             [this.ctx.params.userId]);
         this.ctx.body=result;
     }

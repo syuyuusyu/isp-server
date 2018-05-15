@@ -6,14 +6,14 @@ class LoginService extends Service{
 
     async login(user){
         console.log(user);
-        let [{userExist}]=await this.app.mysql.query(`select count(1) userExist from isp_user where user_name='${user.user_name}'`);
+        let [{userExist}]=await this.app.mysql.query(`select count(1) userExist from t_user where user_name='${user.user_name}' and stateflag=1`);
         if(userExist===0){
             return '2';
         }
 
 
         //根据输入的用户查询出该用户在库中的密码和salt
-        let result=await  this.app.mysql.query(`select passwd,salt from isp_user where user_name='${user.user_name}'`);
+        let result=await  this.app.mysql.query(`select passwd,salt from t_user where user_name='${user.user_name}' and stateflag=1`);
         const salt=result[0].salt;
         const loginPwDB=result[0].passwd;//库中用户的密码
         const hmac = crypto.createHmac('sha256', salt);
@@ -27,7 +27,7 @@ class LoginService extends Service{
         }
 
        /* let [{currentUser}]=await this.app.mysql
-            .query(`select count(1) currentUser from isp_user where user_name='${user.user_name}' and passwd=password('${user.passwd}')`);
+            .query(`select count(1) currentUser from t_user where user_name='${user.user_name}' and passwd=password('${user.passwd}')`);
         if(userExist===1 && currentUser===0){
             return '3'
         }

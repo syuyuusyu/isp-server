@@ -7,7 +7,7 @@ class MessageController extends Controller{
         const {applySystemIds}=this.ctx.request.body;
         const token=this.ctx.request.header['access-token'];
         const {user}=await this.service.authorService.getAuthor(token);
-        const systems=await this.app.mysql.query(`select * from isp_system where id in (?)`,[applySystemIds]);
+        const systems=await this.app.mysql.query(`select * from t_system where id in (?) and stateflag=1`,[applySystemIds]);
         const entity={
             send_user_id:user.id,
             receive_type:2,
@@ -27,7 +27,7 @@ class MessageController extends Controller{
     async receive(){
         const token=this.ctx.request.header['access-token'];
         const {user,roles}=await this.service.authorService.getAuthor(token);
-        const all=await this.app.mysql.query(`select * from isp_message where step=1`);
+        const all=await this.app.mysql.query(`select * from t_message where step=1`);
         const message=all.filter(d=>d.receive_type==='1').filter(d=>
             //指定用户
             d.receive_user_id===user.id
@@ -51,11 +51,11 @@ class MessageController extends Controller{
         try{
             this.service.message.setComplete(message);
             const systems=await this.app.mysql.query(
-                `select s.*,so.path from isp_system s join isp_sys_operation so on s.id=so.system_id where so.type=5 and s.id in(?)`,
+                `select s.*,so.path from t_system s join t_sys_operation so on s.id=so.system_id where so.type=5 and s.id in(?) and s.stateflag=1`,
                 [message.memo.split(',')]);
 
             let [invokeEntity] =this.app.invokeEntitys.filter(d => d.id === 31);
-            let [user]=await this.app.mysql.query(`select * from isp_user where id=?`,[message.send_user_id]);
+            let [user]=await this.app.mysql.query(`select * from t_user where id=?`,[message.send_user_id]);
             for(let sys of systems){
                 this.service.restful.invoke(invokeEntity,{...user,url:sys.url,path:sys.path,username:user.user_name});
             }
@@ -93,7 +93,7 @@ class MessageController extends Controller{
     }
 
     async deleteMsg(){
-        const result = await this.app.mysql.delete('isp_message', {
+        const result = await this.app.mysql.delete('t_message', {
             id: this.ctx.params.id
         });
         const updateSuccess = result.affectedRows === 1;

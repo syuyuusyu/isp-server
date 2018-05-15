@@ -15,8 +15,8 @@ class RestfulController extends Controller{
         let wherecount=(invokeName && !/\s/.test(invokeName))?`where name='${invokeName}'`:'where 1=1';
         wherecount=wherecount+((groupName && !/\s/.test(groupName))?` and groupname='${groupName}'`:'');
         let result={};
-        let [{total}]=await this.app.mysql.query(`select count(1) total from invoke_info ${wherecount}`, []);
-        let [...content]=await this.app.mysql.select('invoke_info',{
+        let [{total}]=await this.app.mysql.query(`select count(1) total from t_invoke_info ${wherecount}`, []);
+        let [...content]=await this.app.mysql.select('t_invoke_info',{
             limit: limit,
             offset: start,
             where
@@ -31,9 +31,9 @@ class RestfulController extends Controller{
         if(!entity.next) entity.next=null;
         let result={};
         if(entity.id){
-            result = await this.app.mysql.update('invoke_info', entity);
+            result = await this.app.mysql.update('t_invoke_info', entity);
         }else {
-            result = await this.app.mysql.insert('invoke_info', entity); // 更新 posts 表中的记录
+            result = await this.app.mysql.insert('t_invoke_info', entity); // 更新 posts 表中的记录
         }
         // 判断更新成功
         const updateSuccess = result.affectedRows === 1;
@@ -42,7 +42,7 @@ class RestfulController extends Controller{
     }
 
     async invokes(){
-        this.ctx.body=await this.app.mysql.select('invoke_info',{});
+        this.ctx.body=await this.app.mysql.select('t_invoke_info',{});
     }
 
     async test(){
@@ -57,7 +57,7 @@ class RestfulController extends Controller{
         try{
             const queryMap=this.ctx.request.body;
             const [entity]=this.app.invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
-            //await this.app.mysql.select('invoke_info',{where: {  name: this.ctx.params.invokeName}});
+            //await this.app.mysql.select('t_invoke_info',{where: {  name: this.ctx.params.invokeName}});
 
             let nextEntitys=this.app.invokeEntitys.filter(d=>{
                 let flag=false;
@@ -110,7 +110,7 @@ class RestfulController extends Controller{
         let result=[];
         const queryMap=this.ctx.request.body;
         const [entity]=this.app.invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
-        //await this.app.mysql.select('invoke_info',{where: {  name: this.ctx.params.invokeName}});
+        //await this.app.mysql.select('t_invoke_info',{where: {  name: this.ctx.params.invokeName}});
 
         let nextEntitys=this.app.invokeEntitys.filter(d=>{
             let flag=false;
@@ -165,7 +165,7 @@ class RestfulController extends Controller{
     }
 
     async delete(){
-        const result = await this.app.mysql.delete('invoke_info', {
+        const result = await this.app.mysql.delete('t_invoke_info', {
             id: this.ctx.params.id
         });
         const updateSuccess = result.affectedRows === 1;
@@ -174,17 +174,17 @@ class RestfulController extends Controller{
     }
 
     async checkUnique(){
-        let [{total}]=await this.app.mysql.query('select count(1) total from invoke_info where name=?' ,[this.ctx.params.invokeName]);
+        let [{total}]=await this.app.mysql.query('select count(1) total from t_invoke_info where name=?' ,[this.ctx.params.invokeName]);
         this.ctx.body={total}
     }
 
     async reflashEntity(){
         console.log('reflashEntity');
-        this.app.invokeEntitys=await this.app.mysql.query('select * from invoke_info');
+        this.app.invokeEntitys=await this.app.mysql.query('select * from t_invoke_info');
     }
 
     async groupName(){
-        this.ctx.body= await this.app.mysql.query(`select distinct groupName from invoke_info`);
+        this.ctx.body= await this.app.mysql.query(`select distinct groupName from t_invoke_info`);
     }
 
 }
