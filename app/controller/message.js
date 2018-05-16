@@ -21,7 +21,7 @@ class MessageController extends Controller{
         };
         const success=await this.service.message.save(entity);
         this.ctx.body={success};
-        this.service.daibanLog.daiban(user.user_name,this.ctx.host.split(':')[0],entity.message,'申请');
+        this.service.backlogLog.backlog(user.user_name,this.ctx.host.split(':')[0],entity.message,'申请');
     }
 
     async receive(){
@@ -65,7 +65,7 @@ class MessageController extends Controller{
             result={success:false};
         }
         this.ctx.body=result;
-        this.service.daibanLog.daiban(currentUser.user_name,this.ctx.host.split(':')[0],message.message,'批准');
+        this.service.backlogLog.backlog(currentUser.user_name,this.ctx.host.split(':')[0],message.message,'批准');
     }
 
     async disApproval(){
@@ -88,7 +88,7 @@ class MessageController extends Controller{
             step:1,
         });
         this.ctx.body={success:true};
-        this.service.daibanLog.daiban(currentUser.user_name,this.ctx.host.split(':')[0],message.message,'否决');
+        this.service.backlogLog.backlog(currentUser.user_name,this.ctx.host.split(':')[0],message.message,'否决');
 
     }
 

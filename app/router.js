@@ -218,13 +218,13 @@ module.exports = app => {
 
     //待办日志
     //获取所有待办日志
-    router.get('/daibanLog/getAllDaibanLog',controller.daibanLog.allDaibanLog);
+    router.get('/backlogLog/getAllBacklogLog',controller.backlogLog.allBacklogLog);
     //获取所有登录用户
-    router.get('/daibanLog/getAllLoginName',controller.daibanLog.allLoginName);
+    router.get('/backlogLog/getAllLoginName',controller.backlogLog.allLoginName);
     //获取所有待办状态
-    router.get('/daibanLog/getDaibanStatus',controller.daibanLog.allDaibanStatus);
+    router.get('/backlogLog/getBacklogStatus',controller.backlogLog.allBacklogStatus);
     //根据条件查询出待办日志
-    router.post('/daibanLog/queryDaibanLog',controller.daibanLog.queryDaibanLog);
+    router.post('/backlogLog/queryBacklogLog',controller.backlogLog.queryBacklogLog);
 
     //修改用户信息
     //校验初始密码是否正确

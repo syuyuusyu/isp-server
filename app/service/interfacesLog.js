@@ -3,6 +3,8 @@ const Service = require('egg').Service;
 class InterfacesLog extends Service{
    log (body,result){
     if(body.method==='keyverify'){
+      const createTime=new Date();
+      const stateflag=1;
       const ip=this.ctx.ip;//调用接口的ip
       const interfacesName=body.method;//接口名
       const repdata=JSON.stringify(body);//请求报文信息
@@ -50,7 +52,7 @@ class InterfacesLog extends Service{
       this.app.mysql.query(sql,[]);*/
 
       //this.app.mysql.query('insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value(?,?,?,?,?,?,?,?,?)', [system, systemCN, ip, interfacesName, repdata, respdata, status, message,invokeDate]);
-      let interfaceInfo=[system,systemCN,ip,interfacesName,repdata,respdata,status,message,date];
+      let interfaceInfo=[system,systemCN,ip,interfacesName,repdata,respdata,status,message,date,systemCN,date,stateflag];
       this.app.interfaceLog.push(interfaceInfo);
     }
   }

@@ -6,6 +6,7 @@ module.exports = (options,app) => {
        // await asyncVerify(ctx,ctx.request.header['access-token'], 'n7d3t7x7',next);
         const token=ctx.request.header['access-token'];
         const author=await ctx.service.authorService.getByCode(token);
+        ctx.service.systemLog.operateLog(ctx);
         if(token && author){
             await next();
         }else{

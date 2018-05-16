@@ -15,9 +15,9 @@ class InterfacesLog extends Subscription {
       //console.log("定时调度中的interfaceInfo的值为：",interfaceInfo);
 
        if(interfaceInfo.length!==0){
-        let sql=`insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) values 
+        let sql=`insert into t_interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date,create_by,create_time,stateflag) values 
         ${interfaceInfo.map(a=>{return '('+ a.map(b=>"'"+b+"'").join(',')+')'}).reduce((a,b)=>a+','+b) }`;
-        //console.log("sql的值为：",sql);}
+        //console.log("sql的值为：",sql);
         await this.app.mysql.query(sql);
            interfaceInfo.length=0;
     }
