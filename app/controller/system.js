@@ -43,7 +43,7 @@ class SystemController extends Controller{
 
     async save() {
         this.ctx.body = { success: await this.ctx.service.saveOrDelete.save('t_system',this.ctx.request.body)};
-        let systems=await this.app.mysql.query(`select * from t_system where stateflage=1`);
+        let systems=await this.app.mysql.query(`select * from t_system where stateflag=1`);
         systems.forEach(s=>{
             this.app.systemMap[s.code]=s.id;
             this.app.systemUrl[s.code]=s.url;
@@ -52,7 +52,7 @@ class SystemController extends Controller{
 
     async delete() {
         this.ctx.body = { success: await this.ctx.service.saveOrDelete.delete('t_system',this.ctx.params.id) };
-        let systems=await this.app.mysql.query(`select * from t_system where stateflage=1`);
+        let systems=await this.app.mysql.query(`select * from t_system where stateflag=1`);
         systems.forEach(s=>{
             this.app.systemMap[s.code]=s.id;
         });
