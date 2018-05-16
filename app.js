@@ -31,7 +31,7 @@ module.exports = app => {
         app.invokeEntitys=await app.mysql.query(`select * from t_invoke_info`);
 
         //初始化获取所有增，改，查的路由
-        let content=await app.mysql.query(`select router_name from router_map`);
+        let content=await app.mysql.query(`select router_name from t_router_map`);
         for(let i=0;i<content.length;i++){
             app.allRouter.push(content[i].router_name)
         }
