@@ -235,4 +235,7 @@ module.exports = app => {
     router.get('/modifyUser/checkEmailUnique/:email',controller.modifyUser.checkEmailUnique);
     //保存用户修改信息
     router.post('/modifyUser/save',controller.modifyUser.save);
+
+    //重置密码
+    router.get('/resetPassword/:userName',controller.resetPassword.resetPassword);
 };
