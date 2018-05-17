@@ -227,8 +227,6 @@ module.exports = app => {
     router.post('/backlogLog/queryBacklogLog',controller.backlogLog.queryBacklogLog);
 
     //修改用户信息
-    //校验初始密码是否正确
-    router.get('/modifyUser/checkOriginalPw/:originalPw',controller.modifyUser.checkOriginalPw);
     //校验输入的身份证编号是否已存在
     router.get('/modifyUser/checkIDnumberUnique/:IDnumber',controller.modifyUser.checkIDnumberUnique);
     //校验输入的邮箱是否已存在
