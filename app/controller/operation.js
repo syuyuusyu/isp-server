@@ -3,7 +3,7 @@ const Controller=require('egg').Controller;
 class OperationController extends Controller{
 
     async operations(){
-        let result=await this.app.mysql.query(`select * from t_sys_operation where system_id=? and type<>3`,[this.ctx.params.sysId]);
+        let result=await this.app.mysql.query(`select * from t_sys_operation where system_id=? and type<>3 and stateflag=1`,[this.ctx.params.sysId]);
         this.ctx.body=result;
     }
 
@@ -32,7 +32,7 @@ class OperationController extends Controller{
 
 
     async invokeOperations(){
-        let result=await this.app.mysql.query(`select * from t_sys_operation where system_id=? and type=3`,[this.ctx.params.sysId]);
+        let result=await this.app.mysql.query(`select * from t_sys_operation where system_id=? and type=3 and stateflag=1`,[this.ctx.params.sysId]);
         this.ctx.body=result;
     }
 
