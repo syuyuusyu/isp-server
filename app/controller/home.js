@@ -51,7 +51,14 @@ class HomeController extends Controller {
                                 return p;
                             });
                             console.log(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
-                            this.app.curl(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
+                            this.app.curl(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`)
+                                .then(result=>{
+                                    console.log('退出结果:',result);
+                                }).catch(e=>{
+                                    console.log(e);
+
+                            });
+
                             this.app.loginSystem.splice(currentIndex,1);
                         }
                     }

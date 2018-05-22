@@ -15,7 +15,7 @@ class AuthorService extends Service {
 
   // 系统访问接口权限
   async invokePromiss() {
-    const systems = await this.app.mysql.query('select * from t_system and stateflag=1');
+    const systems = await this.app.mysql.query('select * from t_system where stateflag=1');
     for (const system of systems) {
       this.app.systemMap[system.code] = system.id;
       this.app.systemUrl[system.code] = system.url;
