@@ -35,6 +35,7 @@ class UserRegister extends Controller{
       const phone=entity.phone;
       const email=entity.email;
       const randomNumber=entity.randomNumber;
+      let insertRoleSuccess=false;
       let result=await this.app.mysql.insert('t_user',{user_name:userName,passwd:password,name:nickName,ID_number:IDnumber,phone:phone,email:email,salt:randomNumber});
       //console.log("result的值为:",result);
       // 判断插入成功
@@ -43,10 +44,11 @@ class UserRegister extends Controller{
         let getUserId=await this.app.mysql.query('select id from t_user where user_name=?',[userName])
         //为新增的用户分配默认角色
         if(getUserId!==null){
-          await this.app.mysql.insert('t_user_role',{user_id:getUserId[0].id,role_id:20});
+         const insertRoleresult=await this.app.mysql.insert('t_user_role',{user_id:getUserId[0].id,role_id:20});
+          insertRoleSuccess=insertRoleresult.affectedRows === 1;
         }
       }
-      this.ctx.body={success:insertSuccess};
+      this.ctx.body={success:insertRoleSuccess};
     }
 }
 module.exports=UserRegister;
