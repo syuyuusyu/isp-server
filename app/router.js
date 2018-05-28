@@ -120,6 +120,14 @@ module.exports = app => {
     router.post('/org/saveAdd',controller.organiza.saveAdd);
     //删除机构信息
     router.delete('/org/delete/:id',controller.organiza.delete);
+    //获取所有用户
+    router.get('/org/allUser',controller.organiza.getAllUser);
+    //获取查询出的用户
+    router.get('/org/QueryUser/:value',controller.organiza.getQueryUser);
+    //在点击机构用户关联按钮时获取选中机构里面的信息
+    router.get('/org/SelectedRowKeys/:id',controller.organiza.getSelectedRowKeys);
+    //保存机构用户关联
+    router.post('/org/saveOrgUser',controller.organiza.saveOrgUser);
 
     //获取对应系统的接口调用配置
     router.get('/op/invokeOperations/:sysId',controller.operation.invokeOperations);
