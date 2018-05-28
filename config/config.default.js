@@ -44,13 +44,13 @@ module.exports = appInfo => {
     config.mysql = {
         client: {
             // host
-            host: '127.0.0.1',
+            host: '10.10.50.21',
             // 端口号
             port: '3306',
             // 用户名
             user: 'root',
             // 密码
-            password: 'password',
+            password: 'isp5t6y',
             // 数据库名
             database: 'isp2',
         },
@@ -86,8 +86,18 @@ module.exports = appInfo => {
             ignoreJSON: true, // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
             enable: false
         },
-        domainWhiteList: ['http://10.10.50.16:3000', 'http://localhost:3000',  'http://192.168.3.11:3000',
-            'http://localhost:7001','http://10.10.0.227:3000','http://10.10.0.119:3000','http://127.0.0.1:3000','http://10.10.50.21:3000','http://192.168.1.119:3000']
+        domainWhiteList: [
+            'http://10.10.50.16:3000',
+            'http://localhost:3000',
+            'http://192.168.3.11:3000',
+            'http://localhost:7001',
+            'http://10.10.0.227:3000',
+            'http://10.10.0.119:3000',
+            'http://127.0.0.1:3000',
+            'http://10.10.50.21:3000',
+            'http://10.10.0.228:3000',
+            'http://10.10.0.228:8080'
+        ]
     };
 
     config.cors = {

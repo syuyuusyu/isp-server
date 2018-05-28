@@ -79,7 +79,7 @@ class InterfaceService extends Service {
                 }
             }
         } catch (e) {
-            this.app.logger.error(new Error('同步用户接口错误'), e);
+            this.ctx.logger.error(new Error('同步用户接口错误'), e);
             return {
                 status: '806',
                 message: `系统错误:${e.toString()}`,
@@ -127,8 +127,7 @@ class InterfaceService extends Service {
                 }
             }
         } catch (e) {
-            console.log(e);
-            this.app.logger.error(new Error('同步角色接口错误'), e);
+            this.ctx.logger.error('同步角色接口错误', e);
             return {
                 status: '806',
                 message: `系统错误:${e.toString()}`,
@@ -174,8 +173,8 @@ class InterfaceService extends Service {
                 message:'对应系统号不存在'
             }
         }
-        this.app.logger.info(syatemId);
-        this.app.logger.info(reqdata);
+        this.ctx.logger.info(syatemId);
+        this.ctx.logger.info(reqdata);
         const conn = await this.app.mysql.beginTransaction(); // 初始化事务
         try{
             for(let metdata of reqdata){
@@ -203,7 +202,7 @@ class InterfaceService extends Service {
             }
         }catch (e){
             await conn.rollback(); // 一定记得捕获异常后回滚事务！！
-            this.app.logger.error(e);
+            this.ctx.logger.error(e);
             return {
                 status:'806',
                 message:'失败'
@@ -222,7 +221,7 @@ class InterfaceService extends Service {
         }
         try{
             for(let op of reqdata){
-                console.log(op);
+                this.ctx.logger.info(op);
                 let [result]=await this.app.mysql.query(`select id from t_sys_operation where name=? and system_id=?`,
                     [op.name,syatemId]);
                 if(result && result.id){
@@ -238,7 +237,7 @@ class InterfaceService extends Service {
             }
         }catch (e){
          // 一定记得捕获异常后回滚事务！！
-            this.app.logger.error(e);
+            this.ctx.logger.error(e);
             return {
                 status:'806',
                 message:'失败'
