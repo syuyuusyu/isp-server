@@ -2,6 +2,7 @@ module.exports = app => {
     app.beforeStart(async () => {
         // 应用会等待这个函数执行完成才启动
         console.log('init app');
+        const ctx = app.createAnonymousContext();
 
         app.secret='n7d3t7x7';
         app.loginSystem=[];
@@ -18,14 +19,7 @@ module.exports = app => {
 
 
         //初始化系统调用接口权限
-        let systems=await app.mysql.query(`select * from t_system where stateflag=1`);
-        for(let system of systems){
-            app.systemMap[system.code]=system.id;
-            app.systemUrl[system.code]=system.url;
-            let operations=await app.mysql.query(`select o.* from t_sys_operation o join t_sys_promiss_operation spo 
-                on spo.operation_id=o.id where spo.system_id=? and o.stateflag=1`,[system.id]);
-            await app.redis.set(system.url,JSON.stringify(operations.map(m=>m.path)));
-        }
+        await ctx.service.authorService.invokePromiss();
 
         //初始化接口调用实体
         app.invokeEntitys=await app.mysql.query(`select * from t_invoke_info`);
@@ -37,13 +31,14 @@ module.exports = app => {
         }
         app.allRouter=app.allRouter.toString();
 
-        //app.mysql.insert('t_test',{name:'sdsd',age:3,time:new Date()});
+        //同步集成用户角色到流程引擎
+        await ctx.service.authorService.actSynUser();
         console.log('app start');
 
     });
 
     app.once('server', server => {
-        //app.logger.info(server.restful);
+
     });
 };
 
