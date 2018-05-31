@@ -244,4 +244,18 @@ module.exports = app => {
 
     //重置密码
     router.get('/resetPassword/:userName',controller.resetPassword.resetPassword);
+
+    //菜单管理
+    //获取菜单
+    router.get('/menuManage/menu/:id',controller.menuManage.initMenu);
+    //获取点击树节点时的菜单
+    router.get('/menuManage/currentMenus/:menuId',controller.menuManage.currentMenus);
+    //获取如果点击的树节点是最终节点时的机构信息
+    router.get('/menuManage/currentMenusIsLeaf/:menuId',controller.menuManage.currentMenuIsLeaf);
+    //保存新增的菜单信息
+    router.post('/menuManage/saveAdd',controller.menuManage.saveAdd);
+    //保存修改菜单信息
+    router.post('/menuManage/saveModify',controller.menuManage.saveModify);
+    //删除菜单
+    router.get('/menuManage/delete/:id',controller.menuManage.delete);
 };
