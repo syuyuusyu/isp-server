@@ -58,6 +58,7 @@ class RoleController extends Controller {
     const menu = await this.app.mysql.select('t_menu', {
       where: {
         parent_id: this.ctx.params.id,
+        stateflag:1
       },
     });
     this.ctx.body = menu;
