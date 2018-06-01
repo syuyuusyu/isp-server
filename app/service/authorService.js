@@ -35,10 +35,11 @@ class AuthorService extends Service {
             usernames=await this.app.mysql.query(`select * from t_user`),
                 groupnames=await this.app.mysql.query(`select * from t_role`),
                 queryMap={
-                    userRole:userRole.map(ur=>[ur.u,ur.g]),
+                    userRole:userRole.map(ur=>ur.u+','+ur.g),
                     usernames:usernames.map(u=>u.user_name),
                     groupnames:groupnames.map(r=>r.code),
         };///act/userSyn
+        console.log(queryMap);
         let result = await this.app.curl(`${this.app.config.self.activitiIp}/act/userSyn`,{
             method:'POST',
             data:queryMap,

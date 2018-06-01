@@ -108,7 +108,7 @@ module.exports = appInfo => {
     config.self={
         keystoneIp:'10.10.0.1:5000',
         swiftBaseUrl :'http://10.10.0.1:8080/v1/AUTH_8caa6e28cf7049d48b9c5274c8cb524e/',
-        activitiIp:'http://127.0.0.1:5001'
+        activitiIp:'http://127.0.0.1:5002'
     };
 
     return config;
