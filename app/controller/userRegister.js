@@ -36,6 +36,15 @@ class UserRegister extends Controller{
       const email=entity.email;
       const randomNumber=entity.randomNumber;
       let insertRoleSuccess=false;
+
+      let getUserName=await this.app.mysql.query('select * from t_user',[]);
+      for(const getUserNameValue of getUserName){
+        if(getUserNameValue.user_name===userName){
+          return this.ctx.body={success:'账号已经存在'
+
+          }
+        }
+      }
       let result=await this.app.mysql.insert('t_user',{user_name:userName,passwd:password,name:nickName,ID_number:IDnumber,phone:phone,email:email,salt:randomNumber});
       //console.log("result的值为:",result);
       // 判断插入成功

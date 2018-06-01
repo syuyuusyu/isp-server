@@ -7,14 +7,15 @@ class OrganizationController extends Controller {
                    parent_id:this.ctx.params.id
                }
            });*/
-    let menu = await this.app.mysql.query('select * from t_organization where parent_id=? /*and parent_id<>?*/', [this.ctx.params.id]);
+    let menu = await this.app.mysql.query('select * from t_organization where parent_id=? and stateflag=1', [this.ctx.params.id]);
     this.ctx.body = menu;
   }
 
   async currentOrgs() {
     let orgs = await this.app.mysql.select('t_organization', {
       where: {
-        parent_id: this.ctx.params.orgId
+        parent_id: this.ctx.params.orgId,
+        stateflag:1
       }
     });
     this.ctx.body = orgs;
@@ -23,7 +24,8 @@ class OrganizationController extends Controller {
   async currentOrgIsLeaf() {
     let org = await this.app.mysql.select('t_organization', {
       where: {
-        id: this.ctx.params.orgId
+        id: this.ctx.params.orgId,
+        stateflag:1
       }
     })
     this.ctx.body = org;
@@ -32,7 +34,8 @@ class OrganizationController extends Controller {
   async currentDetailedOrg() {
     let detailedOrg = await this.app.mysql.select('t_org_detailed', {
         where: {
-          id: this.ctx.params.id
+          id: this.ctx.params.id,
+          stateflag:1
         }
       }
     );
@@ -81,14 +84,16 @@ class OrganizationController extends Controller {
   async delete() {
     const resultAccept = await this.app.mysql.select('t_organization', {
       where: {
-        id: this.ctx.params.id
+        id: this.ctx.params.id,
+        stateflag:1
       }
     });
     //查询要删除的节点的父节点有几个子节点，如果只有一个子节点（即要删除的节点），那么将父节点的is_leaf置为1
     if (resultAccept[0].parent_id) {
       const resultParentId = await this.app.mysql.select('t_organization', {
         where: {
-          parent_id: resultAccept[0].parent_id
+          parent_id: resultAccept[0].parent_id,
+          stateflag:1
         }
       });
       if (resultParentId.length == 1) {
@@ -99,9 +104,10 @@ class OrganizationController extends Controller {
         await this.app.mysql.query('update t_organization set is_leaf=? where parent_id=?',[1,resultAccept[0].parent_id]);
     }*/
     if (resultAccept[0].path) {
-      const result = await this.app.mysql.query(`delete from t_organization where path like '${resultAccept[0].path}%'`);
-      //const updateSuccess = result.affectedRows === 1;
-      this.ctx.body = {success: true};
+      //const result = await this.app.mysql.query(`delete from t_organization where path like '${resultAccept[0].path}%'`);
+      const result = await this.app.mysql.query(`update t_organization set stateflag=0 where path like '${resultAccept[0].path}%'`);
+      const updateSuccess = result.affectedRows >= 1;
+      this.ctx.body = {success: updateSuccess};
     }
   }
 
