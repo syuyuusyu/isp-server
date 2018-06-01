@@ -17,12 +17,12 @@ class ModifyUser extends Controller {
    }*/
 
   async checkIDnumberUnique() {
-    let [{total}] = await this.app.mysql.query('select count(1) total from t_user where ID_number=?', [this.ctx.params.IDnumber]);
+    let [{total}] = await this.app.mysql.query('select count(1) total from t_user where ID_number=? and stateflag=1', [this.ctx.params.IDnumber]);
     this.ctx.body = {total}
   }
 
   async checkEmailUnique() {
-    let [{total}] = await this.app.mysql.query('select count(1) total from t_user where email=?', [this.ctx.params.email]);
+    let [{total}] = await this.app.mysql.query('select count(1) total from t_user where email=? and stateflag=1', [this.ctx.params.email]);
     this.ctx.body = {total}
   }
 
@@ -56,7 +56,7 @@ class ModifyUser extends Controller {
       this.ctx.body = {success: updateSuccess};
     } else if (originalPassword !== '', newPassword !== '' && confirmNewPassword !== '') {
       //对输入的初始密码进行验证
-      let queryResult = await this.app.mysql.query('select passwd,salt from t_user where user_name=?', [userName]);
+      let queryResult = await this.app.mysql.query('select passwd,salt from t_user where user_name=? and stateflag=1', [userName]);
       const salt = queryResult[0].salt;//库中的salt
       const userPwDB = queryResult[0].passwd;//库中用户的密码
       const hmac = crypto.createHmac('sha256', salt);
@@ -82,7 +82,7 @@ class ModifyUser extends Controller {
         };
         let result = await this.app.mysql.update('t_user', row, options);
         const updateSuccess = result.affectedRows === 1;
-        this.ctx.body = {success: updateSuccess};
+        this.ctx.body = {success: '修改用户信息及密码成功'};
       }
     }
   }
