@@ -41,7 +41,6 @@ class UserRegister extends Controller{
       for(const getUserNameValue of getUserName){
         if(getUserNameValue.user_name===userName){
           return this.ctx.body={success:'账号已经存在'
-
           }
         }
       }
