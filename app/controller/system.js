@@ -2,7 +2,7 @@ const Controller=require('egg').Controller;
 
 class SystemController extends Controller{
     async allSystem(){
-        let content=await this.app.mysql.query('select * from t_system',[]);
+        let content=await this.app.mysql.query('select * from t_system where stateflag=1',[]);
         this.ctx.body=content;
     }
 

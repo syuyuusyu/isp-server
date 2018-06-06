@@ -16,7 +16,10 @@ module.exports = app => {
   router.post('/invokeInfo/test', controller.restful.test);
   router.post('/invokeInfo/save', controller.restful.save);
   router.delete('/invokeInfo/delete/:id', controller.restful.delete);
+
+
   router.post('/invoke/:invokeName', controller.restful.invoke);
+
   router.get('/invokeInfo/checkUnique/:invokeName', controller.restful.checkUnique);
   router.get('/invokeInfo/groupName', controller.restful.groupName);
 
@@ -121,7 +124,7 @@ module.exports = app => {
   router.get('/org/allUser', controller.organiza.getAllUser);
   // 获取查询出的用户
   router.get('/org/QueryUser/:value', controller.organiza.getQueryUser);
-  // 在点击机构用户关联按钮时获取选中机构里面的信息
+  // 点击机构用户关联按钮时获取选中机构里面的信息
   router.get('/org/SelectedRowKeys/:id', controller.organiza.getSelectedRowKeys);
   // 保存机构用户关联
   router.post('/org/saveOrgUser', controller.organiza.saveOrgUser);
@@ -197,10 +200,10 @@ module.exports = app => {
   router.post('/interfacesLog/queryLog', controller.interfacesLog.queryLog);
 
   // 用户注册
-  // 校验注册的用户是否唯一
-  router.get('/userRegister/uniqueUser/:userName', controller.userRegister.userUnique);
-  // 校验注册的用户昵称是否唯一
-  router.get('/userRegister/uniqueNickName/:nickName', controller.userRegister.nickNameUnique);
+ /* // 校验注册的用户是否唯一
+  router.get('/userRegister/uniqueUser/:userName', controller.userRegister.userUnique);*/
+  /*// 校验注册的用户昵称是否唯一
+  router.get('/userRegister/uniqueNickName/:nickName', controller.userRegister.nickNameUnique);*/
   // 校验注册的身份证编号是否唯一
   router.get('/userRegister/uniqueIDnumber/:IDnumber', controller.userRegister.IDnumberUnique);
   // 校验注册的电话号码是否唯一
