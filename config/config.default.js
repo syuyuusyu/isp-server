@@ -37,7 +37,7 @@ module.exports = appInfo => {
 
 
     config.multipart = {
-        fileExtensions: ['.apk', '.xls', '.doc', '.docx', '.xlsx', '.pdf', '.mkv','.sql','.flac'],
+        fileExtensions: ['.apk', '.xls', '.doc', '.docx', '.xlsx', '.pdf', '.mkv','.sql','.flac','.txt'],
         fileSize: '1024mb',
     };
 
