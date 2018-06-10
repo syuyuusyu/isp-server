@@ -32,8 +32,20 @@ module.exports = app => {
         app.allRouter=app.allRouter.toString();
 
         //同步集成用户角色到流程引擎
-        await ctx.service.authorService.actSynUser();
-        console.log('app start');
+        //ctx.service.authorService.actSynUser();
+        let activitiIp='http://127.0.0.1:5002';
+        let username='admin';
+        let system='s09';
+        console.log('-----------',`${activitiIp}/userTask/${username+system}`);
+        let tasks=await app.curl(`${activitiIp}/userTask/${username+system}`,{
+            method:'GET',
+            head:{
+                "Accept":"application/json",
+                "Content-Type":"application/json;charset=UTF-8"
+            },
+            dataType: 'json',
+        });
+        console.log(tasks);
 
     });
 

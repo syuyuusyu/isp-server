@@ -246,6 +246,7 @@ class InterfaceService extends Service {
     }
 
     async synuserresult(body){
+        this.service.activitiInterfaces.synuserresult(body);
         const {system,reqdata:[{status,username,msg}]}=body;
         let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
         let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
@@ -269,7 +270,7 @@ class InterfaceService extends Service {
             this.service.message.save({...message,message:message_ok});
             this.service.message.save({...message,message:message_ok,receive_type:1,receive_user_id:user.id,receive_role_id:undefined});
             //增加用户访问对应平台权限
-            this._addsysPromision(systementity,user);
+            await this._addsysPromision(systementity,user);
         }else{
             this.service.message.save({...message,message:message_err});
             this.service.message.save({...message,message:message_err,receive_type:1,receive_user_id:user.id,receive_role_id:undefined});
