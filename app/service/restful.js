@@ -16,17 +16,16 @@ class RestfulService extends Service{
     }
 
     async _invoke(entity,queryObj,count, result){
-        console.log(queryObj);
         const invokeName=entity.name+'-'+count;
         result[invokeName]={};
         let url=this.parseByqueryMap(entity.url,queryObj);
         let method=entity.method.toUpperCase();
         let data=this.parseByqueryMap(entity.body,queryObj);
-        console.log(data);
         data=JSON.parse(data);
         let head=this.parseByqueryMap(entity.head,queryObj);
         head=JSON.parse(head);
         this.ctx.logger.info('url:',url);
+      this.ctx.logger.info('method:',method);
         this.ctx.logger.info('head:',head);
         this.ctx.logger.info('body:',data);
 
