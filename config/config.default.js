@@ -41,36 +41,36 @@ module.exports = appInfo => {
     fileSize: '1024mb',
   };
 
-  // config.mysql = {
-  //     client: {
-  //         // host
-  //         host: '10.10.50.21',
-  //         // 端口号
-  //         port: '3306',
-  //         // 用户名
-  //         user: 'root',
-  //         // 密码
-  //         password: 'isp5t6y',
-  //         // 数据库名
-  //         database: 'isp2',
-  //     },
-  //     // 是否加载到 app 上，默认开启
-  //     app: true,
-  //     // 是否加载到 agent 上，默认关闭
-  //     agent: false,
-  // };
-
   config.mysql = {
-    client: {
-      host: '192.168.2.141',
-      port: '3306',
-      user: 'root',
-      password: '1234',
-      database: 'isp',
-    },
-    app: true,
-    agent: false,
+      client: {
+          // host
+          host: '10.10.50.21',
+          // 端口号
+          port: '3306',
+          // 用户名
+          user: 'root',
+          // 密码
+          password: 'isp5t6y',
+          // 数据库名
+          database: 'isp2',
+      },
+      // 是否加载到 app 上，默认开启
+      app: true,
+      // 是否加载到 agent 上，默认关闭
+      agent: false,
   };
+
+  // config.mysql = {
+  //   client: {
+  //     host: '127.0.0.1',
+  //     port: '3306',
+  //     user: 'root',
+  //     password: '1234',
+  //     database: 'isp',
+  //   },
+  //   app: true,
+  //   agent: false,
+  // };
 
   config.redis = {
     client: {
