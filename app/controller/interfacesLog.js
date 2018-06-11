@@ -14,7 +14,7 @@ class InterfacesLog extends Controller{
     const interfaceInfo=await this.app.interfaceLog;
     let result;
     if(interfaceInfo.length!==0){
-      let sql=`insert into t_interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date,create_by,create_time,stateflag) values 
+      let sql=`insert into t_interfaces_log(initiativeSystem,initiativeSystem_CN,initiative_ip,system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date,create_by,create_time,stateflag) values 
         ${interfaceInfo.map(a=>{return '('+ a.map(b=>"'"+b+"'").join(',')+')'}).reduce((a,b)=>a+','+b) }`;
       result= await this.app.mysql.query(sql);
       interfaceInfo.length=0;
