@@ -40,7 +40,7 @@ class ActivitiInterfaces extends Controller{
         this.ctx.body={
             unnecessary,
             message,
-            data:result
+            nextForm:result
         };
     }
 

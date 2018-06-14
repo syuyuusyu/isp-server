@@ -287,6 +287,7 @@ class InterfaceService extends Service {
                     this.app.SynOrCancelResult[i].type=`result`;
                     this.app.SynOrCancelResult[i].opType=`cancel`;
                     this.app.SynOrCancelResult[i].status=status;
+                    this.app.SynOrCancelResult[i].systemName=systementity.name;
                     break;
                 }
             }
