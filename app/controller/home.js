@@ -57,7 +57,7 @@ class HomeController extends Controller {
                                 }).catch(e=>{
                                     console.log(e);
 
-                            });
+                                });
 
                             this.app.loginSystem.splice(currentIndex,1);
                         }

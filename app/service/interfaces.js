@@ -246,8 +246,8 @@ class InterfaceService extends Service {
     }
 
     async synuserresult(body){
-        this.service.activitiInterfaces.synuserresult(body);
         const {system,reqdata:[{status,username,msg}]}=body;
+
         let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
         let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
         if(!systementity || !user){
@@ -256,24 +256,53 @@ class InterfaceService extends Service {
                 message:`对应系统号${system}或对应用户${username}不存在`
             }
         }
-        const message_ok=`${user.name}申请访问:${systementity.name}访问权限已获${systementity.name}批准,已经可以访问该平台`;
-        const message_err=`${user.name}申请访问:${systementity.name}访问权限不通过,原因:${msg}`;
-        let message={
-            receive_type:2,
-            message_type:2,
-            receive_role_id:19,
-            create_time:this.app.mysql.literals.now,
-            step:1,
-            send_user_name:'系统信息'
-        };
+        setTimeout(()=>{
+            for(let i=0;i<this.app.SynOrCancelResult.length;i++){
+                if(this.app.SynOrCancelResult[i].assigneeName===`${username}${system}apply`
+                    && this.app.SynOrCancelResult[i].type===`invoke`){
+                    this.app.SynOrCancelResult[i].type=`result`;
+                    this.app.SynOrCancelResult[i].opType=`apply`;
+                    this.app.SynOrCancelResult[i].status=status;
+                    this.app.SynOrCancelResult[i].systemName=systementity.name;
+                    break;
+                }
+            }
+        },5000);
         if(status==='801'){
-            this.service.message.save({...message,message:message_ok});
-            this.service.message.save({...message,message:message_ok,receive_type:1,receive_user_id:user.id,receive_role_id:undefined});
             //增加用户访问对应平台权限
             await this._addsysPromision(systementity,user);
-        }else{
-            this.service.message.save({...message,message:message_err});
-            this.service.message.save({...message,message:message_err,receive_type:1,receive_user_id:user.id,receive_role_id:undefined});
+        }
+        return {
+            status:'801',
+            message:`success`
+        }
+    }
+
+    async canceluserresult(body){
+        const {system,reqdata:[{status,username,msg}]}=body;
+        setTimeout(()=>{
+            for(let i=0;i<this.app.SynOrCancelResult.length;i++){
+                if(this.app.SynOrCancelResult[i].assigneeName===`${username}${system}cancel`
+                    && this.app.SynOrCancelResult[i].type===`invoke`){
+                    this.app.SynOrCancelResult[i].type=`result`;
+                    this.app.SynOrCancelResult[i].opType=`cancel`;
+                    this.app.SynOrCancelResult[i].status=status;
+                    break;
+                }
+            }
+        },5000);
+        let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
+        let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
+        if(!systementity || !user){
+            return {
+                status:'806',
+                message:`对应系统号${system}或对应用户${username}不存在`
+            }
+        }
+
+        if(status==='801'){
+            //取消用户访问对应平台权限
+            await this.app.mysql.query(`delete from t_user_system where user_id=? and system_id=?`,[user.id,systementity.id]);
         }
         return {
             status:'801',
@@ -283,7 +312,6 @@ class InterfaceService extends Service {
 
     async _addsysPromision(system,user){
         let [{count}]=await this.app.mysql.query('select count(1) count from t_user_system where user_id=? and system_id=?',[user.id,system.id]);
-        console.log('_addsysPromision',count);
         if(count===0){
             this.app.mysql.insert('t_user_system', {user_id:user.id,system_id:system.id});
         }

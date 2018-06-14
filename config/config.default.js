@@ -20,7 +20,7 @@ module.exports = appInfo => {
     ];
 
     config.author={
-        ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister/,
+        ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister|^\/activiti/,
     };
 
     config.swiftToken = {
@@ -50,9 +50,9 @@ module.exports = appInfo => {
             // 用户名
             user: 'root',
             // 密码
-            password: 'password',
+            password: '1234',
             // 数据库名
-            database: 'isp2',
+            database: 'isp',
         },
         // 是否加载到 app 上，默认开启
         app: true,
@@ -96,7 +96,8 @@ module.exports = appInfo => {
             'http://127.0.0.1:3000',
             'http://10.10.50.21:3000',
             'http://10.10.0.228:3000',
-            'http://10.10.0.228:8080'
+            'http://10.10.0.228:8080',
+            'http://localhost:8080',
         ]
     };
 

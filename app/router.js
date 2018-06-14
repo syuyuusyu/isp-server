@@ -263,7 +263,7 @@ module.exports = app => {
     //平台访问权限申请相关业务接口-----
 
     //获取用户对应的平台访问权限
-    router.get('/activiti/sysAccess/:username', controller.activitiInterfaces.userSysAccess);
+    router.get('/activiti/sysAccess/:username/:isApply', controller.activitiInterfaces.userSysAccess);
     //推送用户给对应平台
     router.post('/activiti/pushUser',controller.activitiInterfaces.pushUser);
 };
