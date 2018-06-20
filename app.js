@@ -7,8 +7,8 @@ module.exports = app => {
         app.loginSystem=[];
         app.systemMap={};
         app.systemUrl={};
-        app.interfaceLog=[];
-        app.allRouter=[];
+        //app.interfaceLog=[];
+        //app.allRouter=[];
 
         //清空redis
         // const keys=await app.redis.keys('*');
@@ -30,12 +30,12 @@ module.exports = app => {
         //初始化接口调用实体
         app.invokeEntitys=await app.mysql.query(`select * from t_invoke_info`);
 
-        //初始化获取所有增，改，查的路由
+        /*//初始化获取所有增，改，查的路由
         let content=await app.mysql.query(`select router_name from t_router_map`);
         for(let i=0;i<content.length;i++){
             app.allRouter.push(content[i].router_name)
         }
-        app.allRouter=app.allRouter.toString();
+        app.allRouter=app.allRouter.toString();*/
 
         //app.mysql.insert('t_test',{name:'sdsd',age:3,time:new Date()});
         console.log('app start');

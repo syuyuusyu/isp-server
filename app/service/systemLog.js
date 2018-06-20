@@ -26,7 +26,8 @@ class SystemLog extends Service{
 
    let requestRouter=ctx.url;
    requestRouter=requestRouter.replace(/\d+/,'');
-   const allRouter=this.app.allRouter;
+   const allRouter=await this.getRouter();
+   //const allRouter=this.app.allRouter;
    if((allRouter.search(requestRouter))!==-1){
      //console.log("进来啦")
      let token=this.ctx.request.header['access-token'];
@@ -77,6 +78,16 @@ class SystemLog extends Service{
      this.app.mysql.query('insert into t_system_log(login_name,operate_type,operate_ip,operate_detail,create_by) value(?,?,?,?,?)',[logoinUser,router_type,requestUrl,router_info,logoinUser]);
     }
    }
+  }
+  //获取所有增、删、改的路由
+  async getRouter(){
+    let allRouter=[];
+    let content=await this.app.mysql.query(`select router_name from t_router_map`);
+    for(let i=0;i<content.length;i++){
+      allRouter.push(content[i].router_name)
+    }
+   allRouter=allRouter.toString();
+    return allRouter;
   }
 }
 module.exports = SystemLog;
