@@ -2,8 +2,6 @@ module.exports = app => {
     app.beforeStart(async () => {
         // 应用会等待这个函数执行完成才启动
         app.logger.info('init app');
-
-
         Array.prototype.indexOf = Array.prototype.indexOf ? Array.prototype.indexOf
             : (o, from) => {
                 from = from || 0;
@@ -55,12 +53,8 @@ module.exports = app => {
         //app.invokeEntitys = await app.mysql.query('select * from t_invoke_info');
         await ctx.service.redis.set('invokeEntitys',await app.mysql.query('select * from t_invoke_info'));
 
-        // 初始化获取所有增，改，查的路由
-        const content = await app.mysql.query('select router_name from t_router_map');
-        for (let i = 0; i < content.length; i++) {
-            app.allRouter.push(content[i].router_name);
-        }
-        app.allRouter = app.allRouter.toString();
+        //app.mysql.insert('t_test',{name:'sdsd',age:3,time:new Date()});
+        console.log('app start');
 
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();

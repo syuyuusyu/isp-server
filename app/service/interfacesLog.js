@@ -31,21 +31,6 @@ class InterfacesLog extends Service{
       let message='';//响应状态信息
       let respdata='无响应体';//响应体
 
-      /*switch (system){
-        case 's02':systemCN='云平台管理系统';
-          break;
-        case 's03':systemCN='大数据平台';
-          break;
-        case 's04':systemCN='数据采集系统';
-          break;
-        case 's05':systemCN='专业数据库管理系统';
-          break;
-        case 's06':systemCN='地质三维分析应用';
-          break;
-        case 's07':systemCN='运维平台';
-          break;
-        default:systemCN='系统未知';
-      }*/
       if (result) {
         status = result.status;
         message = result.message;
@@ -54,13 +39,10 @@ class InterfacesLog extends Service{
         }
       }
 
-      /*let sql=`insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value (${system},${systemCN},${ip},${interfacesName},${repdata},${status},${message},${invokeDate})`;
-      console.log("sql的值为：",sql);
-      this.app.mysql.query(sql,[]);*/
-
-      //this.app.mysql.query('insert into interfaces_log(system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date) value(?,?,?,?,?,?,?,?,?)', [system, systemCN, ip, interfacesName, repdata, respdata, status, message,invokeDate]);
       let interfaceInfo=[initiativeSystem,initiativeSystemCN,initiativeIp,system,systemCN,ip,interfacesName,repdata,respdata,status,message,date,systemCN,date,stateflag];
-      this.app.interfaceLog.push(interfaceInfo);
+      //this.app.interfaceLog.push(interfaceInfo);
+      //将interfaceInfo存入redis中
+      this.app.redis.sadd("interfaceInfo",interfaceInfo.join("----"));
     }
   }
   //获取主动调用方的系统号
