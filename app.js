@@ -26,6 +26,11 @@ module.exports = app => {
 
 
         const ctx = app.createAnonymousContext();
+        //清空redis
+        const keys=await app.redis.keys('*');
+        for(let key of keys){
+            await app.redis.del(key);
+        }
 
         app.secret = 'n7d3t7x7';
         //app.systemMap = {};
@@ -33,17 +38,14 @@ module.exports = app => {
         app.interfaceLog = [];
         app.allRouter = [];
 
-        ctx.service.redis.set('systemMap',{});
-        ctx.service.redis.set('systemUrl',{});
-        ctx.service.redis.set('loginSystem',[]);
-        ctx.service.redis.set('SynOrCancelResult',[]);
+        await ctx.service.redis.set('systemMap',{});
+        await ctx.service.redis.set('systemUrl',{});
+        await ctx.service.redis.set('loginSystem',[]);
+        await ctx.service.redis.set('SynOrCancelResult',[]);
+
+        app.logger.error(111,await ctx.service.redis.get('systemMap'));
 
 
-        // 清空redis
-        // const keys=await app.redis.keys('*');
-        // for(let key of keys){
-        //     app.redis.del(key);
-        // }
 
 
         // 初始化系统调用接口权限

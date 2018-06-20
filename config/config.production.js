@@ -135,9 +135,9 @@ module.exports = appInfo => {
             'http://localhost:3000',
             'http://127.0.0.1:3000',
             'http://localhost:8080',
-            'http://10.10.50.10:8080',
-            'http://10.10.50.14:8080',
-            'http://10.10.50.17:8080',
+            'http://10.10.50.10:3000',
+            'http://10.10.50.14:3000',
+            'http://10.10.50.17:3000',
         ]
     };
 
@@ -147,9 +147,9 @@ module.exports = appInfo => {
     };
 
     config.self={
-        keystoneIp:'10.10.0.1:5000',
-        swiftBaseUrl :'http://10.10.0.1:8080/v1/AUTH_8caa6e28cf7049d48b9c5274c8cb524e/',
-        activitiIp:'http://127.0.0.1:5002',
+        keystoneIp:'10.10.10.1:5000',
+        swiftBaseUrl :'http://10.30.10.1:8080/v1/AUTH_76feacc2ae3c45f9b280e46dd96ff2ce/',
+        activitiIp:'http://10.10.50.10:5002',
         rabbitmqUrl:'amqp://guest:guest@127.0.0.1:5672',
         queueName: 'ispServerQueue'
     };
