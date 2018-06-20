@@ -6,14 +6,15 @@ class SynOrCancelSchedule extends Subscription {
     static get schedule() {
         return {
             interval: '3s', // 10 分钟间隔
-            type: 'all', // 指定所有的 worker 都需要执行
+            type: 'worker', // 指定所有的 worker 都需要执行
         };
     }
 
     //
     async subscribe() {
         //console.log(this.app.SynOrCancelResult);
-        let obj = this.app.SynOrCancelResult.shift();
+        this.app.logger.info(await this.ctx.service.redis.get('SynOrCancelResult'));
+        let obj = await this.ctx.service.redis.shift('SynOrCancelResult');
         if (obj) {
             if (obj.type==='result' && obj.count<5){
                 this.result(obj);
@@ -23,7 +24,7 @@ class SynOrCancelSchedule extends Subscription {
             }
             if(obj.type==='invoke'){
                 if(obj.count<10){
-                    this.app.SynOrCancelResult.push({...obj,count:++obj.count});
+                    await this.ctx.service.redis.push('SynOrCancelResult',{...obj,count:++obj.count});
                 }else{
                     this.error(obj,true);
                 }
@@ -52,14 +53,15 @@ class SynOrCancelSchedule extends Subscription {
                 dataType: 'json',
             });
             message = `${message} ${obj.message}`;
-            const result = await this.service.restful.invoke(this.app.invokeEntitys.filter(d => d.id === 82)[0], {
+            const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+            const result = await this.service.restful.invoke(invokeEntitys.filter(d => d.id === 82)[0], {
                 activitiIp: activitiIp,
                 taskId: tasks.data[0].id,
                 message: message,
             });
             this.app.logger.info(obj.assigneeName+ ' 获取用户推送结果流程完成', result);
         }else if(!del){
-            this.app.SynOrCancelResult.push({...obj,count:++obj.count});
+            await this.ctx.service.redis.push('SynOrCancelResult',{...obj,count:++obj.count});
         }
     }
 
@@ -94,15 +96,15 @@ class SynOrCancelSchedule extends Subscription {
                 succMsg = '失败,该系统拒绝了请求';
             }
             message = `${message} ${opMessage}${obj.systemName}权限${succMsg}`;
-
-            const result = await this.service.restful.invoke(this.app.invokeEntitys.filter(d => d.id === 82)[0], {
+            const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+            const result = await this.service.restful.invoke(invokeEntitys.filter(d => d.id === 82)[0], {
                 activitiIp: activitiIp,
                 taskId: tasks.data[0].id,
                 message: message
             });
             this.app.logger.info(obj.assigneeName+'获取用户推送结果流程完成', result);
         }else {
-            this.app.SynOrCancelResult.push({...obj,count:++obj.count});
+            await this.ctx.service.redis.push('SynOrCancelResult',{...obj,count:++obj.count});
         }
 
 

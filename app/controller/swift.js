@@ -50,7 +50,8 @@ class SwiftController extends Controller {
 
     async getObject() {
         let token = this.ctx.request.header['X-Auth-Token'];
-        let [invokeEntity] = this.app.invokeEntitys.filter(d => d.id === 28);
+        const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+        let [invokeEntity] = invokeEntitys.filter(d => d.id === 28);
         let result = await this.service.restful.invoke(invokeEntity,
             {
                 token: token,
@@ -64,7 +65,8 @@ class SwiftController extends Controller {
     async createFolder() {
         const {filePath, username} = this.ctx.request.body;
         let token = this.ctx.request.header['X-Auth-Token'];
-        let [invokeEntity] = this.app.invokeEntitys.filter(d => d.id === 29);
+        const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+        let [invokeEntity] = invokeEntitys.filter(d => d.id === 29);
         let result = await this.service.restful.invoke(invokeEntity,
             {
                 token: token,
@@ -79,7 +81,8 @@ class SwiftController extends Controller {
     async delete() {
         const {filePath, username} = this.ctx.request.body;
         let token = this.ctx.request.header['X-Auth-Token'];
-        let [invokeEntity] = this.app.invokeEntitys.filter(d => d.id === 30);
+        const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+        let [invokeEntity] = invokeEntitys.filter(d => d.id === 30);
         let result = await this.service.restful.invoke(invokeEntity,
             {
                 token: token,

@@ -53,8 +53,8 @@ class MessageController extends Controller{
             const systems=await this.app.mysql.query(
                 `select s.*,so.path from t_system s join t_sys_operation so on s.id=so.system_id where so.type=5 and s.id in(?) and s.stateflag=1`,
                 [message.memo.split(',')]);
-
-            let [invokeEntity] =this.app.invokeEntitys.filter(d => d.id === 31);
+            const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+            let [invokeEntity] =invokeEntitys.filter(d => d.id === 31);
             let [user]=await this.app.mysql.query(`select * from t_user where id=?`,[message.send_user_id]);
             for(let sys of systems){
                 this.service.restful.invoke(invokeEntity,{...user,url:sys.url,path:sys.path,username:user.user_name});

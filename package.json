@@ -4,6 +4,7 @@
   "description": "地矿综合集成服务",
   "private": true,
   "dependencies": {
+    "amqp": "^0.2.6",
     "egg": "^2.8.1",
     "egg-cors": "^2.0.0",
     "egg-mysql": "^3.0.0",
@@ -26,7 +27,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-isp-server",
+    "start": "egg-scripts start --daemon --title=egg-server-isp-server --env=default",
     "stop": "egg-scripts stop --title=egg-server-isp-server",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",

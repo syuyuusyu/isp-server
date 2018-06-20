@@ -58,58 +58,65 @@ class ActivitiInterfaces extends Controller{
                  s.CODE IN(?)
                 AND s.stateflag = 1`,
                 [opType==='apply'?5:6,applySystemCode.split(',')]);
-            let [invokeEntity] =this.app.invokeEntitys.filter(d => d.id === 31);
+            //const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+            //let [invokeEntity] =invokeEntitys.filter(d => d.id === 31);
             let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
-            console.log('user',user);
-            for(let sys of systems){
-                if(!sys.path){
-                    this.app.SynOrCancelResult.push({
-                        assigneeName:`${username}${sys.code}${opType}`,
-                        count:0,
-                        message:`${sys.name}没有配置${opType==='apply'?'推送用户':'注销用户'}接口`,
-                        type:'noPath'
-                    });
-                    continue;
-                }
-                this.app.curl(`${sys.url}${sys.path}`,{
-                    method:'POST',
-                    data:{
-                        username:username,
-                        name: user.name,
-                        phone: user.phone,
-                        email: user.email,
-                    },
-                    headers:{
-                        "Accept":"application/json",
-                        "Content-Type":"application/json;charset=UTF-8"
-                    },
-                    dataType:'json'
-                }).then(result=>{
-                    if(result.status>=200 && result.status<300){
-                        this.app.SynOrCancelResult.push({
+            for(let i=0;i<systems.length;i++){
+                const sys=systems[i];
+                setTimeout(async ()=>{
+                    if(!sys.path){
+                        await this.ctx.service.redis.push('SynOrCancelResult',{
                             assigneeName:`${username}${sys.code}${opType}`,
                             count:0,
-                            message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}成功,但未获得对方平台返回信息`,
-                            type:'invoke'
-                        })
-                    }else{
-                        this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,result);
-                        this.app.SynOrCancelResult.push({
+                            message:`${sys.name}没有配置${opType==='apply'?'推送用户':'注销用户'}接口`,
+                            type:'noPath'
+                        });
+                        //continue;
+                    }
+                    this.app.curl(`${sys.url}${sys.path}`,{
+                        method:'POST',
+                        data:{
+                            username:username,
+                            name: user.name,
+                            phone: user.phone,
+                            email: user.email,
+                        },
+                        headers:{
+                            "Accept":"application/json",
+                            "Content-Type":"application/json;charset=UTF-8"
+                        },
+                        dataType:'json'
+                    }).then(async result=>{
+                        if(result.status>=200 && result.status<300){
+                            this.ctx.logger.error(sys.code);
+                            await this.ctx.service.redis.push('SynOrCancelResult',{
+                                assigneeName:`${username}${sys.code}${opType}`,
+                                count:0,
+                                message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}成功,但未获得对方平台返回信息`,
+                                type:'invoke'
+                            })
+                        }else{
+                            this.ctx.logger.error(sys.code);
+                            this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,result);
+                            await this.ctx.service.redis.push('SynOrCancelResult',{
+                                assigneeName:`${username}${sys.code}${opType}`,
+                                count:0,
+                                message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
+                                type:'error'
+                            })
+                        }
+                    }).catch(async e=>{
+                        this.ctx.logger.error(sys.code);
+                        this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,e.toString());
+                        await this.ctx.service.redis.push('SynOrCancelResult',{
                             assigneeName:`${username}${sys.code}${opType}`,
                             count:0,
                             message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
                             type:'error'
                         })
-                    }
-                }).catch(e=>{
-                    this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,e.toString());
-                    this.app.SynOrCancelResult.push({
-                        assigneeName:`${username}${sys.code}${opType}`,
-                        count:0,
-                        message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
-                        type:'error'
-                    })
-                });
+                    });
+                },i*3000);
+
             }
             result={success:true};
         }catch (e){

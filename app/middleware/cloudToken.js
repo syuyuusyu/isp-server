@@ -7,9 +7,11 @@ module.exports = (options,app) => {
         if(!cloudToken) {
             const ispToken=ctx.service.interfaces.randomString(8);
             app.redis.set(ispToken,JSON.stringify(user));
-            let [entity] = app.invokeEntitys.filter(d => d.id === 59);
+            const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+            let [entity] =invokeEntitys.filter(d => d.id === 59);
             let result = await ctx.service.restful.invoke(entity,{
-                ip:app.systemUrl['s02'],
+                //ip:app.systemUrl['s02'],
+                ip:await ctx.service.redis.getProperty('systemUrl','s02'),
                 ispToken:ispToken,
             });
             cloudToken = result['cloud_isptoken-1']['result'].token;
@@ -18,9 +20,11 @@ module.exports = (options,app) => {
         }
         ctx.request.body={
             ...ctx.request.body,
-            ip:app.systemUrl['s02'],
+            //ip:app.systemUrl['s02'],
+            ip:await ctx.service.redis.getProperty('systemUrl','s02'),
             token:cloudToken,
-            domain:app.systemUrl['s01']
+            //domain:app.systemUrl['s01'],
+            domain:await ctx.service.redis.getProperty('systemUrl','s01')
         };
         console.log('cloudToken 24',cloudToken);
         if(cloudToken) {

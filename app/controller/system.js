@@ -45,8 +45,10 @@ class SystemController extends Controller{
         this.ctx.body = { success: await this.ctx.service.saveOrDelete.save('t_system',this.ctx.request.body)};
         let systems=await this.app.mysql.query(`select * from t_system where stateflag=1`);
         systems.forEach(s=>{
-            this.app.systemMap[s.code]=s.id;
-            this.app.systemUrl[s.code]=s.url;
+            //this.app.systemMap[s.code]=s.id;
+            //this.app.systemUrl[s.code]=s.url;
+            this.ctx.service.redis.setProperty('systemMap',s.code,s.id);
+            this.ctx.service.redis.setProperty('systemUrl',s.code,s.id);
         });
     }
 
@@ -54,7 +56,8 @@ class SystemController extends Controller{
         this.ctx.body = { success: await this.ctx.service.saveOrDelete.delete('t_system',this.ctx.params.id) };
         let systems=await this.app.mysql.query(`select * from t_system where stateflag=1`);
         systems.forEach(s=>{
-            this.app.systemMap[s.code]=s.id;
+            //this.app.systemMap[s.code]=s.id;
+            this.ctx.service.redis.setProperty('systemMap',s.code,s.id);
         });
     }
 

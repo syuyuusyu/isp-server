@@ -56,10 +56,11 @@ class RestfulController extends Controller{
         let {user}=await this.ctx.service.authorService.getByCode(authorToken);
         try{
             const queryMap=this.ctx.request.body;
-            const [entity]=this.app.invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
+            const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+            const [entity]=invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
             //await this.app.mysql.select('t_invoke_info',{where: {  name: this.ctx.params.invokeName}});
 
-            let nextEntitys=this.app.invokeEntitys.filter(d=>{
+            let nextEntitys=invokeEntitys.filter(d=>{
                 let flag=false;
                 entity.next.split(',').forEach(i=>{
                     if(i===d.id+''){
@@ -109,10 +110,11 @@ class RestfulController extends Controller{
     async invoke2(){
         let result=[];
         const queryMap=this.ctx.request.body;
-        const [entity]=this.app.invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
+        const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+        const [entity]=invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
         //await this.app.mysql.select('t_invoke_info',{where: {  name: this.ctx.params.invokeName}});
 
-        let nextEntitys=this.app.invokeEntitys.filter(d=>{
+        let nextEntitys=invokeEntitys.filter(d=>{
             let flag=false;
             entity.next.split(',').forEach(i=>{
                 if(i===d.id+''){
@@ -180,7 +182,8 @@ class RestfulController extends Controller{
 
     async reflashEntity(){
         console.log('reflashEntity');
-        this.app.invokeEntitys=await this.app.mysql.query('select * from t_invoke_info');
+        //this.app.invokeEntitys=await this.app.mysql.query('select * from t_invoke_info');
+        this.ctx.service.redis.set('invokeEntitys',await app.mysql.query('select * from t_invoke_info'));
     }
 
     async groupName(){

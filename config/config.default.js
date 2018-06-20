@@ -41,41 +41,41 @@ module.exports = appInfo => {
         fileSize: '1024mb',
     };
 
+    // config.mysql = {
+    //     client: {
+    //         // host
+    //         host: '10.10.12.1',
+    //         // 端口号
+    //         port: '3306',
+    //         // 用户名
+    //         user: 'isp',
+    //         // 密码
+    //         password: 'liuge1',
+    //         // 数据库名
+    //         database: 'isp',
+    //     },
+    //     // 是否加载到 app 上，默认开启
+    //     app: true,
+    //     // 是否加载到 agent 上，默认关闭
+    //     agent: false,
+    // };
     config.mysql = {
         client: {
-            // host
             host: '127.0.0.1',
-            // 端口号
             port: '3306',
-            // 用户名
             user: 'root',
-            // 密码
             password: '1234',
-            // 数据库名
             database: 'isp',
         },
-        // 是否加载到 app 上，默认开启
         app: true,
-        // 是否加载到 agent 上，默认关闭
         agent: false,
     };
 
-    // config.mysql={
-    //     client: {
-    //         host: '127.0.0.1',
-    //         port: '3306',
-    //         user: 'root',
-    //         password: '1234',
-    //         database: 'isp',
-    //     },
-    //     app: true,
-    //     agent: false,
-    // };
 
     config.redis = {
         client: {
-            port: 6379,          // Redis port
-            host: '127.0.0.1',   // Redis host
+            port: 6379,
+            host: '127.0.0.1',
             password: '',
             db: 0,
         },
@@ -87,16 +87,8 @@ module.exports = appInfo => {
             enable: false
         },
         domainWhiteList: [
-            'http://10.10.50.16:3000',
             'http://localhost:3000',
-            'http://192.168.3.11:3000',
-            'http://localhost:7001',
-            'http://10.10.0.227:3000',
-            'http://10.10.0.119:3000',
             'http://127.0.0.1:3000',
-            'http://10.10.50.21:3000',
-            'http://10.10.0.228:3000',
-            'http://10.10.0.228:8080',
             'http://localhost:8080',
         ]
     };
@@ -109,7 +101,9 @@ module.exports = appInfo => {
     config.self={
         keystoneIp:'10.10.0.1:5000',
         swiftBaseUrl :'http://10.10.0.1:8080/v1/AUTH_8caa6e28cf7049d48b9c5274c8cb524e/',
-        activitiIp:'http://127.0.0.1:5002'
+        activitiIp:'http://127.0.0.1:5002',
+        rabbitmqUrl:'amqp://guest:guest@127.0.0.1:5672',
+        queueName: 'ispServerQueue'
     };
 
     return config;
