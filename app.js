@@ -28,8 +28,8 @@ module.exports = app => {
         app.secret = 'n7d3t7x7';
         //app.systemMap = {};
         //app.systemUrl = {};
-        app.interfaceLog = [];
-        app.allRouter = [];
+        //app.interfaceLog = [];
+        //app.allRouter = [];
 
         ctx.service.redis.set('systemMap',{});
         ctx.service.redis.set('systemUrl',{});

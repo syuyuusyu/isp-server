@@ -11,14 +11,32 @@ class InterfacesLog extends Controller{
     this.ctx.body = { success: await this.ctx.service.saveOrDelete.save('t_interfaces_log',this.ctx.request.body)};
   }
   async refreshLog(){
-    const interfaceInfo=await this.app.interfaceLog;
+    //const interfaceInfo=await this.app.interfaceLog;
     let result;
+    let interfaceInfoArray=[];
+    //从redis中取出interfaceInfo的值，并将interfaceInfo的值转换成数组类型
+    let interfaceInfo=await this.app.redis.smembers("interfaceInfo");
     if(interfaceInfo.length!==0){
-      let sql=`insert into t_interfaces_log(initiativeSystem,initiativeSystem_CN,initiative_ip,system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date,create_by,create_time,stateflag) values 
+      for(let interfaceInfoValue of interfaceInfo ){
+        interfaceInfoValue=interfaceInfoValue.split("----");
+        //因为转换成的数组中最后一位的stateflag元素的值为字符串类型，将其转换为int类型
+        interfaceInfoValue[interfaceInfoValue.length-1]=parseInt(interfaceInfoValue[interfaceInfoValue.length-1]);
+        interfaceInfoArray.push(interfaceInfoValue);
+      }
+      let sql=`insert into t_interfaces_log(initiativeSystem,initiativeSystem_CN,initiative_ip,system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date,create_by,create_time,stateflag) values
+        ${interfaceInfoArray.map(a=>{return '('+ a.map(b=>"'"+b+"'").join(',')+')'}).reduce((a,b)=>a+','+b) }`;
+      //console.log("sql的值为：",sql);
+      await this.app.mysql.query(sql);
+      //清除数组和redis里面的数据
+      interfaceInfoArray.length=0;
+      this.app.redis.del("interfaceInfo");
+    }
+    /*if(interfaceInfo.length!==0){
+      let sql=`insert into t_interfaces_log(initiativeSystem,initiativeSystem_CN,initiative_ip,system,system_cn,ip,interfaces_name,reqdate_info,response_info,response_status,message,invoke_date,create_by,create_time,stateflag) values
         ${interfaceInfo.map(a=>{return '('+ a.map(b=>"'"+b+"'").join(',')+')'}).reduce((a,b)=>a+','+b) }`;
       result= await this.app.mysql.query(sql);
       interfaceInfo.length=0;
-    }
+    }*/
     //const refreshLogSuccess=result.protocol41===true;
     this.ctx.body={success:true};
   }
