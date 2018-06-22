@@ -20,7 +20,6 @@ class Inital extends Subscription {
         for(let key of keys){
             await this.app.redis.del(key);
         }
-        await ctx.service.redis.set('initaled',true);
         await ctx.service.redis.set('loginSystem',[]);
 
         // 初始化接口调用实体

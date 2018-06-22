@@ -30,10 +30,9 @@ module.exports = app => {
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();
         //await app.runSchedule('inital');
-        const initaled=await ctx.service.redis.get("initaled");
-        if(!initaled){
-            app.runSchedule('inital');
-        }
+
+        app.runSchedule('inital');
+
 
         app.logger.info('app started!!!!');
     });
