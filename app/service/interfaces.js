@@ -105,9 +105,9 @@ class InterfaceService extends Service {
         }
         try {
             for (let r of roles) {
-                console.log(system + r.rolename);
+                this.app.logger.info(system + r.rolename);
                 let [result] = await this.app.mysql.query(`select id from t_role where code=?`, [system + r.rolename]);
-                console.log(result);
+                this.app.logger.info(result);
                 if (result) {
                     let currentId=result.id;
                     await this.app.mysql.update('t_role',
@@ -248,9 +248,9 @@ class InterfaceService extends Service {
     }
 
     async synuserresult(body){
-        const {system,reqdata:[{status,username,msg}]}=body;
-        console.log('synuserresult');
-        console.log(await this.ctx.service.redis.get('SynOrCancelResult'));
+        let {system,reqdata:[{status,username,msg}]}=body;
+        system=system.toLowerCase();
+        this.app.logger.info('synuserresult');
         let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
         let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
         if(!systementity || !user){
@@ -261,10 +261,10 @@ class InterfaceService extends Service {
         }
         setTimeout(async ()=>{
             const SynOrCancelResult=await this.ctx.service.redis.get('SynOrCancelResult');
-            console.log('++++++',system);
-            console.log(system,SynOrCancelResult);
+            this.app.logger.info('++++++',system);
+            this.app.logger.info(system,SynOrCancelResult);
             for(let i=0;i<SynOrCancelResult.length;i++){
-                console.log(i,SynOrCancelResult[i].assigneeName,`${username}${system}apply`);
+                this.app.logger.info(i,SynOrCancelResult[i].assigneeName,`${username}${system}apply`);
                 if(SynOrCancelResult[i].assigneeName===`${username}${system}apply`
                     && SynOrCancelResult[i].type===`invoke`){
                     SynOrCancelResult[i].type=`result`;
@@ -274,13 +274,13 @@ class InterfaceService extends Service {
                     break;
                 }
             }
-            console.log('------',system);
-            console.log(system,SynOrCancelResult);
+            this.app.logger.info('------',system);
+            this.app.logger.info(system,SynOrCancelResult);
             await this.ctx.service.redis.set('SynOrCancelResult',SynOrCancelResult);
             const SynOrCancelResult2=await this.ctx.service.redis.get('SynOrCancelResult');
-            console.log(system,SynOrCancelResult2);
-            console.log('===',system);
-        },10000);
+            this.app.logger.info(system,SynOrCancelResult2);
+            this.app.logger.info('===',system);
+        },5000);
         if(status==='801'){
             //增加用户访问对应平台权限
             await this._addsysPromision(systementity,user);
@@ -292,7 +292,8 @@ class InterfaceService extends Service {
     }
 
     async canceluserresult(body){
-        const {system,reqdata:[{status,username,msg}]}=body;
+        let {system,reqdata:[{status,username,msg}]}=body;
+        system=system.toLowerCase();
         setTimeout(async ()=>{
             const SynOrCancelResult=await this.ctx.service.redis.get('SynOrCancelResult');
             for(let i=0;i<SynOrCancelResult.length;i++){
@@ -306,7 +307,7 @@ class InterfaceService extends Service {
                 }
             }
             this.ctx.service.redis.set('SynOrCancelResult',SynOrCancelResult);
-        },1000);
+        },5000);
         let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
         let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
         if(!systementity || !user){

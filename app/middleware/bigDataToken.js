@@ -5,9 +5,10 @@ module.exports = (options,app) => {
         let {user}=await ctx.service.authorService.getByCode(authorToken);
         let bigDataToken=await app.redis.get(user.user_name+'-bigDataToken');
         if(!bigDataToken) {
-            const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+            const invokeEntitys=await ctx.service.redis.get('invokeEntitys');
             let [entity] = invokeEntitys.filter(d => d.id === 48);
             const ispToken=ctx.service.interfaces.randomString(8);
+            app.redis.set(ispToken,JSON.stringify(user));
             let result = await ctx.service.restful.invoke(entity,{
                 //ip:app.systemUrl['s03'],
                 ip:await ctx.service.redis.getProperty('systemUrl','s03'),

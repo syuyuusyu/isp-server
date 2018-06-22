@@ -61,11 +61,11 @@ module.exports = appInfo => {
     // };
     config.mysql = {
         client: {
-            host: '127.0.0.1',
+            host: '127.0.0.2',
             port: '3306',
             user: 'root',
-            password: 'password',
-            database: 'isp2',
+            password: '1234',
+            database: 'isp',
         },
         app: true,
         agent: false,
@@ -81,6 +81,71 @@ module.exports = appInfo => {
         },
     };
 
+    // config.redis = {
+    //     client:{
+    //         nodes:[
+    //             {
+    //                 port: 6381,
+    //                 host: '10.10.50.10',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6382,
+    //                 host: '10.10.50.10',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6383,
+    //                 host: '10.10.50.10',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //
+    //             {
+    //                 port: 6381,
+    //                 host: '10.10.50.14',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6382,
+    //                 host: '10.10.50.14',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6383,
+    //                 host: '10.10.50.14',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //
+    //             {
+    //                 port: 6381,
+    //                 host: '10.10.50.17',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6382,
+    //                 host: '10.10.50.17',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6383,
+    //                 host: '10.10.50.17',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //         ],
+    //         cluster:true
+    //     }
+    //
+    // };
+
     config.security = {
         csrf: {
             ignoreJSON: true, // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
@@ -90,6 +155,9 @@ module.exports = appInfo => {
             'http://localhost:3000',
             'http://127.0.0.1:3000',
             'http://localhost:8080',
+            'http://10.10.50.10:3000',
+            'http://10.10.50.14:3000',
+            'http://10.10.50.17:3000',
         ]
     };
 
@@ -99,8 +167,8 @@ module.exports = appInfo => {
     };
 
     config.self={
-        keystoneIp:'10.10.0.1:5000',
-        swiftBaseUrl :'http://10.10.0.1:8080/v1/AUTH_8caa6e28cf7049d48b9c5274c8cb524e/',
+        keystoneIp:'10.10.10.1:5000',
+        swiftBaseUrl :'http://10.30.10.1:8080/v1/AUTH_76feacc2ae3c45f9b280e46dd96ff2ce/',
         activitiIp:'http://127.0.0.1:5002',
         rabbitmqUrl:'amqp://guest:guest@127.0.0.1:5672',
         queueName: 'ispServerQueue'

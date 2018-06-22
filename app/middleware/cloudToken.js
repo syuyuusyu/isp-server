@@ -7,7 +7,7 @@ module.exports = (options,app) => {
         if(!cloudToken) {
             const ispToken=ctx.service.interfaces.randomString(8);
             app.redis.set(ispToken,JSON.stringify(user));
-            const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+            const invokeEntitys=await ctx.service.redis.get('invokeEntitys');
             let [entity] =invokeEntitys.filter(d => d.id === 59);
             let result = await ctx.service.restful.invoke(entity,{
                 //ip:app.systemUrl['s02'],

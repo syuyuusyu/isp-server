@@ -3,10 +3,10 @@ const Service=require('egg').Service;
 class RedisService extends Service{
 
     async get(k) {
-        if(!await this.containKey(k)){
-            this.app.logger.error('key:'+k+'对应对象不存在');
-            return;
-        }
+        // if(!await this.containKey(k)){
+        //     this.app.logger.error('key:'+k+'对应对象不存在');
+        //     return;
+        // }
         const json = await this.app.redis.get(k);
         return JSON.parse(json);
     }

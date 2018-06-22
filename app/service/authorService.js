@@ -16,17 +16,19 @@ class AuthorService extends Service {
     // 系统访问接口权限
     async invokePromiss() {
         const systems = await this.app.mysql.query('select * from t_system where stateflag=1');
+        const systemMap={},systemUrl={};
         for (const system of systems) {
-            await this.ctx.service.redis.setProperty('systemMap',system.code,system.id);
-            await this.ctx.service.redis.setProperty('systemUrl',system.code,system.id)
-            // this.app.systemMap[system.code] = system.id;
-            // this.app.systemUrl[system.code] = system.url;
+            systemMap[system.code] = system.id;
+            systemUrl[system.code] = system.url;
             const operations = await this.app.mysql.query(`select o.* from t_sys_operation o join t_sys_promiss_operation spo 
                 on spo.operation_id=o.id where spo.system_id=? and o.stateflag=1`, [system.id]);
             //this.ctx.logger.info(system.url);
             //this.ctx.logger.info(JSON.stringify(operations.map(m => m.path)));
             await this.app.redis.set(system.url, JSON.stringify(operations.map(m => m.path)));
         }
+        console.log(systemUrl);
+        this.app.redis.set('systemMap', JSON.stringify(systemMap));
+        this.app.redis.set('systemUrl', JSON.stringify(systemUrl));
     }
 
     //同步集成用户角色到流程引擎

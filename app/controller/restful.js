@@ -183,7 +183,7 @@ class RestfulController extends Controller{
     async reflashEntity(){
         console.log('reflashEntity');
         //this.app.invokeEntitys=await this.app.mysql.query('select * from t_invoke_info');
-        this.ctx.service.redis.set('invokeEntitys',await app.mysql.query('select * from t_invoke_info'));
+        this.ctx.service.redis.set('invokeEntitys',await this.app.mysql.query('select * from t_invoke_info'));
     }
 
     async groupName(){

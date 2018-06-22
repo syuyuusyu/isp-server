@@ -23,41 +23,18 @@ module.exports = app => {
             };
 
 
-        const ctx = app.createAnonymousContext();
-        //清空redis
-        const keys=await app.redis.keys('*');
-        for(let key of keys){
-            await app.redis.del(key);
-        }
-
         app.secret = 'n7d3t7x7';
-        //app.systemMap = {};
-        //app.systemUrl = {};
-        app.interfaceLog = [];
-        app.allRouter = [];
+        const ctx = app.createAnonymousContext();
 
-        await ctx.service.redis.set('systemMap',{});
-        await ctx.service.redis.set('systemUrl',{});
-        await ctx.service.redis.set('loginSystem',[]);
-        await ctx.service.redis.set('SynOrCancelResult',[]);
-
-        app.logger.error(111,await ctx.service.redis.get('systemMap'));
-
-
-
-
-        // 初始化系统调用接口权限
-        await ctx.service.authorService.invokePromiss();
-
-        // 初始化接口调用实体
-        //app.invokeEntitys = await app.mysql.query('select * from t_invoke_info');
-        await ctx.service.redis.set('invokeEntitys',await app.mysql.query('select * from t_invoke_info'));
-
-        //app.mysql.insert('t_test',{name:'sdsd',age:3,time:new Date()});
-        console.log('app start');
 
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();
+        //await app.runSchedule('inital');
+        const initaled=await ctx.service.redis.get("initaled");
+        if(!initaled){
+            app.runSchedule('inital');
+        }
+
         app.logger.info('app started!!!!');
     });
 

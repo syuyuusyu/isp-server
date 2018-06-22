@@ -6,14 +6,22 @@ class SynOrCancelSchedule extends Subscription {
     static get schedule() {
         return {
             interval: '3s', // 10 分钟间隔
-            type: 'worker', // 指定所有的 worker 都需要执行
+            immediate:false,
+            type: 'worker',
         };
     }
 
     //
     async subscribe() {
-        //console.log(this.app.SynOrCancelResult);
-        this.app.logger.info(await this.ctx.service.redis.get('SynOrCancelResult'));
+        //this.app.logger.info(this.app.SynOrCancelResult);
+        let SynOrCancelResult=await this.ctx.service.redis.get('SynOrCancelResult');
+        if(SynOrCancelResult && SynOrCancelResult.length>0){
+            this.app.logger.info('SynOrCancelSchedule',SynOrCancelResult);
+        }else {
+            this.ctx.service.redis.set('SynOrCancelResult',[]);
+            return;
+        }
+
         let obj = await this.ctx.service.redis.shift('SynOrCancelResult');
         if (obj) {
             if (obj.type==='result' && obj.count<5){
@@ -37,7 +45,7 @@ class SynOrCancelSchedule extends Subscription {
 
     async error(obj,del){
         const activitiIp = this.app.config.self.activitiIp;
-        console.log('-----------', `${activitiIp}/userTask/${obj.assigneeName}`);
+        this.app.logger.info('-----------', `${activitiIp}/userTask/${obj.assigneeName}`);
         const tasks = await this.app.curl(`${activitiIp}/userTask/${obj.assigneeName}`, {
             method: 'GET',
             head: {
@@ -68,7 +76,7 @@ class SynOrCancelSchedule extends Subscription {
     // 平台访问权限申请流程被申请平台调用用户同步结果接口时执行对应的usertask流程
     async result(obj) {
         const activitiIp = this.app.config.self.activitiIp;
-        console.log('-----------', `${activitiIp}/userTask/${obj.assigneeName}`);
+        this.app.logger.info('-----------', `${activitiIp}/userTask/${obj.assigneeName}`);
         const tasks = await this.app.curl(`${activitiIp}/userTask/${obj.assigneeName}`, {
             method: 'GET',
             head: {

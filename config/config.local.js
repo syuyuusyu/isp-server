@@ -64,77 +64,13 @@ module.exports = appInfo => {
     config.redis = {
         client: {
             port: 6379,
-            host: '10.10.50.14',
+            host: '127.0.0.1',
             password: '',
             db: 0,
         },
     };
 
 
-    // config.redis = {
-    //     client:{
-    //         nodes:[
-    //             {
-    //                 port: 6381,
-    //                 host: '10.10.50.10',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6382,
-    //                 host: '10.10.50.10',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6383,
-    //                 host: '10.10.50.10',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //
-    //             {
-    //                 port: 6381,
-    //                 host: '10.10.50.14',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6382,
-    //                 host: '10.10.50.14',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6383,
-    //                 host: '10.10.50.14',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //
-    //             {
-    //                 port: 6381,
-    //                 host: '10.10.50.17',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6382,
-    //                 host: '10.10.50.17',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6383,
-    //                 host: '10.10.50.17',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //         ],
-    //         cluster:true
-    //     }
-    //
-    // };
 
     config.security = {
         csrf: {
@@ -148,8 +84,6 @@ module.exports = appInfo => {
             'http://10.10.50.10:3000',
             'http://10.10.50.14:3000',
             'http://10.10.50.17:3000',
-            'http://10.10.50.9',
-            'http://10.10.50.16',
         ]
     };
 
@@ -161,7 +95,7 @@ module.exports = appInfo => {
     config.self={
         keystoneIp:'10.10.10.1:5000',
         swiftBaseUrl :'http://10.10.10.1:8080/v1/AUTH_76feacc2ae3c45f9b280e46dd96ff2ce/',
-        activitiIp:'http://10.10.50.10:5002',
+        activitiIp:'http://127.0.0.1:5002',
         rabbitmqUrl:'amqp://guest:guest@127.0.0.1:5672',
         queueName: 'ispServerQueue'
     };

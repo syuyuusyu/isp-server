@@ -3,7 +3,7 @@ module.exports = (options,app) => {
         ctx.logger.info('swiftToken');
         let swiftToken=await app.redis.get('swiftToken');
         if(!swiftToken) {
-            const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
+            const invokeEntitys=await ctx.service.redis.get('invokeEntitys');
             let [entity] = invokeEntitys.filter(d => d.id === 24);
             let result = await ctx.service.restful.invoke(entity,{
                 keystoneIp:app.config.self.keystoneIp
