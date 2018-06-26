@@ -14,7 +14,7 @@ class InterfacesLog extends Controller{
     //const interfaceInfo=await this.app.interfaceLog;
     let result;
     let interfaceInfoArray=[];
-    //从redis中取出interfaceInfo的值，并将interfaceInfo的值转换成数组类型
+    //从redis中取出interfaceInfo的值(数组类型)
     let interfaceInfo=await this.app.redis.smembers("interfaceInfo");
     if(interfaceInfo.length!==0){
       for(let interfaceInfoValue of interfaceInfo ){

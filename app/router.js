@@ -266,4 +266,8 @@ module.exports = app => {
     router.get('/activiti/sysAccess/:username/:isApply', controller.activitiInterfaces.userSysAccess);
     //推送用户给对应平台
     router.post('/activiti/pushUser',controller.activitiInterfaces.pushUser);
+
+    //获取云平台的ip和token
+    router.get('/s02Url/getS02Url',controller.s02Url.getS02Url);
+
 };
