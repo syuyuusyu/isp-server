@@ -259,25 +259,6 @@ class InterfaceService extends Service {
                 message:`对应系统号${system}或对应用户${username}不存在`
             }
         }
-        // setTimeout(async ()=>{
-        //     const SynOrCancelResult=await this.ctx.service.redis.get('SynOrCancelResult');
-        //     this.app.logger.info('++++++',system);
-        //     this.app.logger.info(system,SynOrCancelResult);
-        //     for(let i=0;i<SynOrCancelResult.length;i++){
-        //         this.app.logger.info(i,SynOrCancelResult[i].assigneeName,`${username}${system}apply`);
-        //         if(SynOrCancelResult[i].assigneeName===`${username}${system}apply`
-        //             && SynOrCancelResult[i].type===`invoke`){
-        //             SynOrCancelResult[i].type=`result`;
-        //             SynOrCancelResult[i].opType=`apply`;
-        //             SynOrCancelResult[i].status=status;
-        //             SynOrCancelResult[i].systemName=systementity.name;
-        //             break;
-        //         }
-        //     }
-        //     this.app.logger.info('------',system);
-        //     this.app.logger.info(system,SynOrCancelResult);
-        //     await this.ctx.service.redis.set('SynOrCancelResult',SynOrCancelResult);
-        // },5000);
 
         this.app.messenger.sendToAgent('rabbitmqMsg', {
             assigneeName:`${username}${system}apply`,
@@ -298,20 +279,6 @@ class InterfaceService extends Service {
     async canceluserresult(body){
         let {system,reqdata:[{status,username,msg}]}=body;
         system=system.toLowerCase();
-        // setTimeout(async ()=>{
-        //     const SynOrCancelResult=await this.ctx.service.redis.get('SynOrCancelResult');
-        //     for(let i=0;i<SynOrCancelResult.length;i++){
-        //         if(SynOrCancelResult[i].assigneeName===`${username}${system}cancel`
-        //             && SynOrCancelResult[i].type===`invoke`){
-        //             SynOrCancelResult[i].type=`result`;
-        //             SynOrCancelResult[i].opType=`cancel`;
-        //             SynOrCancelResult[i].status=status;
-        //             SynOrCancelResult[i].systemName=systementity.name;
-        //             break;
-        //         }
-        //     }
-        //     this.ctx.service.redis.set('SynOrCancelResult',SynOrCancelResult);
-        // },5000);
 
         let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
         let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
