@@ -25,9 +25,9 @@ class RestfulService extends Service{
         let head=this.parseByqueryMap(entity.head,queryObj);
         head=JSON.parse(head);
         this.ctx.logger.info('url:',url);
-      this.ctx.logger.info('method:',method);
-        this.ctx.logger.info('head:',head);
-        this.ctx.logger.info('body:',data);
+        //this.ctx.logger.info('method:',method);
+        //this.ctx.logger.info('head:',head);
+        //this.ctx.logger.info('body:',data);
 
 
         let invokeResult;
@@ -41,13 +41,13 @@ class RestfulService extends Service{
             });
         }catch (e){
             this.ctx.logger.error('调用接口错误!!',url);
-            this.ctx.logger.info(invokeResult);
+            //this.ctx.logger.info(invokeResult);
             this.ctx.logger.info(e);
             throw e;
 
         }
         this.ctx.logger.info('status',invokeResult.status);
-        this.ctx.logger.info('result',invokeResult.data);
+        //this.ctx.logger.info('result',invokeResult.data);
         if(entity.parseFun){
             try {
                 let fn=evil(entity.parseFun);

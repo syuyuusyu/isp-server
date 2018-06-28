@@ -1,6 +1,6 @@
 module.exports = (options,app) => {
     return async function cloudToken(ctx, next) {
-        ctx.logger.info('cloudToken');
+        //ctx.logger.info('cloudToken');
         const authorToken=ctx.request.header['access-token'];
         let {user}=await ctx.service.authorService.getByCode(authorToken);
         let cloudToken=await app.redis.get(user.user_name+'-cloudToken');
@@ -26,10 +26,8 @@ module.exports = (options,app) => {
             //domain:app.systemUrl['s01'],
             domain:await ctx.service.redis.getProperty('systemUrl','s01')
         };
-        console.log('cloudToken 24',cloudToken);
         if(cloudToken) {
             await next();
-            ctx.logger.info(ctx.body);
             if (ctx.body && ctx.body.code && ctx.body.code === 500) {
                 ctx.logger.info('del cloudToken');
                 app.redis.del(user.user_name + '-cloudToken');

@@ -20,7 +20,7 @@ module.exports = appInfo => {
     ];
 
     config.author={
-        ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister|^\/activiti/,
+        ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister|^\/activiti|^\/map$|^\/doNothing$/,
     };
 
     config.swiftToken = {
@@ -150,6 +150,8 @@ module.exports = appInfo => {
             'http://10.10.50.17:3000',
             'http://10.10.50.9',
             'http://10.10.50.16',
+            'http://127.0.0.1',
+            'http://isp.yndk.cn'
         ]
     };
 
@@ -162,8 +164,8 @@ module.exports = appInfo => {
         keystoneIp:'10.10.10.1:5000',
         swiftBaseUrl :'http://10.10.10.1:8080/v1/AUTH_76feacc2ae3c45f9b280e46dd96ff2ce/',
         activitiIp:'http://10.10.50.10:5002',
-        rabbitmqUrl:'amqp://guest:guest@127.0.0.1:5672',
-        queueName: 'ispServerQueue'
+        rabbitmqUrl:'amqp://admin:123456@10.10.50.10:5672',
+        queueName: 'activitiQueue'
     };
 
     return config;

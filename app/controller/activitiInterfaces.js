@@ -63,15 +63,20 @@ class ActivitiInterfaces extends Controller{
             let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
             for(let i=0;i<systems.length;i++){
                 const sys=systems[i];
-                setTimeout(async ()=>{
                     if(!sys.path){
-                        await this.ctx.service.redis.push('SynOrCancelResult',{
+                        this.app.messenger.sendToAgent('rabbitmqMsg', {
                             assigneeName:`${username}${sys.code}${opType}`,
                             count:0,
                             message:`${sys.name}没有配置${opType==='apply'?'推送用户':'注销用户'}接口`,
-                            type:'noPath'
+                            type:'error'
                         });
-                        //continue;
+                        // await this.ctx.service.redis.push('SynOrCancelResult',{
+                        //     assigneeName:`${username}${sys.code}${opType}`,
+                        //     count:0,
+                        //     message:`${sys.name}没有配置${opType==='apply'?'推送用户':'注销用户'}接口`,
+                        //     type:'noPath'
+                        // });
+                        continue;
                     }
                     this.app.curl(`${sys.url}${sys.path}`,{
                         method:'POST',
@@ -89,33 +94,51 @@ class ActivitiInterfaces extends Controller{
                     }).then(async result=>{
                         if(result.status>=200 && result.status<300){
                             this.ctx.logger.error(sys.code);
-                            await this.ctx.service.redis.push('SynOrCancelResult',{
+                            this.app.messenger.sendToAgent('rabbitmqMsg', {
                                 assigneeName:`${username}${sys.code}${opType}`,
                                 count:0,
                                 message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}成功,但未获得对方平台返回信息`,
-                                type:'invoke'
-                            })
+                                type:'await'
+                            });
+                            // await this.ctx.service.redis.push('SynOrCancelResult',{
+                            //     assigneeName:`${username}${sys.code}${opType}`,
+                            //     count:0,
+                            //     message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}成功,但未获得对方平台返回信息`,
+                            //     type:'invoke'
+                            // });
                         }else{
                             this.ctx.logger.error(sys.code);
                             this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,result);
-                            await this.ctx.service.redis.push('SynOrCancelResult',{
+                            this.app.messenger.sendToAgent('rabbitmqMsg', {
                                 assigneeName:`${username}${sys.code}${opType}`,
                                 count:0,
                                 message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
                                 type:'error'
-                            })
+                            });
+                            // await this.ctx.service.redis.push('SynOrCancelResult',{
+                            //     assigneeName:`${username}${sys.code}${opType}`,
+                            //     count:0,
+                            //     message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
+                            //     type:'error'
+                            // })
                         }
                     }).catch(async e=>{
                         this.ctx.logger.error(sys.code);
                         this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,e.toString());
-                        await this.ctx.service.redis.push('SynOrCancelResult',{
+                        this.app.messenger.sendToAgent('rabbitmqMsg', {
                             assigneeName:`${username}${sys.code}${opType}`,
                             count:0,
                             message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
                             type:'error'
-                        })
+                        });
+                        // await this.ctx.service.redis.push('SynOrCancelResult',{
+                        //     assigneeName:`${username}${sys.code}${opType}`,
+                        //     count:0,
+                        //     message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
+                        //     type:'error'
+                        // })
                     });
-                },i*3000);
+
 
             }
             result={success:true};

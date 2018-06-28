@@ -20,7 +20,7 @@ module.exports = appInfo => {
     ];
 
     config.author={
-        ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister|^\/activiti/,
+        ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister|^\/activiti|^\/map$|^\/doNothing$/,
     };
 
     config.swiftToken = {
@@ -41,6 +41,24 @@ module.exports = appInfo => {
         fileSize: '1024mb',
     };
 
+    // config.mysql = {
+    //     client: {
+    //         // host
+    //         host: '127.0.0.1',
+    //         // 端口号
+    //         port: '3306',
+    //         // 用户名
+    //         user: 'root',
+    //         // 密码
+    //         password: '1234',
+    //         // 数据库名
+    //         database: 'isp',
+    //     },
+    //     // 是否加载到 app 上，默认开启
+    //     app: true,
+    //     // 是否加载到 agent 上，默认关闭
+    //     agent: false,
+    // };
     config.mysql = {
         client: {
             // host
@@ -71,6 +89,70 @@ module.exports = appInfo => {
     };
 
 
+    // config.redis = {
+    //     client:{
+    //         nodes:[
+    //             {
+    //                 port: 6381,
+    //                 host: '10.10.50.10',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6382,
+    //                 host: '10.10.50.10',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6383,
+    //                 host: '10.10.50.10',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //
+    //             {
+    //                 port: 6381,
+    //                 host: '10.10.50.14',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6382,
+    //                 host: '10.10.50.14',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6383,
+    //                 host: '10.10.50.14',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //
+    //             {
+    //                 port: 6381,
+    //                 host: '10.10.50.17',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6382,
+    //                 host: '10.10.50.17',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //             {
+    //                 port: 6383,
+    //                 host: '10.10.50.17',
+    //                 password: '',
+    //                 db: 0,
+    //             },
+    //         ],
+    //         cluster:true
+    //     }
+    //
+    // };
 
     config.security = {
         csrf: {
@@ -84,6 +166,9 @@ module.exports = appInfo => {
             'http://10.10.50.10:3000',
             'http://10.10.50.14:3000',
             'http://10.10.50.17:3000',
+            'http://10.10.50.9',
+            'http://10.10.50.16',
+            'http://127.0.0.1'
         ]
     };
 
@@ -97,7 +182,7 @@ module.exports = appInfo => {
         swiftBaseUrl :'http://10.10.10.1:8080/v1/AUTH_76feacc2ae3c45f9b280e46dd96ff2ce/',
         activitiIp:'http://127.0.0.1:5002',
         rabbitmqUrl:'amqp://guest:guest@127.0.0.1:5672',
-        queueName: 'ispServerQueue'
+        queueName: 'activitiQueue'
     };
 
     return config;

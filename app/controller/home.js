@@ -2,10 +2,17 @@
 
 const Controller = require('egg').Controller;
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 class HomeController extends Controller {
     async index() {
         await this.ctx.render('/index.html');
+    }
+
+
+
+    async doNothing(){
+        this.ctx.body={}
     }
 
     async login() {
@@ -50,13 +57,12 @@ class HomeController extends Controller {
                             auth.user.user_name=auth.user.user_name.replace(/^s\d{2}(\w+)/,(w,p)=>{
                                 return p;
                             });
-                            console.log(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
+                            this.ctx.logger.info(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
                             this.app.curl(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`)
                                 .then(result=>{
-                                    console.log('退出结果:',result);
+                                    this.ctx.logger.info('退出结果:',result);
                                 }).catch(e=>{
-                                    console.log(e);
-
+                                this.ctx.logger.error(e);
                                 });
 
                             this.ctx.service.redis.splice('loginSystem',currentIndex,1);

@@ -31,7 +31,6 @@ module.exports = app => {
         //ctx.service.authorService.actSynUser();
         //await app.runSchedule('inital');
 
-        app.runSchedule('inital');
 
 
         app.logger.info('app started!!!!');
@@ -39,6 +38,10 @@ module.exports = app => {
 
     app.once('server', server => {
 
+    });
+
+    app.messenger.on('xxx_action', data => {
+        app.logger.info('xxx_action',data);
     });
 };
 

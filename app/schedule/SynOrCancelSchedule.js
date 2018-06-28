@@ -13,7 +13,6 @@ class SynOrCancelSchedule extends Subscription {
 
     //
     async subscribe() {
-        //this.app.logger.info(this.app.SynOrCancelResult);
         let SynOrCancelResult=await this.ctx.service.redis.get('SynOrCancelResult');
         if(SynOrCancelResult && SynOrCancelResult.length>0){
             this.app.logger.info('SynOrCancelSchedule',SynOrCancelResult);
