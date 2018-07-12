@@ -7,7 +7,7 @@ module.exports = (options,app) => {
         const token=ctx.request.header['access-token'];
         const author=await ctx.service.authorService.getByCode(token);
         ctx.service.systemLog.operateLog(ctx);
-        if((token && author) || token==='n7d3t7x7'){
+        if((token && author) ){
             await next();
         }else{
             ctx.logger.info('token失效!!!');

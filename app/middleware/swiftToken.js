@@ -13,12 +13,14 @@ module.exports = (options,app) => {
         }
         ctx.logger.info('swiftToken',swiftToken);
         ctx.request.headers['X-Auth-Token']=swiftToken;
+        ctx.request.body={
+            ...ctx.request.body,
+            token:swiftToken
+        };
         await next();
-
         if(ctx.body && ctx.body.status && ctx.body.status===401){
             ctx.logger.info('del swiftToken');
             app.redis.del('swiftToken');
-
         }
 
     };

@@ -26,7 +26,6 @@ class ButtonController extends Controller{
             });  // 第一步操作
             if(buttonIds.length>0){
                 let sql=`insert into t_role_button(role_id,button_id) values ${buttonIds.map((a)=>'('+roleId+','+a+')').reduce((a,b)=>a+','+b)}`;
-                console.log(sql);
                 result=await conn.query(sql);  // 第二步操作
             }
 

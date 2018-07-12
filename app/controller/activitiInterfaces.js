@@ -78,7 +78,7 @@ class ActivitiInterfaces extends Controller{
                             username:username,
                             name: user.name,
                             phone: user.phone,
-                            email: user.email,
+                            email: user.email?user.email:'',
                         },
                         headers:{
                             "Accept":"application/json",

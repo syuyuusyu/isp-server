@@ -10,7 +10,6 @@ class MetadataController extends Controller{
         let c_proType=proType?` and pro_type='${proType}'`:'';
         let sql=`select * from t_metadata
             where stateflag=1${c_systemId}${c_metadataType}${c_databaseType}${c_proType}`;
-        console.log(sql);
         let result=await this.app.mysql.query(sql);
         this.ctx.body=result;
     }

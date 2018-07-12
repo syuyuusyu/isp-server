@@ -45,3 +45,41 @@ module.exports = app => {
     });
 };
 
+
+function parse(obj){
+    let isOk=true;
+    if(obj.forEach){
+        obj.forEach(o=>{
+            if(o['self_monitor_list-1'] && o['self_monitor_list-1'].status){
+                isOk=false;
+            }
+        });
+    }
+    if(!isOk){
+        return {status:401};
+    }
+    let result=[];
+    for(let key in obj[0]){
+        if(/(self_monitor_detail)-\d+/.test(key))
+            result.push(obj[0][key]);
+    }
+    console.log(result);
+    let instenceNames=new Set();
+    result.forEach(o=>instenceNames.add(o.instanceName));
+    let table=[];
+    instenceNames.forEach(n=>table.push({instanceName:n}));
+    while(result.length>0){
+        let o=result.pop();
+        for(let i=0;i<table.length;i++){
+            if(table[i].instanceName===o.instanceName){
+                table[i]={
+                    ...table[i],
+                    [o.propertyName]:o.value
+                };
+            }
+        }
+
+    }
+    return table;
+}
+

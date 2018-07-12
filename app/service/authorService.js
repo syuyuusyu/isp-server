@@ -26,7 +26,6 @@ class AuthorService extends Service {
             //this.ctx.logger.info(JSON.stringify(operations.map(m => m.path)));
             await this.app.redis.set(system.url, JSON.stringify(operations.map(m => m.path)));
         }
-        console.log(systemUrl);
         this.app.redis.set('systemMap', JSON.stringify(systemMap));
         this.app.redis.set('systemUrl', JSON.stringify(systemUrl));
     }
@@ -44,7 +43,6 @@ class AuthorService extends Service {
                 usernames: usernames.map(u => u.user_name),
                 groupnames: groupnames.map(r => r.code),
             };///act/userSyn
-        console.log(queryMap);
         let result = await this.app.curl(`${this.app.config.self.activitiIp}/act/userSyn`, {
             method: 'POST',
             data: queryMap,

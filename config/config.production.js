@@ -20,11 +20,11 @@ module.exports = appInfo => {
     ];
 
     config.author={
-        ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister|^\/activiti|^\/map$|^\/doNothing$/,
+        ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister|^\/activiti|^\/map$|^\/doNothing$|^\/screen/,
     };
 
     config.swiftToken = {
-        match: /\/swift/,
+        match: /\/swift|\/invoke\/self_monitor/,
     };
 
     config.cloudToken={
@@ -171,3 +171,6 @@ module.exports = appInfo => {
     return config;
 
 };
+
+//npx pm2 start npm --watch --name isp -- run start
+//npx pm2 kill
