@@ -16,8 +16,10 @@ class ScreenController extends Controller{
             success:true,
             list:
                 files.map(f=>[
-                    `/public/pic/${encodeURI(f)}`,
-                    f.replace(/^(.*)(\.png)$/,(w,p1)=>p1)
+                    `http://127.0.0.1:7001/public/pic/${encodeURI(f)}`,
+                    //`http://10.10.50.10:7001/public/pic/${encodeURI(f)}`,
+                    f.replace(/^(\S+)\.(\S+)\.png$/,(w,p1)=>p1),
+                    'http://10.10.50.18:8090/iserver/manager/services/'+f.replace(/^(\S+)\.(\S+)\.png$/,(w,p1,p2)=>p2)
                 ])
 
         };
