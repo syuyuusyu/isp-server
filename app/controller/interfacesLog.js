@@ -4,7 +4,6 @@ class InterfacesLog extends Controller{
   async allInterfacesLog(){
     let content=await this.app.mysql.query('select * from t_interfaces_log where stateflag=1 order by invoke_date desc',[]);
     this.ctx.body=content;
-    //console.log("InterfacesLog中current的值为:",this.ctx.body);
   }
 
   async save() {

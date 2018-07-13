@@ -15,7 +15,19 @@ class SystemLog extends Service{
      this.app.mysql.query('insert into t_system_log(login_name,operate_type,operate_ip,operate_detail,create_by) value(?,?,?,?,?)',[user,'退出',ip,'退出用户:'+user,user]);
   }
 
+  async resetPassword(user,ip){
+    if(ip==='::1'){
+      ip='127.0.0.1'
+    }
+    this.app.mysql.query('insert into t_system_log(login_name,operate_type,operate_ip,operate_detail,create_by) value(?,?,?,?,?)',[user,'重置密码',ip,'重置密码',user]);
+  }
 
+  async userRegister(user,ip){
+    if(ip==='::1'){
+      ip='127.0.0.1'
+    }
+    this.app.mysql.query('insert into t_system_log(login_name,operate_type,operate_ip,operate_detail,create_by) value(?,?,?,?,?)',[user,'注册',ip,'用户注册，注册账号:'+user,user]);
+  }
 
   async operateLog(ctx){
     //console.log("========",this.ctx.request.body);
@@ -29,7 +41,7 @@ class SystemLog extends Service{
    const allRouter=await this.getRouter();
    //const allRouter=this.app.allRouter;
    if((allRouter.search(requestRouter))!==-1){
-     //console.log("进来啦")
+     console.log("进来啦")
      let token=this.ctx.request.header['access-token'];
      let sd=await this.service.authorService.getAuthor(token);
      let logoinUser=sd.user.user_name;

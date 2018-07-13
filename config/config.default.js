@@ -28,7 +28,7 @@ module.exports = appInfo => {
     };
 
     config.cloudToken={
-        match:  /\/invoke\/cloud/
+        match:  /\/invoke\/cloud|\/s02Url\/getS02Url/
     };
 
     config.bigDataToken={
@@ -61,11 +61,11 @@ module.exports = appInfo => {
     // };
     config.mysql = {
         client: {
-            host: '127.0.0.2',
+            host: '127.0.0.1',
             port: '3306',
             user: 'root',
-            password: '1234',
-            database: 'isp',
+            password: 'password',
+            database: 'isp2',
         },
         app: true,
         agent: false,
