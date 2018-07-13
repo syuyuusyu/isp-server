@@ -6,7 +6,7 @@ class Inital extends Subscription {
     static get schedule() {
         return {
             cron: '0 0 0 * * *',
-            immediate:false,
+            immediate:true,
             type: 'worker',
         };
     }

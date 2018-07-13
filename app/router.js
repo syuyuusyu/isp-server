@@ -4,6 +4,8 @@ module.exports = app => {
     const { router, controller } = app;
     router.get('/index', controller.home.index);
 
+    router.get('/doNothing',controller.home.doNothing);
+
     // 登录
     router.post('/login', controller.home.login);
     // 退出
@@ -267,7 +269,20 @@ module.exports = app => {
     //推送用户给对应平台
     router.post('/activiti/pushUser',controller.activitiInterfaces.pushUser);
 
+
     //获取云平台的ip和token
     router.get('/s02Url/getS02Url',controller.s02Url.getS02Url);
+
+
+    //大屏接口
+    router.get('/map', controller.screen.map);
+    router.get('/screen/picture', controller.screen.picture);
+     // 地图geoJSON请求接口（第二屏）
+    router.get('/screen/map_llx',controller.screen.map_llx);
+    // 经济概况接口（第三屏）
+    router.get('/screen/business_info',controller.screen.business_info);
+    // 城市建设概况接口（第三屏）
+    router.get('/screen/city_info',controller.screen.city_info);
+
 
 };

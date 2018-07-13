@@ -5,7 +5,7 @@ class SynOrCancelSchedule extends Subscription {
     // 通过 schedule 属性来设置定时任务的执行间隔等配置
     static get schedule() {
         return {
-            interval: '3s', // 10 分钟间隔
+            interval: '24h', // 10 分钟间隔
             immediate:false,
             type: 'worker',
         };
@@ -13,7 +13,6 @@ class SynOrCancelSchedule extends Subscription {
 
     //
     async subscribe() {
-        //this.app.logger.info(this.app.SynOrCancelResult);
         let SynOrCancelResult=await this.ctx.service.redis.get('SynOrCancelResult');
         if(SynOrCancelResult && SynOrCancelResult.length>0){
             this.app.logger.info('SynOrCancelSchedule',SynOrCancelResult);

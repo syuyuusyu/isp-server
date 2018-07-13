@@ -50,7 +50,7 @@ class RestfulController extends Controller{
         this.ctx.body=await this.service.restful.invoke(entity,entity.queryMap);
     }
 
-    async invoke(){
+    async invoke2(){
         let result=[];
         const authorToken=this.ctx.request.header['access-token'];
         let {user}=await this.ctx.service.authorService.getByCode(authorToken);
@@ -82,7 +82,7 @@ class RestfulController extends Controller{
                 }
                 result.push(cur);
             }
-            this.ctx.logger.info('集成就调用结果:',result);
+            //this.ctx.logger.info('集成就调用结果:',result);
             if(entity.parseFun && !queryMap.doNotParse){
                 try {
                     let fn=evil(entity.parseFun);
@@ -95,7 +95,7 @@ class RestfulController extends Controller{
             }else{
 
             }
-            this.ctx.logger.info('运行解析函数后结果',result);
+            //this.ctx.logger.info('运行解析函数后结果',result);
             //缓存当次结果
             this.app.redis.set(user.user_name+this.ctx.params.invokeName,JSON.stringify(result));
         }catch (exp){
@@ -107,7 +107,7 @@ class RestfulController extends Controller{
         this.ctx.body=result;
     }
 
-    async invoke2(){
+    async invoke(){
         let result=[];
         const queryMap=this.ctx.request.body;
         const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
@@ -136,7 +136,7 @@ class RestfulController extends Controller{
             }
             result.push(cur);
         }
-        this.ctx.logger.info('集成就调用结果:',result);
+        //this.ctx.logger.info('集成就调用结果:',result);
         if(entity.parseFun){
             try {
                 let fn=evil(entity.parseFun);
@@ -148,7 +148,7 @@ class RestfulController extends Controller{
         }else{
 
         }
-        this.ctx.logger.info('运行解析函数后结果',result);
+        //this.ctx.logger.info('运行解析函数后结果',result);
         this.ctx.body=result;
     }
 

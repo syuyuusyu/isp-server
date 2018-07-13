@@ -1,6 +1,6 @@
 module.exports = (options,app) => {
     return async function bigDataToken(ctx, next) {
-        ctx.logger.info('bigDataToken');
+        //ctx.logger.info('bigDataToken');
         const authorToken=ctx.request.header['access-token'];
         let {user}=await ctx.service.authorService.getByCode(authorToken);
         let bigDataToken=await app.redis.get(user.user_name+'-bigDataToken');

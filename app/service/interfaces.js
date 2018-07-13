@@ -251,6 +251,7 @@ class InterfaceService extends Service {
         let {system,reqdata:[{status,username,msg}]}=body;
         system=system.toLowerCase();
         this.app.logger.info('synuserresult');
+
         let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
         let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
         if(!systementity || !user){
@@ -259,32 +260,19 @@ class InterfaceService extends Service {
                 message:`对应系统号${system}或对应用户${username}不存在`
             }
         }
-        setTimeout(async ()=>{
-            const SynOrCancelResult=await this.ctx.service.redis.get('SynOrCancelResult');
-            this.app.logger.info('++++++',system);
-            this.app.logger.info(system,SynOrCancelResult);
-            for(let i=0;i<SynOrCancelResult.length;i++){
-                this.app.logger.info(i,SynOrCancelResult[i].assigneeName,`${username}${system}apply`);
-                if(SynOrCancelResult[i].assigneeName===`${username}${system}apply`
-                    && SynOrCancelResult[i].type===`invoke`){
-                    SynOrCancelResult[i].type=`result`;
-                    SynOrCancelResult[i].opType=`apply`;
-                    SynOrCancelResult[i].status=status;
-                    SynOrCancelResult[i].systemName=systementity.name;
-                    break;
-                }
-            }
-            this.app.logger.info('------',system);
-            this.app.logger.info(system,SynOrCancelResult);
-            await this.ctx.service.redis.set('SynOrCancelResult',SynOrCancelResult);
-            const SynOrCancelResult2=await this.ctx.service.redis.get('SynOrCancelResult');
-            this.app.logger.info(system,SynOrCancelResult2);
-            this.app.logger.info('===',system);
-        },5000);
+
+        let isOk=false;
         if(status==='801'){
             //增加用户访问对应平台权限
+            isOk=true;
             await this._addsysPromision(systementity,user);
         }
+        this.app.messenger.sendToAgent('rabbitmqMsg', {
+            assigneeName:`${username}${system}apply`,
+            message:isOk?`申请${systementity.name}权限成功`:`申请${systementity.name}权限失败,对方平台拒绝申请`,
+            count:0,
+            type:'complate',
+        });
         return {
             status:'801',
             message:`success`
@@ -294,22 +282,10 @@ class InterfaceService extends Service {
     async canceluserresult(body){
         let {system,reqdata:[{status,username,msg}]}=body;
         system=system.toLowerCase();
-        setTimeout(async ()=>{
-            const SynOrCancelResult=await this.ctx.service.redis.get('SynOrCancelResult');
-            for(let i=0;i<SynOrCancelResult.length;i++){
-                if(SynOrCancelResult[i].assigneeName===`${username}${system}cancel`
-                    && SynOrCancelResult[i].type===`invoke`){
-                    SynOrCancelResult[i].type=`result`;
-                    SynOrCancelResult[i].opType=`cancel`;
-                    SynOrCancelResult[i].status=status;
-                    SynOrCancelResult[i].systemName=systementity.name;
-                    break;
-                }
-            }
-            this.ctx.service.redis.set('SynOrCancelResult',SynOrCancelResult);
-        },5000);
+
         let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
         let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
+
         if(!systementity || !user){
             return {
                 status:'806',
@@ -317,10 +293,18 @@ class InterfaceService extends Service {
             }
         }
 
+        let isOk=false;
         if(status==='801'){
             //取消用户访问对应平台权限
+            isOk=true;
             await this.app.mysql.query(`delete from t_user_system where user_id=? and system_id=?`,[user.id,systementity.id]);
         }
+        this.app.messenger.sendToAgent('rabbitmqMsg', {
+            assigneeName:`${username}${system}cancel`,
+            message:isOk?`申请注销${systementity.name}权限成功`:`申请注销${systementity.name}权限失败,对方平台拒绝注销`,
+            count:0,
+            type:'complate',
+        });
         return {
             status:'801',
             message:`success`
