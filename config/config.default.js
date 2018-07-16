@@ -28,7 +28,7 @@ module.exports = appInfo => {
     };
 
     config.cloudToken={
-        match:  /\/invoke\/cloud/
+        match:  /\/invoke\/cloud|\/s02Url\/getS02Url/
     };
 
     config.bigDataToken={

@@ -37,6 +37,9 @@ class UserRegister extends Controller{
       const randomNumber=entity.randomNumber;
       let insertRoleSuccess=false;
 
+      //获取调用此接口ip(日志用)
+      let ip=this.ctx.ip;
+
       let getUserName=await this.app.mysql.query('select * from t_user',[]);
       for(const getUserNameValue of getUserName){
         if(getUserNameValue.user_name===userName){
@@ -57,6 +60,8 @@ class UserRegister extends Controller{
         }
       }
       this.ctx.body={success:insertRoleSuccess};
+      //存日志
+      this.ctx.service.systemLog.userRegister(userName,ip)
     }
 }
 module.exports=UserRegister;

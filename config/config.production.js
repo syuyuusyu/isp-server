@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = appInfo => {
-
     const config = {};
 
     config.view = {
@@ -28,7 +27,7 @@ module.exports = appInfo => {
     };
 
     config.cloudToken={
-        match:  /\/invoke\/cloud/
+        match:  /\/invoke\/cloud|\/s02Url\/getS02Url/
     };
 
     config.bigDataToken={
@@ -169,7 +168,6 @@ module.exports = appInfo => {
     };
 
     return config;
-
 };
 
 //npx pm2 start npm --watch --name isp -- run start
