@@ -41,7 +41,6 @@ class SystemLog extends Service{
    const allRouter=await this.getRouter();
    //const allRouter=this.app.allRouter;
    if((allRouter.search(requestRouter))!==-1){
-     console.log("进来啦")
      let token=this.ctx.request.header['access-token'];
      let sd=await this.service.authorService.getAuthor(token);
      let logoinUser=sd.user.user_name;

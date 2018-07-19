@@ -284,5 +284,6 @@ module.exports = app => {
     // 城市建设概况接口（第三屏）
     router.get('/screen/city_info',controller.screen.city_info);
 
-
+    //获取接口配置信息
+  router.get('/interfaceConfig/:flag',controller.interfaceConfig.interfaceConfig);
 };

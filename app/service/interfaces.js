@@ -206,7 +206,7 @@ class InterfaceService extends Service {
             this.ctx.logger.error(e);
             return {
                 status:'806',
-                message:'失败'
+                message:'同步失败'
             }
         }
     }
@@ -227,7 +227,7 @@ class InterfaceService extends Service {
                 let [result]=await this.app.mysql.query(`select id from t_sys_operation where name=? and system_id=?`,
                     [op.name,syatemId]);
                 if(result && result.id){
-                    await this.app.mysql.update('t_sys_operation',{...op,id:result.id,type:3,system_id:syatemId});
+                    let resultUpdate=await this.app.mysql.update('t_sys_operation',{...op,id:result.id,type:3,system_id:syatemId});
                 }else{
                     await this.app.mysql.insert('t_sys_operation',{...op,type:3,system_id:syatemId});
                 }
@@ -242,7 +242,7 @@ class InterfaceService extends Service {
             this.ctx.logger.error(e);
             return {
                 status:'806',
-                message:'失败'
+                message:'同步失败'
             }
         }
     }
@@ -328,7 +328,5 @@ class InterfaceService extends Service {
         }
         return pwd;
     }
-
 }
-
 module.exports = InterfaceService;
