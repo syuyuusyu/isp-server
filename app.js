@@ -14,7 +14,7 @@ module.exports = app => {
                 return -1;
             };
 
-        Array:.prototype.remove = Array.prototype.remove ? Array.prototype.remove
+        Array.prototype.remove = Array.prototype.remove ? Array.prototype.remove
             : (o) => {
                 let index = this.indexOf(o);
                 if (index != -1) {
