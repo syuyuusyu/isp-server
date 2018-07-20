@@ -40,7 +40,6 @@ class HomeController extends Controller {
             this.service.systemLog.loginLog(this.ctx.request.body.user_name,this.ctx.ip);
         }
         this.ctx.body = {msg, user, token, roles};
-        //return {msg,user,token};
     }
 
     async logout() {

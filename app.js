@@ -23,6 +23,13 @@ module.exports = app => {
             };
 
 
+        Object.prototype.forEach=Object.prototype.forEach?Object.prototype.forEach:
+            function(fn){
+                Object.keys(this).forEach(key=>{
+                    fn(key,this[key]);
+                })
+            };
+
         app.secret = 'n7d3t7x7';
         const ctx = app.createAnonymousContext();
 

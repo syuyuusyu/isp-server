@@ -169,6 +169,3 @@ module.exports = appInfo => {
 
     return config;
 };
-
-//npx pm2 start npm --watch --name isp -- run start
-//npx pm2 kill
