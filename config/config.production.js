@@ -167,5 +167,7 @@ module.exports = appInfo => {
         queueName: 'activitiQueue'
     };
 
+    config.discription='production';
+
     return config;
 };

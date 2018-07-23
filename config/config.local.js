@@ -41,6 +41,24 @@ module.exports = appInfo => {
         fileSize: '1024mb',
     };
 
+    config.mysql = {
+        client: {
+            // host
+            host: '10.10.12.1',
+            // 端口号
+            port: '3306',
+            // 用户名
+            user: 'isp',
+            // 密码
+            password: 'liuge1',
+            // 数据库名
+            database: 'isp',
+        },
+        // 是否加载到 app 上，默认开启
+        app: true,
+        // 是否加载到 agent 上，默认关闭
+        agent: false,
+    };
     // config.mysql = {
     //     client: {
     //         // host
@@ -59,24 +77,6 @@ module.exports = appInfo => {
     //     // 是否加载到 agent 上，默认关闭
     //     agent: false,
     // };
-    config.mysql = {
-        client: {
-            // host
-            host: '127.0.0.1',
-            // 端口号
-            port: '3306',
-            // 用户名
-            user: 'root',
-            // 密码
-            password: '1234',
-            // 数据库名
-            database: 'isp',
-        },
-        // 是否加载到 app 上，默认开启
-        app: true,
-        // 是否加载到 agent 上，默认关闭
-        agent: false,
-    };
 
 
     config.redis = {
@@ -184,6 +184,8 @@ module.exports = appInfo => {
         rabbitmqUrl:'amqp://guest:guest@127.0.0.1:5672',
         queueName: 'activitiQueue'
     };
+
+    config.discription='local';
 
     return config;
 

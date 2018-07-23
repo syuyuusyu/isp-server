@@ -174,6 +174,8 @@ module.exports = appInfo => {
         queueName: 'ispServerQueue'
     };
 
+    config.discription='default';
+
     return config;
 
 };

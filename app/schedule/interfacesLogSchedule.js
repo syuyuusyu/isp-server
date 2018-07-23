@@ -29,6 +29,8 @@ class InterfacesLog extends Subscription {
         //清除数组和redis里面的数据
         interfaceInfoArray.length=0;
         this.app.redis.del("interfaceInfo");
+
+
       }
 
       /*interfaceInfo=interfaceInfo.split("----");

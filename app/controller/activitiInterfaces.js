@@ -22,7 +22,7 @@ class ActivitiInterfaces extends Controller{
             result.push({
                 label:d.name,
                 key:d.code,
-                type:'switch',
+                type:'check',
                 editable:editable,
                 value:value
             });

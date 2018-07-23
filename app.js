@@ -2,6 +2,7 @@ module.exports = app => {
     app.beforeStart(async () => {
         // 应用会等待这个函数执行完成才启动
         app.logger.info('init app');
+        app.logger.info(app.config.discription);
         Array.prototype.indexOf = Array.prototype.indexOf ? Array.prototype.indexOf
             : (o, from) => {
                 from = from || 0;
@@ -23,12 +24,15 @@ module.exports = app => {
             };
 
 
-        Object.prototype.forEach=Object.prototype.forEach?Object.prototype.forEach:
-            function(fn){
-                Object.keys(this).forEach(key=>{
-                    fn(key,this[key]);
-                })
-            };
+        // Object.prototype.forEach=Object.prototype.forEach?Object.prototype.forEach:
+        //     function(fn){
+        //         Object.keys(this).forEach(key=>{
+        //             fn(key,this[key]);
+        //         })
+        //     };
+
+
+
 
         app.secret = 'n7d3t7x7';
         const ctx = app.createAnonymousContext();
@@ -43,7 +47,7 @@ module.exports = app => {
         app.logger.info('app started!!!!');
     });
 
-    app.once('server', server => {
+    app.once('server', async server => {
 
     });
 
