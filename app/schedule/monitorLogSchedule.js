@@ -20,7 +20,7 @@ class MonitorLog extends Subscription{
       timeout:20000
     });
     this.service.monitorLog.saveMonitorLog(result);
-    //console.log("result的值为:",result);
+
   }
 }
 module.exports = MonitorLog;
