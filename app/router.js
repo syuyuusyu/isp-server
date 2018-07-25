@@ -286,4 +286,9 @@ module.exports = app => {
 
     //获取接口配置信息
   router.get('/interfaceConfig/:flag',controller.interfaceConfig.interfaceConfig);
+
+  //获取所有监控日志
+  router.get('/monitorLog/allMonitorLog',controller.monitorLog.getAllMonitorLog);
+  //获取所有虚拟机名称
+  router.get('/monitorLog/allInstanceName',controller.monitorLog.getAllInstanceName);
 };
