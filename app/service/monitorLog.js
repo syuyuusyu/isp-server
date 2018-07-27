@@ -17,5 +17,21 @@ class MonitorLog extends Service{
     let result=await this.app.mysql.query('select DISTINCT instance_name from t_monitor_log where stateflag=1',[]);
     return result;
   }
+
+  async queryMonitorLog(instanceName,startValue,endValue){
+    let result;
+    if(instanceName!==''&&startValue===null&&endValue===null){
+     result =await this.app.mysql.query('select * from t_monitor_log where instance_name=? order by operate_date desc',[instanceName]);
+    }else if(instanceName===''&&startValue!==null&&endValue!==null){
+      result =await this.app.mysql.query('select * from t_monitor_log where operate_date>=? and operate_date<=? order by operate_date desc',[startValue,endValue]);
+    }else if(instanceName===''&&startValue!==null&&endValue===null){
+      result =await this.app.mysql.query('select * from t_monitor_log where operate_date>=? order by operate_date desc',[startValue]);
+    }else if(instanceName===''&&startValue===null&&endValue!==null){
+      result =await this.app.mysql.query('select * from t_monitor_log where operate_date<=? order by operate_date desc',[endValue]);
+    }else if(instanceName!==''&&startValue!==null&&endValue!==null){
+      result =await this.app.mysql.query('select * from t_monitor_log where instance_name=? and operate_date>=? and operate_date<=? order by operate_date desc',[instanceName,startValue,endValue]);
+    }
+    return result;
+  }
 }
 module.exports = MonitorLog;

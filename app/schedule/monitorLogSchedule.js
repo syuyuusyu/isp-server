@@ -3,7 +3,7 @@ const Subscription = require('egg').Subscription;
 class MonitorLog extends Subscription{
   static get schedule() {
     return {
-      interval: '20m', // 10 分钟间隔
+      interval: '20m', // 20 分钟间隔
       type: 'worker', // 指定所有的 worker 都需要执行
     };
   }

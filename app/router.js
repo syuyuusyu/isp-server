@@ -291,4 +291,6 @@ module.exports = app => {
   router.get('/monitorLog/allMonitorLog',controller.monitorLog.getAllMonitorLog);
   //获取所有虚拟机名称
   router.get('/monitorLog/allInstanceName',controller.monitorLog.getAllInstanceName);
+  //根据条件查询出监控日志
+  router.post('/monitorLog/queryMonitorLog',controller.monitorLog.getQueryMonitorLog);
 };
