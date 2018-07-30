@@ -112,7 +112,6 @@ class RestfulController extends Controller{
         const queryMap=this.ctx.request.body;
         const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
         const [entity]=invokeEntitys.filter(d=>d.name===this.ctx.params.invokeName);
-        console.log(entity);
         //await this.app.mysql.select('t_invoke_info',{where: {  name: this.ctx.params.invokeName}});
 
         let nextEntitys=invokeEntitys.filter(d=>{

@@ -4,7 +4,7 @@ module.exports = app => {
         app.logger.info('init app');
         app.logger.info(app.config.discription);
         Array.prototype.indexOf = Array.prototype.indexOf ? Array.prototype.indexOf
-            : (o, from) => {
+            : function(o, from)  {
                 from = from || 0;
                 var len = this.length;
                 from += (from < 0) ? len : 0;
@@ -16,7 +16,7 @@ module.exports = app => {
             };
 
         Array.prototype.remove = Array.prototype.remove ? Array.prototype.remove
-            : (o) => {
+            : function(o)  {
                 let index = this.indexOf(o);
                 if (index != -1) {
                     this.splice(index, 1);
@@ -33,7 +33,6 @@ module.exports = app => {
 
 
 
-
         app.secret = 'n7d3t7x7';
         const ctx = app.createAnonymousContext();
 
@@ -41,7 +40,6 @@ module.exports = app => {
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();
         //await app.runSchedule('inital');
-
 
 
         app.logger.info('app started!!!!');
@@ -55,6 +53,9 @@ module.exports = app => {
         app.logger.info('xxx_action',data);
     });
 };
+
+
+
 
 
 
