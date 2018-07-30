@@ -48,7 +48,7 @@ class InterfacesLog extends Service{
   //获取主动调用方的系统号
   async getInitiativeSystem(domain){
     const result=await this.app.mysql.query('select * from t_system where url=?',[domain]);
-    if(result.length=1){
+    if(result.length===1){
       const initiativeSystem=result[0].code;
      return initiativeSystem;
     }else{
@@ -58,7 +58,7 @@ class InterfacesLog extends Service{
 
   async getSystemCN(system){
      const result=await this.app.mysql.query('select * from t_system where code=?',[system]);
-     if(result.length=1){
+     if(result.length===1){
        const systemCN=result[0].name;
        return systemCN;
      }else{

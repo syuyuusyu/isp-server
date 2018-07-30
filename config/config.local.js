@@ -44,13 +44,13 @@ module.exports = appInfo => {
     config.mysql = {
         client: {
             // host
-            host: '10.10.12.1',
+            host: '127.0.0.1',
             // 端口号
             port: '3306',
             // 用户名
-            user: 'isp',
+            user: 'root',
             // 密码
-            password: 'liuge1',
+            password: 'password',
             // 数据库名
             database: 'isp',
         },
