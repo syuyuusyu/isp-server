@@ -104,7 +104,7 @@ class ActivitiInterfaces extends Controller{
                                 type:'error'
                             });
                         }
-                    }).catch(async e=>{
+                    }).catch( e=>{
                         this.ctx.logger.error(sys.code);
                         this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,e.toString());
                         this.app.messenger.sendToAgent('rabbitmqMsg', {

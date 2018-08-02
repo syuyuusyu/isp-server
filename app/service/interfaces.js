@@ -311,6 +311,25 @@ class InterfaceService extends Service {
         }
     }
 
+    async department(body){
+        let departments=await this.app.mysql.query(
+            `select id,parent_id parentId,name,parent_name parentName,orgUser from t_organization where stateflag=1`);
+        for(let i=0;i<departments.length;i++){
+            departments[i].users=[];
+            if(departments[i].orgUser){
+                let users=await this.app.mysql.query(`select user_name userName,name from t_user where id in(?)`,[departments[i].orgUser.split(',')]);
+                users.forEach(u=>departments[i].users.push(u));
+
+            }
+            delete departments[i].orgUser;
+        }
+        return {
+            status:'801',
+            message:'成功',
+            respdata:departments
+        }
+    }
+
     async _addsysPromision(system,user){
         let [{count}]=await this.app.mysql.query('select count(1) count from t_user_system where user_id=? and system_id=?',[user.id,system.id]);
         if(count===0){

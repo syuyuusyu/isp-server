@@ -41,7 +41,6 @@ module.exports = app => {
         //ctx.service.authorService.actSynUser();
         //await app.runSchedule('inital');
 
-
         app.logger.info('app started!!!!');
     });
 
