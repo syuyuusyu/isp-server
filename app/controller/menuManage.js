@@ -7,12 +7,12 @@ class MenuManage extends Controller {
   }
 
   async currentMenus() {
-    let currentMenus = await  this.app.mysql.query('select * from t_menu where parent_id=? and stateflag=1 order by menu_order', [this.ctx.params.menuId]);
+    let currentMenus = await this.app.mysql.query('select * from t_menu where parent_id=? and stateflag=1 order by menu_order', [this.ctx.params.menuId]);
     this.ctx.body = currentMenus;
   }
 
   async currentMenuIsLeaf() {
-    let currentMenus = await  this.app.mysql.query('select * from t_menu where id=? and stateflag=1 order by menu_order', [this.ctx.params.menuId]);
+    let currentMenus = await this.app.mysql.query('select * from t_menu where id=? and stateflag=1 order by menu_order', [this.ctx.params.menuId]);
     this.ctx.body = currentMenus;
   }
 
@@ -69,26 +69,43 @@ class MenuManage extends Controller {
       }
     }
     //获取要删除菜单的id及其子菜单的id
-    const result=await this.ctx.service.saveOrDelete.childList(menuInfo[0].id,'id','parent_id','t_menu');
-    console.log("result的值为:",result);
+    const getIdResult = await this.ctx.service.saveOrDelete.childList(menuInfo[0].id, 'id', 'parent_id', 't_menu');
+    //在菜单权限表中删除相应的配置
+    if (getIdResult.length > 0) {
+      for (const getIdResultValue of getIdResult) {
+        const menuId = getIdResultValue.id;
+        await this.app.mysql.query('update t_role_menu set stateflag=0,update_by=?,update_time=? where menu_id=?', [logoinUser, new Date(), menuId]);
+      }
+      //删除菜单及该菜单下的子菜单
+      let count = 0;
+      for (let i = 0; i < getIdResult.length; i++) {
+        await this.app.mysql.query(`update t_menu set stateflag=0,update_by=?,update_time=? where id=?`, [logoinUser, new Date(), getIdResult[i]]);
+        count += 1;
+      }
+      if (count === getIdResult.length) {
+        this.ctx.body = {success: true};
+      } else {
+        this.ctx.body = {success: false};
+      }
+    }
 
 
-    if (menuInfo[0].menu_path) {
+   /* if (menuInfo[0].menu_path) {
       //获取要删除菜单的id及其子菜单的id
       const getIdResult = await this.app.mysql.query(`select * from t_menu where menu_path like '${menuInfo[0].menu_path}%'`);
       //在菜单权限表中删除相应的配置
       if (getIdResult.length > 0) {
         for (const getIdResultValue of getIdResult) {
           const menuId = getIdResultValue.id;
-          await this.app.mysql.query('update t_role_menu set stateflag=0,update_by=?,update_time=? where menu_id=?', [logoinUser,new Date(),menuId]);
+          await this.app.mysql.query('update t_role_menu set stateflag=0,update_by=?,update_time=? where menu_id=?', [logoinUser, new Date(), menuId]);
         }
       }
 
       //删除菜单及该菜单下的子菜单
-      const result = await this.app.mysql.query(`update t_menu set stateflag=0,update_by=?,update_time=? where menu_path like '${menuInfo[0].menu_path}%'`,[logoinUser,new Date()]);
+      const result = await this.app.mysql.query(`update t_menu set stateflag=0,update_by=?,update_time=? where menu_path like '${menuInfo[0].menu_path}%'`, [logoinUser, new Date()]);
       const updateSuccess = result.affectedRows >= 1;
       this.ctx.body = {success: updateSuccess};
-    }
+    }*/
   }
 }
 
