@@ -56,7 +56,7 @@ class SaveOrDelete extends Service {
     async _child(currentIds,result,sql){
         const ids =await this.app.mysql.query(sql,[currentIds]);
         if(ids.length>0){
-            ids.map(_=>_.id).forEach(_=>result.push(_));
+            ids.forEach(_=>result.push(_.id));
             await this._child(ids.map(o=>o.id),result,sql);
         }
     }
