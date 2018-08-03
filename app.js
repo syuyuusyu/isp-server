@@ -40,6 +40,8 @@ module.exports = app => {
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();
         //await app.runSchedule('inital');
+        let ids=await ctx.service.saveOrDelete.childList(21,'id','parent_id','t_menu');
+        console.log(ids);
 
         app.logger.info('app started!!!!');
     });

@@ -46,6 +46,21 @@ class SaveOrDelete extends Service {
         return result.affectedRows === 1;
     }
 
+    async childList(id,idField,pidField,tableName){
+        const result=[id];
+        const sql=`select ${idField} id from ${tableName} where ${pidField} in(?)`;
+        await this._child([id],result,sql);
+        return result;
+    }
+
+    async _child(currentIds,result,sql){
+        const ids =await this.app.mysql.query(sql,[currentIds]);
+        if(ids.length>0){
+            ids.map(_=>_.id).forEach(_=>result.push(_));
+            await this._child(ids.map(o=>o.id),result,sql);
+        }
+    }
+
 }
 
 
