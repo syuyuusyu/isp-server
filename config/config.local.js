@@ -50,7 +50,7 @@ module.exports = appInfo => {
             // 用户名
             user: 'root',
             // 密码
-            password: '1234',
+            password: 'password',
             // 数据库名
             database: 'isp',
         },

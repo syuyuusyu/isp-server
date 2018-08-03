@@ -68,6 +68,11 @@ class MenuManage extends Controller {
         await this.app.mysql.query('update t_menu set is_leaf=? where id=?', [1, menuInfo[0].parent_id])
       }
     }
+    //获取要删除菜单的id及其子菜单的id
+    const result=await this.ctx.service.saveOrDelete.childList(menuInfo[0].id,'id','parent_id','t_menu');
+    console.log("result的值为:",result);
+
+
     if (menuInfo[0].menu_path) {
       //获取要删除菜单的id及其子菜单的id
       const getIdResult = await this.app.mysql.query(`select * from t_menu where menu_path like '${menuInfo[0].menu_path}%'`);

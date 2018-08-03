@@ -88,6 +88,7 @@ class OrganizationController extends Controller {
         stateflag:1
       }
     });
+
     //查询要删除的节点的父节点有几个子节点，如果只有一个子节点（即要删除的节点），那么将父节点的is_leaf置为1
     if (resultAccept[0].parent_id) {
       const resultParentId = await this.app.mysql.select('t_organization', {
@@ -100,15 +101,24 @@ class OrganizationController extends Controller {
         await this.app.mysql.query('update t_organization set is_leaf=? where id=?', [1, resultAccept[0].parent_id]);
       }
     }
-    /*if(resultAccept[0].parent_id){
-        await this.app.mysql.query('update t_organization set is_leaf=? where parent_id=?',[1,resultAccept[0].parent_id]);
-    }*/
-    if (resultAccept[0].path) {
-      //const result = await this.app.mysql.query(`delete from t_organization where path like '${resultAccept[0].path}%'`);
+    //获取要删除的节点及其所有子节点的id
+    const result=await this.ctx.service.saveOrDelete.childList(resultAccept[0].id,'id','parent_id','t_organization');
+    let count=0;
+    for(let i=0;i<result.length;i++){
+      await this.app.mysql.query(`update t_organization set stateflag=0 where id=?`,[result[i]]);
+      count+=1;
+    }
+    if(count===result.length){
+      this.ctx.body = {success: true};
+    }else{
+      this.ctx.body = {success: false};
+    }
+
+   /* if (resultAccept[0].path) {
       const result = await this.app.mysql.query(`update t_organization set stateflag=0 where path like '${resultAccept[0].path}%'`);
       const updateSuccess = result.affectedRows >= 1;
       this.ctx.body = {success: updateSuccess};
-    }
+    }*/
   }
 
   async getAllUser() {
