@@ -98,6 +98,8 @@ module.exports = app => {
     router.get('/sys/currentRoleSys', controller.system.currentRoleSys);
     // 申请平台访问权限获取平台列表
     router.get('/sys/sysAccess/:userId', controller.system.sysAccess);
+    //根据系统id查询出调用接口信息的路径
+    router.get('/sys/currentSysPath/:id', controller.system.currentSysPath);
 
     // 系统功能
     // 获取对应系统的功能列表
