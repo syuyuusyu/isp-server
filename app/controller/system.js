@@ -56,6 +56,11 @@ class SystemController extends Controller{
         this.ctx.body=content;
     };
 
+    async currentSysPath(){
+      let content=await this.app.mysql.query('select * from t_sys_operation where system_id=? and type=?',[this.ctx.params.id,7]);
+      this.ctx.body=content;
+    };
+
     async sysRole(){
         let systems=await this.app.mysql.query(`select s.* from t_system s join t_sys_role sr on s.id=sr.system_id where sr.role_id=?`,
             [this.ctx.params.roleId]);
