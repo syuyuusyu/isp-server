@@ -1,11 +1,14 @@
 const Controller=require('egg').Controller;
+//const {log}=require('../util');
 
 class EntityController extends Controller{
 
+    @log
     async columns(){
         this.ctx.body=await this.app.mysql.query(
             `select * from entity_column where entityId=? order by columnIndex`,[this.ctx.params.entityId]);
     }
+
 
     async entitys(){
         this.ctx.body=await this.app.mysql.query(
@@ -32,6 +35,16 @@ class EntityController extends Controller{
         const updateSuccess = result.affectedRows === 1;
         this.ctx.body={success:updateSuccess};
     }
+}
+
+function log(target, name, descriptor) {
+    var oldValue = descriptor.value;
+
+    descriptor.value = function() {
+        target.ctx.logger.info(`Calling ${name} with`, arguments);
+        return oldValue.apply(this, arguments);
+    };
+    return descriptor;
 }
 
 module.exports=EntityController;
