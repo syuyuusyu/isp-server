@@ -22,7 +22,6 @@ class RedisService extends Service{
         }
         const json=await this.app.redis.get(k);
         const array=JSON.parse(json);
-        this.app.logger.error(k,array);
         if(!array.push){
             this.app.logger.error('key:'+k+'对应对应对象不是数组',array);
             return;
