@@ -61,6 +61,8 @@ module.exports = app => {
     router.post('/user/saveUserRole', controller.user.saveUserRole);
     // 用户角色配置页面获取角色(根据不同用户类型获取)
     router.get('/user/userRoleConfRoles/:userId', controller.user.userRoleConfRoles);
+    //根据条件查询出用户
+    router.post('/user/queryUser',controller.user.queryUser);
 
 
     // 按钮
@@ -289,10 +291,4 @@ module.exports = app => {
     //获取接口配置信息
   router.get('/interfaceConfig/:flag',controller.interfaceConfig.interfaceConfig);
 
-  //获取所有监控日志
-  router.get('/monitorLog/allMonitorLog',controller.monitorLog.getAllMonitorLog);
-  //获取所有虚拟机名称
-  router.get('/monitorLog/allInstanceName',controller.monitorLog.getAllInstanceName);
-  //根据条件查询出监控日志
-  router.post('/monitorLog/queryMonitorLog',controller.monitorLog.getQueryMonitorLog);
 };
