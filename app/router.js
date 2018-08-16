@@ -297,7 +297,9 @@ module.exports = app => {
     router.get('/entity/columns/:entityId',controller.entity.columns);
     router.get('/entity/entitys',controller.entity.entitys);
     router.get('/entity/allDictionary',controller.entity.allDictionary);
-    router.post('/entity/saveColumn',controller.entity.saveColumn);
-    router.get('/entity/deleteColumn/:id',controller.entity.deleteColumn)
+    router.post('/entity/saveConfig/:tableName/:idField',controller.entity.saveConfig);
+    router.get('/entity/deleteConfig/:tableName/:idField/:id',controller.entity.deleteConfig);
+    router.get('/entity/tableNames',controller.entity.tableNames);
+    router.get('/entity/originalColumns',controller.entity.originalColumns);
 
 };
