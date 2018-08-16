@@ -17,7 +17,11 @@ class InterfaceService extends Service {
                 };
             } else {
                 this.app.redis.del(token + system);
-                await this.ctx.service.redis.push('loginSystem',system);
+                if(!await this.service.redis.containKey(user.user_name+'loginSystem')){
+                    await this.service.redis.set(user.user_name+'loginSystem',[]);
+                }
+
+                await this.ctx.service.redis.push(user.user_name+'loginSystem',system);
                 this.ctx.logger.info('成功');
                 return {
                     status: '801',
