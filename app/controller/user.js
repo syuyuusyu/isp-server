@@ -51,6 +51,18 @@ class UserController extends Controller{
         this.ctx.body=roles;
     }
 
+    async queryUser(){
+      let selectUser=this.ctx.request.body.selectUser;
+      if(selectUser===''){
+        let content=await this.app.mysql.query(`select * from t_user where  stateflag=?`, [1]);
+        this.ctx.body = content;
+      }else {
+        let content = await this.app.mysql.query(`select * from t_user where user_name=? and stateflag=?`, [selectUser, 1]);
+        this.ctx.body = content;
+      }
+    }
+
+
 }
 
 module.exports= UserController;
