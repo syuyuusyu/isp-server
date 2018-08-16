@@ -49,13 +49,10 @@ class HomeController extends Controller {
         if(auth.systems){
             auth.systems.forEach(sys=>{
                 let currentIndex=-1;
-                this.ctx.service.redis.forEach('loginSystem',(code,index)=>{
+                this.ctx.service.redis.forEach(auth.user.user_name+'loginSystem',(code,index)=>{
                     if(sys.code===code){
                         currentIndex=index;
                         if(sys.operations.filter(o=>o.type===2).length===1){
-                            auth.user.user_name=auth.user.user_name.replace(/^s\d{2}(\w+)/,(w,p)=>{
-                                return p;
-                            });
                             this.ctx.logger.info(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
                             this.app.curl(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`)
                                 .then(result=>{
@@ -64,7 +61,7 @@ class HomeController extends Controller {
                                 this.ctx.logger.error(e);
                                 });
 
-                            this.ctx.service.redis.splice('loginSystem',currentIndex,1);
+                            //this.ctx.service.redis.splice(auth.user.user_name+'loginSystem',currentIndex,1);
                         }
                     }
                 });
@@ -74,6 +71,9 @@ class HomeController extends Controller {
         }
 
         this.app.redis.del(token);
+        setTimeout(()=>{
+            this.app.redis.del(auth.user.user_name+'loginSystem');
+        },5000);
         this.ctx.body={};
 
     }

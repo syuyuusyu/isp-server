@@ -63,13 +63,13 @@ module.exports = appInfo => {
     // config.mysql = {
     //     client: {
     //         // host
-    //         host: '127.0.0.1',
+    //         host: '10.10.12.1',
     //         // 端口号
     //         port: '3306',
     //         // 用户名
-    //         user: 'root',
+    //         user: 'isp',
     //         // 密码
-    //         password: '1234',
+    //         password: 'liuge1',
     //         // 数据库名
     //         database: 'isp',
     //     },
@@ -169,8 +169,7 @@ module.exports = appInfo => {
             'http://10.10.50.17:3000',
             'http://10.10.50.9',
             'http://10.10.50.16',
-            'http://127.0.0.1',
-            'http://192.168.1.192:3000'
+            'http://127.0.0.1'
         ]
     };
 

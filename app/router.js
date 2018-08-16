@@ -1,10 +1,10 @@
 'use strict';
 
 module.exports = app => {
-    const {router, controller} = app;
+    const { router, controller } = app;
     router.get('/index', controller.home.index);
 
-    router.get('/doNothing', controller.home.doNothing);
+    router.get('/doNothing',controller.home.doNothing);
 
     // 登录
     router.post('/login', controller.home.login);
@@ -18,7 +18,10 @@ module.exports = app => {
     router.post('/invokeInfo/test', controller.restful.test);
     router.post('/invokeInfo/save', controller.restful.save);
     router.delete('/invokeInfo/delete/:id', controller.restful.delete);
+
+
     router.post('/invoke/:invokeName', controller.restful.invoke);
+
     router.get('/invokeInfo/checkUnique/:invokeName', controller.restful.checkUnique);
     router.get('/invokeInfo/groupName', controller.restful.groupName);
 
@@ -266,40 +269,30 @@ module.exports = app => {
     //获取用户对应的平台访问权限
     router.get('/activiti/sysAccess/:username/:isApply', controller.activitiInterfaces.userSysAccess);
     //推送用户给对应平台
-    router.post('/activiti/pushUser', controller.activitiInterfaces.pushUser);
+    router.post('/activiti/pushUser',controller.activitiInterfaces.pushUser);
 
 
     //获取云平台的ip和token
-    router.get('/s02Url/getS02Url', controller.s02Url.getS02Url);
+    router.get('/s02Url/getS02Url',controller.s02Url.getS02Url);
 
 
     //大屏接口
     router.get('/map', controller.screen.map);
     router.get('/screen/picture', controller.screen.picture);
-    // 地图geoJSON请求接口（第二屏）
-    router.get('/screen/map_llx', controller.screen.map_llx);
+     // 地图geoJSON请求接口（第二屏）
+    router.get('/screen/map_llx',controller.screen.map_llx);
     // 经济概况接口（第三屏）
-    router.get('/screen/business_info', controller.screen.business_info);
+    router.get('/screen/business_info',controller.screen.business_info);
     // 城市建设概况接口（第三屏）
-    router.get('/screen/city_info', controller.screen.city_info);
+    router.get('/screen/city_info',controller.screen.city_info);
 
     //获取接口配置信息
-    router.get('/interfaceConfig/:flag', controller.interfaceConfig.interfaceConfig);
+  router.get('/interfaceConfig/:flag',controller.interfaceConfig.interfaceConfig);
 
-    //获取所有监控日志
-    router.get('/monitorLog/allMonitorLog', controller.monitorLog.getAllMonitorLog);
-    //获取所有虚拟机名称
-    router.get('/monitorLog/allInstanceName', controller.monitorLog.getAllInstanceName);
-    //根据条件查询出监控日志
-    router.post('/monitorLog/queryMonitorLog', controller.monitorLog.getQueryMonitorLog);
-
-    //通用实体曾删查改
-    router.get('/entity/columns/:entityId',controller.entity.columns);
-    router.get('/entity/entitys',controller.entity.entitys);
-    router.get('/entity/allDictionary',controller.entity.allDictionary);
-    router.post('/entity/saveConfig/:tableName/:idField',controller.entity.saveConfig);
-    router.get('/entity/deleteConfig/:tableName/:idField/:id',controller.entity.deleteConfig);
-    router.get('/entity/tableNames',controller.entity.tableNames);
-    router.get('/entity/originalColumns',controller.entity.originalColumns);
-
+  //获取所有监控日志
+  router.get('/monitorLog/allMonitorLog',controller.monitorLog.getAllMonitorLog);
+  //获取所有虚拟机名称
+  router.get('/monitorLog/allInstanceName',controller.monitorLog.getAllInstanceName);
+  //根据条件查询出监控日志
+  router.post('/monitorLog/queryMonitorLog',controller.monitorLog.getQueryMonitorLog);
 };

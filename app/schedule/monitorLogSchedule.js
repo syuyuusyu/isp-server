@@ -3,8 +3,8 @@ const Subscription = require('egg').Subscription;
 class MonitorLog extends Subscription{
   static get schedule() {
     return {
-      interval: '100m', // 20 分钟间隔
-      type: 'worker',
+      interval: '20m', // 20 分钟间隔
+      type: 'worker', // 指定所有的 worker 都需要执行
     };
   }
   // subscribe 是真正定时任务执行时被运行的函数

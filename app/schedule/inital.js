@@ -20,7 +20,7 @@ class Inital extends Subscription {
         for(let key of keys){
             await this.app.redis.del(key);
         }
-        await ctx.service.redis.set('loginSystem',[]);
+
 
         // 初始化接口调用实体
         //app.invokeEntitys = await app.mysql.query('select * from t_invoke_info');
