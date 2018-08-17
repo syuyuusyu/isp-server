@@ -287,12 +287,15 @@ module.exports = app => {
     router.get('/screen/city_info',controller.screen.city_info);
 
     //获取接口配置信息
-  router.get('/interfaceConfig/:flag',controller.interfaceConfig.interfaceConfig);
+    router.get('/interfaceConfig/:flag',controller.interfaceConfig.interfaceConfig);
 
-  //获取所有监控日志
-  router.get('/monitorLog/allMonitorLog',controller.monitorLog.getAllMonitorLog);
-  //获取所有虚拟机名称
-  router.get('/monitorLog/allInstanceName',controller.monitorLog.getAllInstanceName);
-  //根据条件查询出监控日志
-  router.post('/monitorLog/queryMonitorLog',controller.monitorLog.getQueryMonitorLog);
+    //通用实体增删改查
+    router.get('/entity/columns/:entityId',controller.entity.columns);
+    router.get('/entity/entitys',controller.entity.entitys);
+    router.get('/entity/allDictionary',controller.entity.allDictionary);
+    router.get('/entity/tableNames',controller.entity.tableNames);
+    router.get('/entity/originalColumns',controller.entity.originalColumns);
+    router.post('/entity/saveConfig/:tableName/:idField',controller.entity.saveConfig);
+    router.get('/entity/deleteConfig/:tableName/:idField/:id',controller.entity.deleteConfig);
+
 };
