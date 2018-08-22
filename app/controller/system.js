@@ -108,7 +108,7 @@ class SystemController extends Controller{
 
         auth.systems=[];
         for(let i=0;i<systems.length;i++){
-            const operations=await this.app.mysql.query(`select * from t_sys_operation where system_id=?`,systems[i].id);
+            const operations=await this.app.mysql.query(`select * from t_sys_operation where system_id=?`,[systems[i].id]);
             let loginToken=this.service.interfaces.randomString(8);
             this.app.redis.set(loginToken+systems[i].code,JSON.stringify(user));
             systems[i].operations=operations;
