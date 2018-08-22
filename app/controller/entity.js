@@ -3,22 +3,28 @@ const {smartQuery}=require('../util');
 
 class EntityController extends Controller{
 
-    @smartQuery
     async columns(){
-        this.ctx.body=await this.app.mysql.query(
-            `select * from entity_column where entityId=? order by columnIndex`,[this.ctx.params.entityId,null]);
+        let result=await this.app.mysql.query(
+            `select * from entity_column where entityId=? order by columnIndex`,[this.ctx.params.entityId]);
+        console.log(result);
+        this.ctx.body=result;
+    }
+
+    async column(){
+        let [result]=await this.app.mysql.query(
+            `select * from entity_column where id=?`,[this.ctx.params.id]);
+        this.ctx.body=result;
     }
 
 
     async entitys(){
-        this.ctx.body=await this.app.mysql.query(
+        let result=await this.app.mysql.query(
             `select * from entity`,[]
         );
+        console.log(result);
+        this.ctx.body=result;
     }
 
-    async allDictionary(){
-        this.ctx.body=await this.app.mysql.query(`select DISTINCT groupId,groupName from entity_dictionary`,[]);
-    }
 
     async saveConfig(){
         const entity=this.ctx.request.body;

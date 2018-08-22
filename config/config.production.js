@@ -35,9 +35,11 @@ module.exports = appInfo => {
     };
 
 
+
     config.multipart = {
-        fileExtensions: ['.apk', '.xls', '.doc', '.docx', '.xlsx', '.pdf', '.mkv','.sql','.flac','.txt'],
-        fileSize: '1024mb',
+        //fileExtensions: ['.jar'],
+        whitelist:fileName=>true,
+        fileSize: '5120mb',
     };
 
     config.mysql = {

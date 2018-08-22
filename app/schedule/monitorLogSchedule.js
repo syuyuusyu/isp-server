@@ -19,7 +19,6 @@ class MonitorLog extends Subscription{
       dataType: 'json',
       timeout:20000
     });
-    this.service.monitorLog.saveMonitorLog(result);
 
   }
 }

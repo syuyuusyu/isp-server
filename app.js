@@ -17,6 +17,7 @@ module.exports = app => {
         //ctx.service.authorService.actSynUser();
         //await app.runSchedule('inital');
         //let ids=await ctx.service.saveOrDelete.childList(21,'id','parent_id','t_menu');
+
         app.logger.info('app started!!!!');
     });
 
