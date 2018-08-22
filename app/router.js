@@ -140,10 +140,6 @@ module.exports = app => {
     // 保存系统访问接口权限
     router.post('/op/saveInvokePromiss', controller.operation.saveInvokePromiss);
 
-    // 字典
-    // 获取字典
-    router.get('/dic/getDictionary/:groupId', controller.dictionary.getDictionary);
-
     // 元数据
     // 获取元数据
     router.post('/metadata/queryMetadata', controller.metadata.queryMetadata);
@@ -287,6 +283,24 @@ module.exports = app => {
     router.get('/screen/city_info', controller.screen.city_info);
 
     //获取接口配置信息
-    router.get('/interfaceConfig/:flag', controller.interfaceConfig.interfaceConfig);
+    router.get('/interfaceConfig/:flag',controller.interfaceConfig.interfaceConfig);
+
+    //通用实体增删改查
+    router.get('/entity/columns/:entityId',controller.entity.columns);
+    router.get('/entity/column/:id',controller.entity.column);
+    router.get('/entity/entitys',controller.entity.entitys);
+    router.get('/entity/tableNames',controller.entity.tableNames);
+    router.get('/entity/originalColumns',controller.entity.originalColumns);
+    router.post('/entity/saveConfig/:tableName/:idField',controller.entity.saveConfig);
+    router.get('/entity/deleteConfig/:tableName/:idField/:id',controller.entity.deleteConfig);
+
+    //字典配置
+    router.get('/dictionary/allDictionary',controller.dictionary.allDictionary);
+    router.get('/dictionary/dictionary/:dicGroupId',controller.dictionary.dictionary);
+    router.post('/dictionary/saveDic',controller.dictionary.saveDic);
+    router.post('/dictionary/saveDicField',controller.dictionary.saveDicField);
+    router.get('/dictionary/deleteGroup/:groupId',controller.dictionary.deleteGroup);
+    router.get('/dictionary/deleteDictionary/:id',controller.dictionary.deleteDictionary);
+
 
 };
