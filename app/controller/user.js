@@ -53,7 +53,7 @@ class UserController extends Controller{
 
     async queryUser(){
       let selectUser=this.ctx.request.body.selectUser;
-      if(selectUser==='null'){
+      if(selectUser==='null'||selectUser===''){
         let content=await this.app.mysql.query(`select * from t_user where  stateflag=?`, [1]);
         this.ctx.body = content;
       }else {

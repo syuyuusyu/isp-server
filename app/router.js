@@ -61,6 +61,8 @@ module.exports = app => {
     router.post('/user/saveUserRole', controller.user.saveUserRole);
     // 用户角色配置页面获取角色(根据不同用户类型获取)
     router.get('/user/userRoleConfRoles/:userId', controller.user.userRoleConfRoles);
+    //查询用户
+    router.post('/user/queryUser', controller.user.queryUser);
 
 
     // 按钮
