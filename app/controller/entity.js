@@ -6,7 +6,6 @@ class EntityController extends Controller{
     async columns(){
         let result=await this.app.mysql.query(
             `select * from entity_column where entityId=? order by columnIndex`,[this.ctx.params.entityId]);
-        console.log(result);
         this.ctx.body=result;
     }
 
@@ -21,7 +20,6 @@ class EntityController extends Controller{
         let result=await this.app.mysql.query(
             `select * from entity`,[]
         );
-        console.log(result);
         this.ctx.body=result;
     }
 
