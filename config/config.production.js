@@ -152,7 +152,8 @@ module.exports = appInfo => {
             'http://10.10.50.9',
             'http://10.10.50.16',
             'http://127.0.0.1',
-            'http://isp.yndk.cn'
+            'http://isp.yndk.cn',
+            'http://10.10.50.10:7006'
         ]
     };
 
