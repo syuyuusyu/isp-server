@@ -1,4 +1,5 @@
 const Controller=require('egg').Controller;
+const {smartQuery}=require('../util');
 
 class DictionaryController extends Controller{
 
@@ -6,6 +7,7 @@ class DictionaryController extends Controller{
         this.ctx.body=await this.app.mysql.query(`select DISTINCT groupId,groupName from entity_dictionary`,[]);
     }
 
+    @smartQuery
     async dictionary(){
         this.ctx.body=await this.app.mysql.query(`select id,groupId,groupName,text,value from entity_dictionary where groupId=?`,
             [this.ctx.params.dicGroupId]);

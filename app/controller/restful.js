@@ -9,7 +9,7 @@ class RestfulController extends Controller{
     }
 
     async infos(){
-        const {page,start,limit,invokeName,groupName}=this.ctx.request.body;
+        const {start,limit,invokeName,groupName}=this.ctx.request.body;
         let where=(invokeName && !/\s/.test(invokeName))?{name:invokeName}:{};
         where=(groupName && !/\s/.test(groupName))?{...where,groupName:groupName}:where;
         let wherecount=(invokeName && !/\s/.test(invokeName))?`where name='${invokeName}'`:'where 1=1';

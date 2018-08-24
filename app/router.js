@@ -295,6 +295,7 @@ module.exports = app => {
     router.get('/entity/originalColumns',controller.entity.originalColumns);
     router.post('/entity/saveConfig/:tableName/:idField',controller.entity.saveConfig);
     router.get('/entity/deleteConfig/:tableName/:idField/:id',controller.entity.deleteConfig);
+    router.get('/entity/monyToMonys',controller.entity.monyToMonys);
 
     //字典配置
     router.get('/dictionary/allDictionary',controller.dictionary.allDictionary);

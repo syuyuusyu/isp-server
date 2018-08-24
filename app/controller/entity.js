@@ -3,9 +3,10 @@ const {smartQuery}=require('../util');
 
 class EntityController extends Controller{
 
+    @smartQuery
     async columns(){
         let result=await this.app.mysql.query(
-            `select * from entity_column where entityId=? order by columnIndex`,[this.ctx.params.entityId]);
+            `select * from entity_column where entityId=? order by id,columnIndex`,[this.ctx.params.entityId]);
         this.ctx.body=result;
     }
 
@@ -49,6 +50,15 @@ class EntityController extends Controller{
         this.ctx.body=await this.app.mysql.query(
             `select table_name,column_name,ordinal_position,data_type,column_key from information_schema.COLUMNS where TABLE_SCHEMA=?`,
             [this.app.config.mysql.client.database]);
+    }
+
+    async monyToMonys(){
+        this.ctx.body=await this.app.mysql.query(`select * from entity_mony_to_mony`);
+    }
+
+    async query(){
+        const entityId=this.ctx.params.entityId;
+
     }
 }
 
