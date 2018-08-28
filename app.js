@@ -15,8 +15,10 @@ module.exports = app => {
 
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();
-        //await app.runSchedule('inital');
-        //let ids=await ctx.service.saveOrDelete.childList(21,'id','parent_id','t_menu');
+
+        //实体配置缓存
+        ctx.service.entity.entityCache();
+
 
         app.logger.info('app started!!!!');
     });
@@ -25,8 +27,9 @@ module.exports = app => {
 
     });
 
-    app.messenger.on('xxx_action', data => {
-        app.logger.info('xxx_action',data);
+    //实体配置信息缓存
+    app.messenger.on('entityCache', data => {
+        app.entityCache=data;
     });
 };
 

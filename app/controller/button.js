@@ -52,6 +52,7 @@ class ButtonController extends Controller{
         let token=this.ctx.request.header['access-token'];
         let userInfo=await this.service.authorService.getAuthor(token);
         let result =[];
+
         if(userInfo.roles.length>0){
             result=await this.app.mysql.query(`select b.*,(select count(1) from t_role_button 
                     where button_id=b.id and role_id in (?)) available from t_button b where b.stateflag=1;`, [userInfo.roles.map(r=>r.id)]);

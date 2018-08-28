@@ -10,7 +10,7 @@ class DictionaryController extends Controller{
     @smartQuery
     async dictionary(){
         this.ctx.body=await this.app.mysql.query(`select id,groupId,groupName,text,value from entity_dictionary where groupId=?`,
-            [this.ctx.params.dicGroupId]);
+            [parseInt(this.ctx.params.dicGroupId)]);
     }
 
     async saveDic(){

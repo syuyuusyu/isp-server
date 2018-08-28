@@ -5,6 +5,9 @@ module.exports = agent => {
 
     agent.messenger.on('egg-ready', () => {
         agent.logger.info('egg-ready');
+
+        agent.messenger.on('entityCache',data=>agent.messenger.sendToApp('entityCache', data));
+
         const rabbitmqUrl = agent.config.self.rabbitmqUrl;
         const queueName = agent.config.self.queueName;
         const connection = amqp.createConnection({url: rabbitmqUrl});
@@ -20,6 +23,8 @@ module.exports = agent => {
         });
 
     });
+
+
 
 
 };

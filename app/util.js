@@ -45,8 +45,9 @@ Function.prototype.replaceArguments=Function.prototype.replaceArguments?Function
             this:
             function(){
                 var me=this,
-                    arg=arguments;
-                return method.apply(me||global,fn.apply(null,arg));
+                    arg=arguments,
+                    args=fn.apply(null,arg);
+                return method.apply(me||global,args);
             }
     };
 
@@ -66,9 +67,9 @@ function smartQuery(target, name, descriptor) {
 
         return (function(_this,arg,_oquery){
             _this.app.mysql.query=_this.app.mysql.query.replaceArguments(function(sql,paramsArr){
-                const newArg=[];
+                const newArg=[],paramsArrClone=[].concat(paramsArr)
                 sql=sql.replace(/((?:where|and)\s+[\w\.]+\s*=\s*\?)|((?:where|and)\s+[\w\.]+\s+in\s*\(\s*\?\s*\))/g,(w)=>{
-                    let current=paramsArr.shift();
+                    let current=paramsArrClone.shift();
                     if(current){
                         newArg.push(current);
                         return w;
@@ -79,8 +80,6 @@ function smartQuery(target, name, descriptor) {
                 if(!/where/.test(sql)){
                     sql=sql.replace('and','where');
                 }
-                //console.log(sql);
-                //console.log(newArg);
                 return [sql,newArg];
             });
             return new Promise(function(resolve, reject){
