@@ -11,7 +11,6 @@ class EntityService extends Service{
         this.app.messenger.sendToAgent('entityCache',entityCache);
     }
 
-
 }
 
 
