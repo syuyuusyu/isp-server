@@ -214,6 +214,8 @@ module.exports = app => {
     router.get('/userRegister/uniqueEmail/:email', controller.userRegister.emailUnique);
     // 保存用户注册信息
     router.post('/userRegister/save', controller.userRegister.save);
+    //获取机构
+    router.get('/userRegister/getOrg',controller.userRegister.getOrg);
 
     // 系统日志
     // 获取所有系统日志
