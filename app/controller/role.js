@@ -35,6 +35,7 @@ class RoleController extends Controller {
 
   async saveRoleMenu() {
     const { roleId, menuIds } = this.ctx.request.body;
+    console.log("值为:",menuIds.map(a => '(' + roleId + ',' + a + ')'));
     const sql = `insert into t_role_menu(role_id,menu_id) values ${menuIds.map(a => '(' + roleId + ',' + a + ')').reduce((a, b) => a + ',' + b)}`;
     let result;
     const conn = await this.app.mysql.beginTransaction(); // 初始化事务
