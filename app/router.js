@@ -236,6 +236,10 @@ module.exports = app => {
     router.get('/backlogLog/getBacklogStatus', controller.backlogLog.allBacklogStatus);
     // 根据条件查询出待办日志
     router.post('/backlogLog/queryBacklogLog', controller.backlogLog.queryBacklogLog);
+    //采集申请的待办日志
+    router.post('/backlogLog/getBackLogForApply', controller.backlogLog.backLogForApply);
+    //采集提交申请的待办日志
+    router.post('/backlogLog/getBackLogForsubmitApply', controller.backlogLog.backLogForsubmitApply);
 
     // 修改用户信息
     // 校验输入的身份证编号是否已存在
@@ -308,6 +312,7 @@ module.exports = app => {
     router.post('/dictionary/saveDicField',controller.dictionary.saveDicField);
     router.get('/dictionary/deleteGroup/:groupId',controller.dictionary.deleteGroup);
     router.get('/dictionary/deleteDictionary/:id',controller.dictionary.deleteDictionary);
+
 
 
 };
