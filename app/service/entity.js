@@ -8,7 +8,10 @@ class EntityService extends Service{
         entityCache.entitys = await this.app.mysql.query(`select * from entity`);
         entityCache.dictionary = await this.app.mysql.query(`select * from entity_dictionary order by groupId`);
         entityCache.monyToMony = await this.app.mysql.query(`select * from entity_mony_to_mony`);
+        console.log(111111);
+
         this.app.messenger.sendToAgent('entityCache',entityCache);
+
     }
 
 }
