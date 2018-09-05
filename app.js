@@ -16,19 +16,21 @@ module.exports = app => {
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();
 
-        //实体配置缓存
-        ctx.service.entity.entityCache();
+
 
 
         app.logger.info('app started!!!!');
     });
 
     app.once('server', async server => {
-
+        const ctx = app.createAnonymousContext();
+        //实体配置缓存
+        await ctx.service.entity.entityCache();
     });
 
     //实体配置信息缓存
     app.messenger.on('entityCache', data => {
+        console.log('entityCache');
         app.entityCache=data;
     });
 };
