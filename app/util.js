@@ -125,6 +125,29 @@ function lowCaseResult(target, name, descriptor) {
     }
 }
 
+function lowCaseResponseBody(target, name, descriptor) {
+    var oldValue = descriptor.value;
+    descriptor.value=function(){
+        var me=this;
+        var arg=arguments;
+        return new Promise(async function(resolve,reject) {
+            resolve(oldValue.apply(me, arg));
+        }).then(function(){
+            let result=me.ctx.body;
+            let returnValue;
+            if(isObj(result)){
+                returnValue=_lowCaseObj(result);
+            }else if(isArrsy(result)){
+                returnValue=_lowCaseArray(result);
+            }else {
+                returnValue=result;
+            }
+            me.ctx.body=returnValue;
+        });
+
+    }
+}
+
 function _lowCaseObj(target){
     let result={};
     for(let key in target){
@@ -154,4 +177,4 @@ function _lowCaseArray(arr){
 }
 
 
-module.exports={smartQuery,lowCaseResult};
+module.exports={smartQuery,lowCaseResult,lowCaseResponseBody};

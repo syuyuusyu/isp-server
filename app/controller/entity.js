@@ -1,5 +1,5 @@
 const Controller=require('egg').Controller;
-const {smartQuery,lowCaseResult}=require('../util');
+const {smartQuery,lowCaseResult,lowCaseResponseBody}=require('../util');
 
 class EntityController extends Controller{
 
@@ -48,6 +48,7 @@ class EntityController extends Controller{
             ,[this.app.config.mysql.client.database]);
     }
 
+    @lowCaseResponseBody
     async originalColumns(){
         this.ctx.body=await this.app.mysql.query(
             `select table_name,column_name,ordinal_position,data_type,column_key from information_schema.COLUMNS where TABLE_SCHEMA=?`,
