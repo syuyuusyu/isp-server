@@ -1,4 +1,5 @@
 const Service=require('egg').Service;
+const {smartQuery,lowCaseResult}=require('../util');
 
 class EntityService extends Service{
 
@@ -12,6 +13,11 @@ class EntityService extends Service{
 
         this.app.messenger.sendToAgent('entityCache',entityCache);
 
+    }
+
+    async test(){
+        let result=await this.app.mysql.query(`select id ID,tableName TABLENAME from entity`);
+        return result;
     }
 
 }

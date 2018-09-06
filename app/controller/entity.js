@@ -1,5 +1,5 @@
 const Controller=require('egg').Controller;
-const {smartQuery}=require('../util');
+const {smartQuery,lowCaseResult}=require('../util');
 
 class EntityController extends Controller{
 

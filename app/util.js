@@ -2,7 +2,15 @@
 const toString=Object.prototype.toString;
 const isFunction=function(v){
     return toString.call(v)=="[object Function]";
-}
+};
+
+const isObj=function(v){
+    return toString.call(v)=="[object Object]";
+};
+
+const isArrsy=function(v){
+    return toString.call(v)=="[object Array]";
+};
 
 Array.prototype.indexOf = Array.prototype.indexOf ? Array.prototype.indexOf
     : function(o, from)  {
@@ -94,4 +102,56 @@ function smartQuery(target, name, descriptor) {
     return descriptor;
 }
 
-module.exports={smartQuery};
+function lowCaseResult(target, name, descriptor) {
+    var oldValue = descriptor.value;
+    descriptor.value=function(){
+        var me=this;
+        var arg=arguments;
+        return new Promise(async function(resolve,reject){
+            let result=await oldValue.apply(me, arg);
+            let returnValue;
+            if(isObj(result)){
+                returnValue=_lowCaseObj(result);
+            }else if(isArrsy(result)){
+                returnValue=_lowCaseArray(result);
+            }else {
+                returnValue=result;
+            }
+            resolve(returnValue);
+
+
+        });
+
+    }
+}
+
+function _lowCaseObj(target){
+    let result={};
+    for(let key in target){
+        if(isObj(target[key])){
+            result[key.toLowerCase()]=_lowCaseObj(target[key]);
+        }else if(isArrsy(target[key])){
+            result[key.toLowerCase()]=_lowCaseArray(target[key]);
+        }else{
+            result[key.toLowerCase()]=target[key];
+        }
+    }
+    return result;
+}
+
+function _lowCaseArray(arr){
+    let result=[];
+    for(let i=0;i<arr.length;i++){
+        if(isObj(arr[i])){
+            result.push(_lowCaseObj(arr[i]))
+        }else if(isArrsy(arr[i])){
+            result.push(_lowCaseArray(arr[i]))
+        }else{
+            result.push(arr[i]);
+        }
+    }
+    return result;
+}
+
+
+module.exports={smartQuery,lowCaseResult};
