@@ -108,18 +108,16 @@ function lowCaseResult(target, name, descriptor) {
         var me=this;
         var arg=arguments;
         return new Promise(async function(resolve,reject){
-            let result=await oldValue.apply(me, arg);
-            let returnValue;
-            if(isObj(result)){
-                returnValue=_lowCaseObj(result);
-            }else if(isArrsy(result)){
-                returnValue=_lowCaseArray(result);
+            resolve(oldValue.apply(me, arg));
+        }).then(function(response){
+            if(isObj(response)){
+                response=_lowCaseObj(response);
+            }else if(isArrsy(response)){
+                response=_lowCaseArray(response);
             }else {
-                returnValue=result;
+                response=response;
             }
-            resolve(returnValue);
-
-
+            return response;
         });
 
     }
@@ -134,15 +132,14 @@ function lowCaseResponseBody(target, name, descriptor) {
             resolve(oldValue.apply(me, arg));
         }).then(function(){
             let result=me.ctx.body;
-            let returnValue;
             if(isObj(result)){
-                returnValue=_lowCaseObj(result);
+                result=_lowCaseObj(result);
             }else if(isArrsy(result)){
-                returnValue=_lowCaseArray(result);
+                result=_lowCaseArray(result);
             }else {
-                returnValue=result;
+                result=result;
             }
-            me.ctx.body=returnValue;
+            me.ctx.body=result;
         });
 
     }

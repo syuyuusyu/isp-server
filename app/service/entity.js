@@ -14,6 +14,13 @@ class EntityService extends Service{
         this.app.messenger.sendToAgent('entityCache',entityCache);
 
     }
+
+    @lowCaseResult
+    async test(){
+        let result=await this.app.mysql.query(`select id ID,tableName TABLENAME from entity`);
+        return result;
+    }
+
 }
 
 

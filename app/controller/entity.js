@@ -10,6 +10,10 @@ class EntityController extends Controller{
         this.ctx.body=result;
     }
 
+    async entityOperations(){
+        this.ctx.body=await this.app.mysql.query(`select * from enrity_operation where entityId=?`,[parseInt(this.ctx.params.entityId)]);
+    };
+
     async column(){
         let [result]=await this.app.mysql.query(
             `select * from entity_column where id=?`,[this.ctx.params.id]);
@@ -139,6 +143,7 @@ class EntityController extends Controller{
         }
         let [{id}]=await this.app.mysql.query(
             `select ${entity.idField} id from ${entity.tableName} where ${entity.pidField} not in(select ${entity.idField} from ${entity.tableName} )`);
+        console.log(id);
         this.ctx.body={topParentId:id};
     }
 

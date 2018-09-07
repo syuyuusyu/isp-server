@@ -295,6 +295,7 @@ module.exports = app => {
 
     //通用实体增删改查
     router.get('/entity/columns/:entityId',controller.entity.columns);
+    router.get('/entity/entityOperations/:entityId',controller.entity.entityOperations);
     router.get('/entity/column/:id',controller.entity.column);
     router.get('/entity/entitys',controller.entity.entitys);
     router.get('/entity/tableNames',controller.entity.tableNames);
