@@ -9,11 +9,13 @@ class DictionaryController extends Controller{
 
     @smartQuery
     async dictionary(){
+        this.ctx.logger.info(this.app.mysql.modify);
         this.ctx.body=await this.app.mysql.query(`select id,groupId,groupName,text,value from entity_dictionary where groupId=?`,
             [parseInt(this.ctx.params.dicGroupId)]);
     }
 
     async saveDic(){
+        this.ctx.logger.info(this.app.mysql.modify);
         let {groupId,groupName}=this.ctx.request.body;
         let affectedRows=0;
         if(groupId){
@@ -30,6 +32,7 @@ class DictionaryController extends Controller{
     }
 
     async saveDicField(){
+        this.ctx.logger.info(this.app.mysql.modify);
         let {id,groupId,groupName,text,value}=this.ctx.request.body;
         let affectedRows=0;
         if(id){

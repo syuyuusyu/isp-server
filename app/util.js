@@ -74,6 +74,7 @@ function smartQuery(target, name, descriptor) {
         const oldquery=this.app.mysql.query;
 
         return (function(_this,arg,_oquery){
+            _this.app.mysql.modify=true;
             _this.app.mysql.query=_this.app.mysql.query.replaceArguments(function(sql,paramsArr){
                 const newArg=[],paramsArrClone=[].concat(paramsArr)
                 sql=sql.replace(/((?:where|and)\s+[\w\.]+\s*=\s*\?)|((?:where|and)\s+[\w\.]+\s+in\s*\(\s*\?\s*\))/g,(w)=>{
@@ -95,6 +96,7 @@ function smartQuery(target, name, descriptor) {
 
             }).then(function(){
                 _this.app.mysql.query=_oquery;
+                _this.app.mysql.modify=false;
             });
 
         })(this,arguments,oldquery)

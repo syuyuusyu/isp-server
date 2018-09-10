@@ -10,8 +10,9 @@ class EntityController extends Controller{
         this.ctx.body=result;
     }
 
+    @smartQuery
     async entityOperations(){
-        this.ctx.body=await this.app.mysql.query(`select * from enrity_operation where entityId=?`,[parseInt(this.ctx.params.entityId)]);
+        this.ctx.body=await this.app.mysql.query(`select * from entity_operation where entityId=?`,[parseInt(this.ctx.params.entityId)]);
     };
 
     async column(){
