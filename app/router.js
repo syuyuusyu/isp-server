@@ -295,6 +295,7 @@ module.exports = app => {
 
     //通用实体增删改查
     router.get('/entity/columns/:entityId',controller.entity.columns);
+    router.get('/entity/entityOperations/:entityId',controller.entity.entityOperations);
     router.get('/entity/column/:id',controller.entity.column);
     router.get('/entity/entitys',controller.entity.entitys);
     router.get('/entity/tableNames',controller.entity.tableNames);
@@ -303,11 +304,13 @@ module.exports = app => {
     router.get('/entity/deleteConfig/:tableName/:idField/:id',controller.entity.deleteConfig);
     router.get('/entity/monyToMonys',controller.entity.monyToMonys);
     router.post('/entity/query/:entityId',controller.entity.query);
-    router.get('/entity/topParentId/:entityId',controller.entity.topParentId);
+    router.get('/entity/topParentRecord/:entityId',controller.entity.topParentRecord);
     router.post('/entity/queryCandidate/:columnId',controller.entity.queryCandidate);
     router.get('/entity/checkUnique/:entityId/:checkField/:value',controller.entity.checkUnique);
     router.post('/entity/saveEntity/:entityId',controller.entity.saveEntity);
     router.get('/entity/deleteEntity/:entityId/:id',controller.entity.deleteEntity);
+    router.get('/entity/queryRelevant/:entityId/:monyToMonyId/:recordId',controller.entity.queryRelevant);
+    router.post('/entity/saveRelevant/:entityId/:monyToMonyId',controller.entity.saveRelevant);
 
     //字典配置
     router.get('/dictionary/allDictionary',controller.dictionary.allDictionary);

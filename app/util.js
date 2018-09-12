@@ -74,6 +74,7 @@ function smartQuery(target, name, descriptor) {
         const oldquery=this.app.mysql.query;
 
         return (function(_this,arg,_oquery){
+            _this.app.mysql.modify=true;
             _this.app.mysql.query=_this.app.mysql.query.replaceArguments(function(sql,paramsArr){
                 const newArg=[],paramsArrClone=[].concat(paramsArr)
                 sql=sql.replace(/((?:where|and)\s+[\w\.]+\s*=\s*\?)|((?:where|and)\s+[\w\.]+\s+in\s*\(\s*\?\s*\))/g,(w)=>{
@@ -93,8 +94,10 @@ function smartQuery(target, name, descriptor) {
             return new Promise(function(resolve, reject){
                 resolve(oldValue.apply(_this, arg));
 
-            }).then(function(){
+            }).then(function(response){
                 _this.app.mysql.query=_oquery;
+                _this.app.mysql.modify=false;
+                return response;
             });
 
         })(this,arguments,oldquery)
@@ -108,18 +111,16 @@ function lowCaseResult(target, name, descriptor) {
         var me=this;
         var arg=arguments;
         return new Promise(async function(resolve,reject){
-            let result=await oldValue.apply(me, arg);
-            let returnValue;
-            if(isObj(result)){
-                returnValue=_lowCaseObj(result);
-            }else if(isArrsy(result)){
-                returnValue=_lowCaseArray(result);
+            resolve(oldValue.apply(me, arg));
+        }).then(function(response){
+            if(isObj(response)){
+                response=_lowCaseObj(response);
+            }else if(isArrsy(response)){
+                response=_lowCaseArray(response);
             }else {
-                returnValue=result;
+                response=response;
             }
-            resolve(returnValue);
-
-
+            return response;
         });
 
     }
@@ -134,15 +135,14 @@ function lowCaseResponseBody(target, name, descriptor) {
             resolve(oldValue.apply(me, arg));
         }).then(function(){
             let result=me.ctx.body;
-            let returnValue;
             if(isObj(result)){
-                returnValue=_lowCaseObj(result);
+                result=_lowCaseObj(result);
             }else if(isArrsy(result)){
-                returnValue=_lowCaseArray(result);
+                result=_lowCaseArray(result);
             }else {
-                returnValue=result;
+                result=result;
             }
-            me.ctx.body=returnValue;
+            me.ctx.body=result;
         });
 
     }

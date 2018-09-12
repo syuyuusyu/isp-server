@@ -15,6 +15,7 @@ module.exports = app => {
 
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();
+        app.mysql.modify=false;
 
         app.logger.info('app started!!!!');
     });
