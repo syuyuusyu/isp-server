@@ -3,16 +3,12 @@ const {smartQuery,lowCaseResult,lowCaseResponseBody}=require('../util');
 
 class EntityController extends Controller{
 
-    @smartQuery
     async columns(){
-        let result=await this.app.mysql.query(
-            `select * from entity_column where entityId=? order by id,columnIndex`,[parseInt(this.ctx.params.entityId)]);
-        this.ctx.body=result;
+        this.ctx.body=await this.service.entity.columns(parseInt(this.ctx.params.entityId));
     }
 
-    @smartQuery
     async entityOperations(){
-        this.ctx.body=await this.app.mysql.query(`select * from entity_operation where entityId=?`,[parseInt(this.ctx.params.entityId)]);
+        this.ctx.body=await this.service.entity.entityOperations(parseInt(this.ctx.params.entityId));
     };
 
     async column(){
@@ -23,20 +19,12 @@ class EntityController extends Controller{
 
 
     async entitys(){
-        let result=await this.app.mysql.query(
-            `select * from entity`,[]
-        );
-        this.ctx.body=result;
+        this.ctx.body=await this.service.entity.entitys();
     }
 
 
     async saveConfig(){
-        const entity=this.ctx.request.body;
-        let result = await this.app.mysql[entity[this.ctx.params.idField]?'update':'insert'](this.ctx.params.tableName, entity);
-        // 判断更新成功
-        const updateSuccess = result.affectedRows === 1;
-        this.ctx.body={success:updateSuccess};
-        this.ctx.service.entity.entityCache();
+        this.ctx.body=await this.service.entity.saveConfig(this.ctx.request.body,this.ctx.params.tableName,this.ctx.params.idField);
     }
 
     async deleteConfig(){
@@ -115,7 +103,10 @@ class EntityController extends Controller{
             }
             queryValues.push(this.ctx.request.body[fieldName]?this.ctx.request.body[fieldName]:null);
         }
-
+        if(entity.deleteFlagField){
+            sql+=` and ${entity.entityCode}.${entity.deleteFlagField}='1'`;
+            countSql+=` and ${entity.entityCode}.${entity.deleteFlagField}='1'`;
+        }
         let pageQuery=false;
         let [{total}]=await this.app.mysql.query(countSql,queryValues);
         const {start,pageSize}=this.ctx.request.body;
@@ -134,18 +125,17 @@ class EntityController extends Controller{
         };
     }
 
-    async topParentId(){
+    async topParentRecord(){
         const entityId=this.ctx.params.entityId;
         const {entitys}=this.app.entityCache;
         let entity=entitys.filter(e=>e.id==entityId)[0];
         if(!entity || !entity.parentEntityId || entity.parentEntityId!=entity.id){
-            this.ctx.body={topParentId:null};
+            this.ctx.body={};
             return;
         }
-        let [{id}]=await this.app.mysql.query(
-            `select ${entity.idField} id from ${entity.tableName} where ${entity.pidField} not in(select ${entity.idField} from ${entity.tableName} )`);
-        console.log(id);
-        this.ctx.body={topParentId:id};
+        let [result]=await this.app.mysql.query(
+            `select * from ${entity.tableName} where ${entity.pidField} not in(select ${entity.idField} from ${entity.tableName} )`);
+        this.ctx.body=result;
     }
 
     async queryCandidate(){
@@ -204,7 +194,6 @@ class EntityController extends Controller{
             id=await this.ctx.service.saveOrDelete.childList(id,entity.idField,entity.pidField,entity.tableName);
         }
         let result;
-        console.log(id);
         if(entity.deleteFlagField){
             result= await this.app.mysql.update(entity.tableName, {
                 [entity.idField]:id,
@@ -215,9 +204,61 @@ class EntityController extends Controller{
                 [entity.idField]:id,
             });
         }
-        console.log(result);
         const updateSuccess = result.affectedRows>0;
         console.log(updateSuccess);
+        this.ctx.body={success:updateSuccess};
+    }
+
+    async queryRelevant(){
+        const {success,srcTableName,srcIdField,
+            relevantTableName,targetTableName,
+            targetIdField,r_srcIdField,
+            r_targetIdField,targetDeleteFlagField}
+                =this.ctx.service.entity.relevantInfo(this.ctx.params.entityId,this.ctx.params.monyToMonyId);
+        if(!success){
+            this.ctx.body={success};
+            return;
+        }
+        let sql=`select f.* from ${targetTableName} f 
+            join ${relevantTableName} m on m.${r_targetIdField}=f.${targetIdField}
+            join ${srcTableName} s on m.${r_srcIdField}=s.${srcIdField} where s.${srcIdField}=?`;
+        if(targetDeleteFlagField){
+            sql=sql+` and f.${targetDeleteFlagField}='1'`
+        }
+        this.ctx.logger.info(sql);
+        let result=await this.app.mysql.query(sql,[this.ctx.params.recordId]);
+        this.ctx.body={
+            success,
+            data:result
+        }
+    }
+
+    async saveRelevant(){
+        const {relevantTableName, r_srcIdField, r_targetIdField}
+                =this.ctx.service.entity.relevantInfo(this.ctx.params.entityId,this.ctx.params.monyToMonyId);
+        const {srcId,targetIds}=this.ctx.request.body;
+        console.log(relevantTableName, r_srcIdField, r_targetIdField);
+        console.log(targetIds);
+        let result;
+        const conn = await this.app.mysql.beginTransaction(); // 初始化事务
+
+        try {
+            await conn.delete(relevantTableName, {
+                [r_srcIdField]: srcId,
+            });  // 第一步操作
+            if(targetIds.length>0){
+                let sql=`insert into ${relevantTableName}(${r_srcIdField},${r_targetIdField}) 
+                    values ${targetIds.map((a)=>'('+srcId+','+a+')').reduce((a,b)=>a+','+b)}`;
+                console.log(sql);
+                result=await conn.query(sql);  // 第二步操作
+            }
+
+            await conn.commit(); // 提交事务
+        } catch (err) {
+            await conn.rollback(); // 一定记得捕获异常后回滚事务！！
+            throw err;
+        }
+        const updateSuccess = targetIds.length===0 || result.affectedRows === targetIds.length;
         this.ctx.body={success:updateSuccess};
     }
 }

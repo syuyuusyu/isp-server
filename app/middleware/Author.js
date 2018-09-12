@@ -8,6 +8,7 @@ module.exports = (options,app) => {
         const author=await ctx.service.authorService.getByCode(token);
         ctx.service.systemLog.operateLog(ctx);
         if((token && author) ){
+            ctx.isGov=ctx.request.header['isGov'];
             await next();
         }else{
             ctx.logger.info('token失效!!!');

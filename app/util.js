@@ -94,9 +94,10 @@ function smartQuery(target, name, descriptor) {
             return new Promise(function(resolve, reject){
                 resolve(oldValue.apply(_this, arg));
 
-            }).then(function(){
+            }).then(function(response){
                 _this.app.mysql.query=_oquery;
                 _this.app.mysql.modify=false;
+                return response;
             });
 
         })(this,arguments,oldquery)
