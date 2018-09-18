@@ -61,7 +61,7 @@ module.exports = appInfo => {
     agent: false,
   };
 
-/*    config.mysql = {
+   /* config.mysql = {
         client: {
             // host
             host: '10.10.12.1',
