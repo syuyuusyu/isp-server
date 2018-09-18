@@ -216,6 +216,8 @@ module.exports = app => {
     router.post('/userRegister/save', controller.userRegister.save);
     //获取机构
     router.get('/userRegister/getOrg',controller.userRegister.getOrg);
+    //获取机构名称
+
 
     // 系统日志
     // 获取所有系统日志

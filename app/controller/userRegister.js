@@ -96,5 +96,9 @@ class UserRegister extends Controller{
       }
       return leafOrg;
   }
+
+  async getOrgName(){
+    const checkedKeys=this.ctx.request.body;
+  }
 }
 module.exports=UserRegister;
