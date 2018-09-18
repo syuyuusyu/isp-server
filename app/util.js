@@ -177,4 +177,32 @@ function _lowCaseArray(arr){
 }
 
 
-module.exports={smartQuery,lowCaseResult,lowCaseResponseBody};
+function careateTree(array,idField,pidField,topId) {
+    function _tree(arr) {
+        const leafArray=[];
+        arr.forEach(_=>{
+            if(arr.filter(a=>a[pidField]===_[idField]).length===0){
+                leafArray.push(_);
+            }
+        });
+        if(leafArray.findIndex(_=>_[pidField]==topId)===-1){
+            leafArray.forEach(_=>arr.remove(_));
+            leafArray.forEach(_=>{
+                for(let i=0;i<arr.length;i++){
+                    if(arr[i][idField]===_[pidField]){
+                        if(!arr[i].children){
+                            arr[i].children=[];
+                        }
+                        arr[i].children.push(_);
+                    }
+                }
+            });
+            _tree(arr);
+        }
+    }
+    _tree(array);
+    return array;
+
+}
+
+module.exports={smartQuery,lowCaseResult,lowCaseResponseBody,careateTree};

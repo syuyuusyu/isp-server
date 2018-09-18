@@ -105,7 +105,6 @@ class EntityService extends Service{
             };
 
         }
-
         //console.log(entityColumns);
         let foreignColumns=entityColumns.filter(d=>d.foreignKeyId).map(d=>({
             entity:entitys.find(e=>e.id===columns.find(c=>c.id===d.foreignKeyId).entityId),
@@ -130,19 +129,19 @@ class EntityService extends Service{
             if(!entityColumns.find(c=>c.columnName===fieldName)) continue;
             if(entityColumns.find(c=>c.columnName===fieldName).columnType==='timestamp'){
                 sql+=` and ${entity.entityCode}.${fieldName} 
-                    BETWEEN '${this.ctx.request.body[fieldName][0]}' and '${this.ctx.request.body[fieldName][1]}'`;
+                    BETWEEN '${requestBody[fieldName][0]}' and '${requestBody[fieldName][1]}'`;
                 countSql+=` and ${entity.entityCode}.${fieldName} 
-                    BETWEEN '${this.ctx.request.body[fieldName][0]}' and '${this.ctx.request.body[fieldName][1]}'`;
+                    BETWEEN '${requestBody[fieldName][0]}' and '${requestBody[fieldName][1]}'`;
                 continue;
             }
-            if(Object.prototype.toString.call(this.ctx.request.body[fieldName])==="[object Array]"){
+            if(Object.prototype.toString.call(requestBody[fieldName])==="[object Array]"){
                 sql+=` and ${entity.entityCode}.${fieldName} in(?)`;
                 countSql+=` and ${entity.entityCode}.${fieldName} in(?)`;
             }else{
                 sql+=` and ${entity.entityCode}.${fieldName}=?`;
                 countSql+=` and ${entity.entityCode}.${fieldName}=?`;
             }
-            queryValues.push(this.ctx.request.body[fieldName]?this.ctx.request.body[fieldName]:null);
+            queryValues.push(requestBody[fieldName]?requestBody[fieldName]:null);
         }
         if(entity.deleteFlagField){
             sql+=` and ${entity.entityCode}.${entity.deleteFlagField}='1'`;
@@ -150,7 +149,7 @@ class EntityService extends Service{
         }
         let pageQuery=false;
         let [{total}]=await this.app.mysql.query(countSql,queryValues);
-        const {start,pageSize}=this.ctx.request.body;
+        const {start,pageSize}=requestBody;
         if((start || start===0) && pageSize){
             sql+=` limit ${start},${pageSize};`;
             pageQuery=true;
