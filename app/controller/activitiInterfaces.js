@@ -72,6 +72,8 @@ class ActivitiInterfaces extends Controller{
                         });
                         continue;
                     }
+                    this.ctx.logger.error('推送用户!!');
+                    this.ctx.logger.error(`${sys.url}${sys.path}`);
                     this.app.curl(`${sys.url}${sys.path}`,{
                         method:'POST',
                         data:{
@@ -85,7 +87,7 @@ class ActivitiInterfaces extends Controller{
                             "Content-Type":"application/json;charset=UTF-8"
                         },
                         dataType:'json'
-                    }).then(async result=>{
+                    }).then(result=>{
                         if(result.status>=200 && result.status<300){
                             this.ctx.logger.error(sys.code);
                             this.app.messenger.sendToAgent('rabbitmqMsg', {

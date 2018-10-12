@@ -334,6 +334,56 @@ class InterfaceService extends Service {
         }
     }
 
+    async message(body){
+        let [{users,message}]=body.reqdata;
+        const activitiIp = this.app.config.self.activitiIp;
+        const json = await this.app.curl(`${activitiIp}/repository/process-definitions`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+            dataType: 'json',
+        });
+        let process = json.data.data.find(p => p.key === 'message' && !p.suspended);
+        console.log(process);
+        if (!process) {
+            return {
+                status:'806',
+                message:'失败,消息流未启动',
+            }
+        }
+        users.forEach(async user=>{
+            let startResult = await this.app.curl(`${activitiIp}/runtime/process-instances`,
+                {
+                    method: 'POST',
+                    data:{
+                        processDefinitionId: process.id,
+                        businessKey: `message-${user}`,
+                        variables: [
+                            {
+                                name: "applyUser",
+                                value: user
+                            },{
+                                name:'message',
+                                value:message
+                            }
+                        ]
+                    },
+                    headers: {
+                        "Accept":"application/json",
+                        "Content-Type":"application/json;charset=UTF-8"
+                    },
+                    dataType: 'json',
+                });
+            console.log(startResult);
+        });
+        return {
+            status:'801',
+            message:'成功',
+        }
+    }
+
     async _addsysPromision(system,user){
         let [{count}]=await this.app.mysql.query('select count(1) count from t_user_system where user_id=? and system_id=?',[user.id,system.id]);
         if(count===0){

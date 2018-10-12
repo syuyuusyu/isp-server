@@ -10,6 +10,8 @@ module.exports = app => {
     router.post('/login', controller.home.login);
     // 退出
     router.get('/logout', controller.home.logout);
+    //获取一个随机ispToken
+    router.get('/randomToken',controller.home.randomToken);
 
     // 接口调用
     router.get('/invokeEntityInfo', controller.restful.toPage);

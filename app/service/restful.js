@@ -32,9 +32,9 @@ class RestfulService extends Service{
         let head=this.parseByqueryMap(entity.head,queryObj);
         head=JSON.parse(head);
         this.ctx.logger.info('url:',url);
-        //this.ctx.logger.info('method:',method);
-        //this.ctx.logger.info('head:',head);
-        //this.ctx.logger.info('body:',data);
+        // this.ctx.logger.info('method:',method);
+        // this.ctx.logger.info('head:',head);
+        // this.ctx.logger.info('body:',data);
 
 
         let invokeResult;

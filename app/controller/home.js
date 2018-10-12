@@ -42,6 +42,14 @@ class HomeController extends Controller {
         this.ctx.body = {msg, user, token, roles};
     }
 
+    async randomToken(){
+        const token = this.ctx.request.header['access-token'];
+        const {user} = await this.service.redis.get(token);
+        let ispToken=this.service.interfaces.randomString(8);
+        this.service.redis.set(ispToken,user);
+        this.ctx.body={ispToken};
+    }
+
     async logout() {
         const token = this.ctx.request.header['access-token'];
         const auth = await this.service.authorService.getAuthor(token);

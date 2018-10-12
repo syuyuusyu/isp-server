@@ -42,26 +42,9 @@ module.exports = appInfo => {
         fileSize: '5120mb',
     };
 
-  config.mysql = {
-    client: {
-      // host
-      host: '127.0.0.1',
-      // 端口号
-      port: '3306',
-      // 用户名
-      user: 'root',
-      // 密码
-      password: 'password',
-      // 数据库名
-      database: 'isp',
-    },
-    // 是否加载到 app 上，默认开启
-    app: true,
-    // 是否加载到 agent 上，默认关闭
-    agent: false,
-  };
 
-/*    config.mysql = {
+
+    config.mysql = {
         client: {
             // host
             host: '10.10.12.1',
@@ -78,7 +61,7 @@ module.exports = appInfo => {
         app: true,
         // 是否加载到 agent 上，默认关闭
         agent: false,
-    };*/
+    };
 
     config.redis = {
         client: {
@@ -182,8 +165,8 @@ module.exports = appInfo => {
     config.self = {
         keystoneIp: '10.10.10.1:5000',
         swiftBaseUrl: 'http://10.10.10.1:8080/v1/AUTH_76feacc2ae3c45f9b280e46dd96ff2ce/',
-        //activitiIp:'http://127.0.0.1:5002',
-        activitiIp: 'http://10.10.50.10:5002',
+        activitiIp:'http://127.0.0.1:5002',
+        //activitiIp: 'http://10.10.50.10:5002',
         rabbitmqUrl: 'amqp://guest:guest@127.0.0.1:5672',
         queueName: 'activitiQueue'
     };

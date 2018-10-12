@@ -83,6 +83,7 @@ class EntityService extends Service{
         this.entityCache();
         return {success:updateSuccess};
 
+
     }
 
     async deleteConfig(tableName,idField,id){
