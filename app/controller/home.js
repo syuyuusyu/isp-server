@@ -60,13 +60,13 @@ class HomeController extends Controller {
                 this.ctx.service.redis.forEach(auth.user.user_name+'loginSystem',(code,index)=>{
                     if(sys.code===code){
                         currentIndex=index;
-                        if(sys.operations.filter(o=>o.type===2).length===1){
-                            this.ctx.logger.info(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
-                            this.app.curl(`${sys.url}${sys.operations.filter(o=>o.type===2).map(o=>o.path)[0]}?user=${auth.user.user_name}`)
+                        if(sys.operations.filter(o=>o.type==2).length===1){
+                            this.ctx.logger.info(`${sys.url}${sys.operations.filter(o=>o.type==2).map(o=>o.path)[0]}?user=${auth.user.user_name}`);
+                            this.app.curl(`${sys.url}${sys.operations.filter(o=>o.type==2).map(o=>o.path)[0]}?user=${auth.user.user_name}`)
                                 .then(result=>{
                                     this.ctx.logger.info('退出结果:',result);
                                 }).catch(e=>{
-                                this.ctx.logger.error(e);
+                                    this.ctx.logger.error(e);
                                 });
 
                             //this.ctx.service.redis.splice(auth.user.user_name+'loginSystem',currentIndex,1);
