@@ -39,7 +39,7 @@ module.exports = appInfo => {
     config.multipart = {
         //fileExtensions: ['.jar'],
         whitelist:fileName=>true,
-        fileSize: '5120mb',
+        fileSize: '102400mb',
     };
 
     config.mysql = {

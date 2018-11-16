@@ -72,8 +72,8 @@ class ActivitiInterfaces extends Controller{
                         });
                         continue;
                     }
-                    this.ctx.logger.error('推送用户!!');
-                    this.ctx.logger.error(`${sys.url}${sys.path}`);
+                    this.ctx.logger.info('推送用户!!');
+                    this.ctx.logger.info(`${sys.url}${sys.path}`);
                     this.app.curl(`${sys.url}${sys.path}`,{
                         method:'POST',
                         data:{
@@ -89,7 +89,7 @@ class ActivitiInterfaces extends Controller{
                         dataType:'json'
                     }).then(result=>{
                         if(result.status>=200 && result.status<300){
-                            this.ctx.logger.error(sys.code);
+                            this.ctx.logger.info(sys.code);
                             this.app.messenger.sendToAgent('rabbitmqMsg', {
                                 assigneeName:`${username}${sys.code}${opType}`,
                                 count:0,
@@ -97,7 +97,7 @@ class ActivitiInterfaces extends Controller{
                                 type:'await'
                             });
                         }else{
-                            this.ctx.logger.error(sys.code);
+                            this.ctx.logger.info(sys.code);
                             this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,result);
                             this.app.messenger.sendToAgent('rabbitmqMsg', {
                                 assigneeName:`${username}${sys.code}${opType}`,
@@ -107,7 +107,7 @@ class ActivitiInterfaces extends Controller{
                             });
                         }
                     }).catch( e=>{
-                        this.ctx.logger.error(sys.code);
+                        this.ctx.logger.info(sys.code);
                         this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,e.toString());
                         this.app.messenger.sendToAgent('rabbitmqMsg', {
                             assigneeName:`${username}${sys.code}${opType}`,
@@ -119,7 +119,7 @@ class ActivitiInterfaces extends Controller{
             }
             result={success:true};
         }catch (e){
-            this.ctx.logger.error(e.toString());
+            this.ctx.logger.info(e.toString());
             result={success:false};
         }
         this.ctx.body=result;

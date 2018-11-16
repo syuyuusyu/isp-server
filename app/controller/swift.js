@@ -124,6 +124,7 @@ class SwiftController extends Controller {
         const username = ctx.request.header['user-name'];
         const flodername = ctx.request.header['folder-path'];
         const Length = ctx.request.header['content-length'];
+        this.ctx.logger.info('上传开始',username,flodername);
 
 
         const parts = ctx.multipart();

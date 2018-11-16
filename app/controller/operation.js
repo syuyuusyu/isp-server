@@ -44,16 +44,23 @@ class OperationController extends Controller{
 
     async saveInvokePromiss(){
         const {operationId,sysIds}=this.ctx.request.body;
-        let sql=`insert into t_sys_promiss_operation(operation_id,system_id) 
-            values ${sysIds.map((a)=>'('+operationId+','+a+')').reduce((a,b)=>a+','+b)}`;
-        let result;
+
+
+        let result={};
         const conn = await this.app.mysql.beginTransaction(); // 初始化事务
 
         try {
             await conn.delete('t_sys_promiss_operation', {
                 operation_id: operationId,
             });  // 第一步操作
-            result=await conn.query(sql);  // 第二步操作
+            if (sysIds.length>0){
+                let sql=`insert into t_sys_promiss_operation(operation_id,system_id) 
+                        values ${sysIds.map((a)=>'('+operationId+','+a+')').reduce((a,b)=>a+','+b)}`;
+                result=await conn.query(sql);
+            }else{
+                result.affectedRows = 0
+            }
+
             await conn.commit(); // 提交事务
         } catch (err) {
             await conn.rollback(); // 一定记得捕获异常后回滚事务！！
