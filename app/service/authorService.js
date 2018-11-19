@@ -20,11 +20,15 @@ class AuthorService extends Service {
         for (const system of systems) {
             systemMap[system.code] = system.id;
             systemUrl[system.code] = system.url;
-            const operations = await this.app.mysql.query(`select o.* from t_sys_operation o join t_sys_promiss_operation spo 
-                on spo.operation_id=o.id where spo.system_id=? and o.stateflag=1`, [system.id]);
+            const operations = await this.app.mysql.query(`select o.*,t.code sysCode from t_sys_operation o join t_sys_promiss_operation spo 
+                on spo.operation_id=o.id join t_system t on t.id=o.system_id where spo.system_id=? and o.stateflag=1`, [system.id]);
             //this.ctx.logger.info(system.url);
             //this.ctx.logger.info(JSON.stringify(operations.map(m => m.path)));
-            await this.app.redis.set(system.url, JSON.stringify(operations.map(m => m.path)));
+            await this.service.redis.set(system.url, operations.map(m => m.path));
+            //keyverify
+            await this.service.redis.set(system.keyverify_token,operations.map(m => ({path:m.path,code:m.sysCode})));
+            console.log(system.keyverify_token,operations.map(m => ({path:m.path,code:m.sysCode})));
+            await this.service.redis.set(`keyverify_token_${system.sysCode}`, system.keyverify_token);
         }
         this.app.redis.set('systemMap', JSON.stringify(systemMap));
         this.app.redis.set('systemUrl', JSON.stringify(systemUrl));

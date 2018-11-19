@@ -5,9 +5,9 @@ class InterfaceService extends Service {
     async verifications(body) {
 
         let {system, reqdata: [{token}]} = body;
-        system=system.toLowerCase();
+        system = system.toLowerCase();
         let user = await this.service.authorService.getByCode(token);
-        if(!user){
+        if (!user) {
             user = await this.service.authorService.getByCode(token + system);
             if (!user) {
                 this.ctx.logger.info('令牌token无效');
@@ -17,11 +17,11 @@ class InterfaceService extends Service {
                 };
             } else {
                 this.app.redis.del(token + system);
-                if(!await this.service.redis.containKey(user.user_name+'loginSystem')){
-                    await this.service.redis.set(user.user_name+'loginSystem',[]);
+                if (!await this.service.redis.containKey(user.user_name + 'loginSystem')) {
+                    await this.service.redis.set(user.user_name + 'loginSystem', []);
                 }
 
-                await this.ctx.service.redis.push(user.user_name+'loginSystem',system);
+                await this.ctx.service.redis.push(user.user_name + 'loginSystem', system);
                 this.ctx.logger.info('成功');
                 return {
                     status: '801',
@@ -64,7 +64,7 @@ class InterfaceService extends Service {
             for (let u of users) {
                 let [result] = await this.app.mysql.query(`select id from t_user where phone=?`, [system + u.username]);
                 if (result) {
-                    let currentId=result.id;
+                    let currentId = result.id;
                     await this.app.mysql.update('t_user',
                         {
                             id: currentId,
@@ -97,7 +97,7 @@ class InterfaceService extends Service {
 
     }
 
-    async synrole(body){
+    async synrole(body) {
         let {system, reqdata: roles} = body;
         system = system.toLocaleLowerCase();
         let [sysEntity] = await this.app.mysql.query(`select * from t_system where code=?`, [system]);
@@ -113,7 +113,7 @@ class InterfaceService extends Service {
                 let [result] = await this.app.mysql.query(`select id from t_role where code=?`, [system + r.rolename]);
                 this.app.logger.info(result);
                 if (result) {
-                    let currentId=result.id;
+                    let currentId = result.id;
                     await this.app.mysql.update('t_role',
                         {
                             id: currentId,
@@ -145,22 +145,25 @@ class InterfaceService extends Service {
 
     //keyverify
     async keyverify(body) {
-        const { reqdata:[{domain,path:path}]} = body;
+        const {version, reqdata: [{domain, path: path}]} = body;
+        if (version == 'v2' || version == 'V2') {
+            return await this.keyverifyV2();
+        }
 
-        let codes=await this.service.authorService.getByCode(domain);
+        let codes = await this.service.redis.get(domain);
         //this.ctx.logger.info('接口权限认证:codes',codes);
-        if(codes && codes.filter(c=>{
-                let rep=/(?:\{)\w+(?:\})/;
-                let a=c.replace(rep,(w,p)=>{
+        if (codes && codes.filter(c => {
+                let rep = /(?:\{)\w+(?:\})/;
+                let a = c.replace(rep, (w, p) => {
                     return '.*?'
                 });
                 return new RegExp(a).test(path);
-            }).length>0){
+            }).length > 0) {
             return {
                 status: '801',
                 message: `成功`,
             }
-        }else{
+        } else {
             return {
                 status: '806',
                 message: `没有访问权限`,
@@ -168,174 +171,248 @@ class InterfaceService extends Service {
         }
     }
 
-    async metadata(body){
-        const {system,reqdata} =body;
-        //const syatemId=this.app.systemMap[system.toLowerCase()];
-        const syatemId=await this.ctx.service.redis.getProperty('systemMap',system.toLowerCase());
-        if(!syatemId){
+    async keyverify_token(){
+        let {system} = this.ctx.request.body;
+        system = system.toLocaleLowerCase();
+        let token = await this.service.redis.get(`keyverify_token_${system}`);
+        if(!token){
+            let sys = await this.app.mysql.get('t_system',{code:system});
+            token=sys['keyverify_token'];
+        }
+        if(token){
             return {
-                status:'806',
-                message:'对应系统号不存在'
+                status: '801',
+                message: '成功',
+                respdata: [
+                    {
+                        token: token,
+                    }
+                ]
+            };
+        }else{
+            return {
+                status: '806',
+                message: '获取token失败',
+                respdata: [
+                    {
+                        token: '',
+                    }
+                ]
+            };
+        }
+
+    }
+
+    async keyverifyV2() {
+        let {system, reqdata: [{ path, token}]} = this.ctx.request.body;
+        let now = new Date();
+        let newStr = `${now.getFullYear()}${now.getMonth()}${now.getDay()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`;
+        system = system.toLocaleLowerCase();
+
+        let operations = await this.service.redis.get(token);
+        if(!operations){
+            return {
+                "message": "token失效",
+                "servertime": newStr,
+                "status": "807"
+            }
+        }
+        let codes = operations.filter(o=>o.code == system).map(o=>o.path);
+        if (codes && codes.filter(c => {
+                let rep = /(?:\{)\w+(?:\})/;
+                let a = c.replace(rep, (w, p) => {
+                    return '.*?'
+                });
+                return new RegExp(a).test(path);
+            }).length > 0) {
+            return {
+                "message": "成功",
+                "servertime": newStr,
+                "status": "801"
+            }
+        } else {
+            return {
+                "message": "没有访问权限",
+                "servertime": newStr,
+                "status": "806"
+            }
+        }
+
+    }
+
+    async metadata(body) {
+        const {system, reqdata} = body;
+        //const syatemId=this.app.systemMap[system.toLowerCase()];
+        const syatemId = await this.ctx.service.redis.getProperty('systemMap', system.toLowerCase());
+        if (!syatemId) {
+            return {
+                status: '806',
+                message: '对应系统号不存在'
             }
         }
         this.ctx.logger.info(syatemId);
         this.ctx.logger.info(reqdata);
         const conn = await this.app.mysql.beginTransaction(); // 初始化事务
-        try{
-            for(let metdata of reqdata){
-                let fields=metdata.fields;
+        try {
+            for (let metdata of reqdata) {
+                let fields = metdata.fields;
                 delete metdata.fields;
-                let [met]=await conn.query(`select id from t_metadata where name=? and system_id=?`,[metdata.name,syatemId]);
-                if(met && met.id){
-                    await conn.update('t_metadata',{...metdata,id:met.id,system_id:syatemId})
-                    await conn.delete('t_metadata_fields',{metadata_id:met.id});
-                    for (let field of fields){
-                        await conn.insert('t_metadata_fields',{...field,metadata_id:met.id})
+                let [met] = await conn.query(`select id from t_metadata where name=? and system_id=?`, [metdata.name, syatemId]);
+                if (met && met.id) {
+                    await conn.update('t_metadata', {...metdata, id: met.id, system_id: syatemId})
+                    await conn.delete('t_metadata_fields', {metadata_id: met.id});
+                    for (let field of fields) {
+                        await conn.insert('t_metadata_fields', {...field, metadata_id: met.id})
                     }
-                }else{
-                    let result=await  conn.insert('t_metadata',{...metdata,system_id:syatemId})
-                    await conn.delete('t_metadata_fields',{metadata_id:result.insertId});
-                    for (let field of fields){
-                        await conn.insert('t_metadata_fields',{...field,metadata_id:result.insertId})
+                } else {
+                    let result = await  conn.insert('t_metadata', {...metdata, system_id: syatemId})
+                    await conn.delete('t_metadata_fields', {metadata_id: result.insertId});
+                    for (let field of fields) {
+                        await conn.insert('t_metadata_fields', {...field, metadata_id: result.insertId})
                     }
                 }
             }
             await conn.commit();
             return {
-                status:'801',
-                message:'同步成功'
+                status: '801',
+                message: '同步成功'
             }
-        }catch (e){
+        } catch (e) {
             await conn.rollback(); // 一定记得捕获异常后回滚事务！！
             this.ctx.logger.error(e);
             return {
-                status:'806',
-                message:'同步失败'
+                status: '806',
+                message: '同步失败'
             }
         }
     }
 
-    async push_interface(body){
-        const {system,reqdata} =body;
+    async push_interface(body) {
+        const {system, reqdata} = body;
         //const syatemId=this.app.systemMap[system.toLowerCase()];
-        const syatemId=await this.ctx.service.redis.getProperty('systemMap',system.toLowerCase());
-        if(!syatemId){
+        const syatemId = await this.ctx.service.redis.getProperty('systemMap', system.toLowerCase());
+        if (!syatemId) {
             return {
-                status:'806',
-                message:'对应系统号不存在'
+                status: '806',
+                message: '对应系统号不存在'
             }
         }
-        try{
-            for(let op of reqdata){
+        try {
+            for (let op of reqdata) {
                 this.ctx.logger.info(op);
-                let [result]=await this.app.mysql.query(`select id from t_sys_operation where name=? and system_id=?`,
-                    [op.name,syatemId]);
-                if(result && result.id){
-                    let resultUpdate=await this.app.mysql.update('t_sys_operation',{...op,id:result.id,type:3,system_id:syatemId});
-                }else{
-                    await this.app.mysql.insert('t_sys_operation',{...op,type:3,system_id:syatemId});
+                let [result] = await this.app.mysql.query(`select id from t_sys_operation where name=? and system_id=?`,
+                    [op.name, syatemId]);
+                if (result && result.id) {
+                    let resultUpdate = await this.app.mysql.update('t_sys_operation', {
+                        ...op,
+                        id: result.id,
+                        type: 3,
+                        system_id: syatemId
+                    });
+                } else {
+                    await this.app.mysql.insert('t_sys_operation', {...op, type: 3, system_id: syatemId});
                 }
             }
 
             return {
-                status:'801',
-                message:'同步成功'
+                status: '801',
+                message: '同步成功'
             }
-        }catch (e){
-         // 一定记得捕获异常后回滚事务！！
+        } catch (e) {
+            // 一定记得捕获异常后回滚事务！！
             this.ctx.logger.error(e);
             return {
-                status:'806',
-                message:'同步失败'
+                status: '806',
+                message: '同步失败'
             }
         }
     }
 
-    async synuserresult(body){
-        let {system,reqdata:[{status,username,msg}]}=body;
-        system=system.toLowerCase();
+    async synuserresult(body) {
+        let {system, reqdata: [{status, username, msg}]} = body;
+        system = system.toLowerCase();
         this.app.logger.info('synuserresult');
 
-        let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
-        let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
-        if(!systementity || !user){
+        let [systementity] = await this.app.mysql.query(`select * from t_system where code=?`, [system.toLowerCase()]);
+        let [user] = await this.app.mysql.query(`select * from t_user where user_name=?`, [username]);
+        if (!systementity || !user) {
             return {
-                status:'806',
-                message:`对应系统号${system}或对应用户${username}不存在`
+                status: '806',
+                message: `对应系统号${system}或对应用户${username}不存在`
             }
         }
 
-        let isOk=false;
-        if(status==='801'){
+        let isOk = false;
+        if (status === '801') {
             //增加用户访问对应平台权限
-            isOk=true;
-            await this._addsysPromision(systementity,user);
+            isOk = true;
+            await this._addsysPromision(systementity, user);
         }
         this.app.messenger.sendToAgent('rabbitmqMsg', {
-            assigneeName:`${username}${system}apply`,
-            message:isOk?`申请${systementity.name}权限成功`:`申请${systementity.name}权限失败,对方平台拒绝申请`,
-            count:0,
-            type:'complate',
+            assigneeName: `${username}${system}apply`,
+            message: isOk ? `申请${systementity.name}权限成功` : `申请${systementity.name}权限失败,对方平台拒绝申请`,
+            count: 0,
+            type: 'complate',
         });
         return {
-            status:'801',
-            message:`success`
+            status: '801',
+            message: `success`
         }
     }
 
-    async canceluserresult(body){
-        let {system,reqdata:[{status,username,msg}]}=body;
-        system=system.toLowerCase();
+    async canceluserresult(body) {
+        let {system, reqdata: [{status, username, msg}]} = body;
+        system = system.toLowerCase();
 
-        let [systementity]=await this.app.mysql.query(`select * from t_system where code=?`,[system.toLowerCase()]);
-        let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
+        let [systementity] = await this.app.mysql.query(`select * from t_system where code=?`, [system.toLowerCase()]);
+        let [user] = await this.app.mysql.query(`select * from t_user where user_name=?`, [username]);
 
-        if(!systementity || !user){
+        if (!systementity || !user) {
             return {
-                status:'806',
-                message:`对应系统号${system}或对应用户${username}不存在`
+                status: '806',
+                message: `对应系统号${system}或对应用户${username}不存在`
             }
         }
 
-        let isOk=false;
-        if(status==='801'){
+        let isOk = false;
+        if (status === '801') {
             //取消用户访问对应平台权限
-            isOk=true;
-            await this.app.mysql.query(`delete from t_user_system where user_id=? and system_id=?`,[user.id,systementity.id]);
+            isOk = true;
+            await this.app.mysql.query(`delete from t_user_system where user_id=? and system_id=?`, [user.id, systementity.id]);
         }
         this.app.messenger.sendToAgent('rabbitmqMsg', {
-            assigneeName:`${username}${system}cancel`,
-            message:isOk?`申请注销${systementity.name}权限成功`:`申请注销${systementity.name}权限失败,对方平台拒绝注销`,
-            count:0,
-            type:'complate',
+            assigneeName: `${username}${system}cancel`,
+            message: isOk ? `申请注销${systementity.name}权限成功` : `申请注销${systementity.name}权限失败,对方平台拒绝注销`,
+            count: 0,
+            type: 'complate',
         });
         return {
-            status:'801',
-            message:`success`
+            status: '801',
+            message: `success`
         }
     }
 
-    async department(body){
-        let departments=await this.app.mysql.query(
+    async department(body) {
+        let departments = await this.app.mysql.query(
             `select id,parent_id parentId,name,parent_name parentName,orgUser from t_organization where stateflag=1`);
-        for(let i=0;i<departments.length;i++){
-            departments[i].users=[];
-            if(departments[i].orgUser){
-                let users=await this.app.mysql.query(`select user_name userName,name from t_user where id in(?)`,[departments[i].orgUser.split(',')]);
-                users.forEach(u=>departments[i].users.push(u));
+        for (let i = 0; i < departments.length; i++) {
+            departments[i].users = [];
+            if (departments[i].orgUser) {
+                let users = await this.app.mysql.query(`select user_name userName,name from t_user where id in(?)`, [departments[i].orgUser.split(',')]);
+                users.forEach(u => departments[i].users.push(u));
 
             }
             delete departments[i].orgUser;
         }
         return {
-            status:'801',
-            message:'成功',
-            respdata:departments
+            status: '801',
+            message: '成功',
+            respdata: departments
         }
     }
 
-    async message(body){
-        let [{users,message}]=body.reqdata;
+    async message(body) {
+        let [{users, message}] = body.reqdata;
         const activitiIp = this.app.config.self.activitiIp;
         const json = await this.app.curl(`${activitiIp}/repository/process-definitions`, {
             method: 'GET',
@@ -349,51 +426,52 @@ class InterfaceService extends Service {
         console.log(process);
         if (!process) {
             return {
-                status:'806',
-                message:'失败,消息流未启动',
+                status: '806',
+                message: '失败,消息流未启动',
             }
         }
-        users.forEach(async user=>{
+        users.forEach(async user => {
             let startResult = await this.app.curl(`${activitiIp}/runtime/process-instances`,
                 {
                     method: 'POST',
-                    data:{
+                    data: {
                         processDefinitionId: process.id,
                         businessKey: `message-${user}`,
                         variables: [
                             {
                                 name: "applyUser",
                                 value: user
-                            },{
-                                name:'message',
-                                value:message
+                            }, {
+                                name: 'message',
+                                value: message
                             }
                         ]
                     },
                     headers: {
-                        "Accept":"application/json",
-                        "Content-Type":"application/json;charset=UTF-8"
+                        "Accept": "application/json",
+                        "Content-Type": "application/json;charset=UTF-8"
                     },
                     dataType: 'json',
                 });
             console.log(startResult);
         });
         return {
-            status:'801',
-            message:'成功',
+            status: '801',
+            message: '成功',
         }
     }
 
-    async _addsysPromision(system,user){
-        let [{count}]=await this.app.mysql.query('select count(1) count from t_user_system where user_id=? and system_id=?',[user.id,system.id]);
-        if(count===0){
-            this.app.mysql.insert('t_user_system', {user_id:user.id,system_id:system.id});
+    async _addsysPromision(system, user) {
+        let [{count}] = await this.app.mysql.query('select count(1) count from t_user_system where user_id=? and system_id=?', [user.id, system.id]);
+        if (count === 0) {
+            this.app.mysql.insert('t_user_system', {user_id: user.id, system_id: system.id});
         }
     }
 
     randomString(len) {
         len = len || 32;
-        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+        /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
         var maxPos = $chars.length;
         var pwd = '';
         for (let i = 0; i < len; i++) {
@@ -402,4 +480,5 @@ class InterfaceService extends Service {
         return pwd;
     }
 }
+
 module.exports = InterfaceService;
