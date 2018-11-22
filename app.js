@@ -18,7 +18,6 @@ module.exports = app => {
         app.mysql.modify=false;
 
 
-
         app.logger.info('app started!!!!');
     });
 
@@ -34,10 +33,3 @@ module.exports = app => {
         app.entityCache=data;
     });
 };
-
-
-
-
-
-
-

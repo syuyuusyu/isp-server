@@ -17,7 +17,7 @@ class OperationService extends Service{
     }
 
     //平台接口管理菜单树
-    async sysInvoke(current,user,roles){
+    async sysInvoke2(current,user,roles){
         let platfroms=await this.app.mysql.query(
             `select s.id sysId,s.name text from t_system s where stateflag=1`,
             []);
@@ -26,6 +26,24 @@ class OperationService extends Service{
             platfroms[i].path='/sys_invoke/'+platfroms[i].sysId;
             platfroms[i].page_path='sysInvoke';
             platfroms[i].page_class='InvokeTable';
+        }
+        return platfroms;
+    }
+
+    async sysInvoke(current,user,roles){
+        let platfroms=await this.app.mysql.query(
+            `select s.id sysId,s.name text from t_system s where stateflag=1`,
+            []);
+        for(let i=0;i<platfroms.length;i++){
+
+            platfroms[i].id=platfroms[i].sysId+'-'+current.id;
+            platfroms[i].path='/commonEntity/1003/'+platfroms[i].sysId;
+            if(platfroms[i].sysId==1){
+                platfroms[i].path='/commonEntity/1030'
+            }
+            platfroms[i].page_path='components';
+            platfroms[i].page_class='CommonLayOut';
+            platfroms[i].defaultQueryObj={stateflag:1,type:3,system_id:platfroms[i].sysId};
         }
         return platfroms;
     }

@@ -27,7 +27,7 @@ class AuthorService extends Service {
             await this.service.redis.set(system.url, operations.map(m => m.path));
             //keyverify
             await this.service.redis.set(system.keyverify_token,operations.map(m => ({path:m.path,code:m.sysCode})));
-            console.log(system.keyverify_token,operations.map(m => ({path:m.path,code:m.sysCode})));
+            console.log(system.keyverify_token);
             await this.service.redis.set(`keyverify_token_${system.sysCode}`, system.keyverify_token);
         }
         this.app.redis.set('systemMap', JSON.stringify(systemMap));

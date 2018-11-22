@@ -97,6 +97,7 @@ class EntityService extends Service{
 
     @smartQuery
     async query(entityId,requestBody){
+        console.log(entityId,requestBody);
         const {entitys,columns}=this.app.entityCache;
         let entity=entitys.filter(e=>e.id==entityId)[0];
         let entityColumns=columns.filter(c=>c.entityId==entityId);
