@@ -104,6 +104,8 @@ module.exports = app => {
     router.get('/sys/sysAccess/:userId', controller.system.sysAccess);
     //根据系统id查询出调用接口信息的路径
     router.get('/sys/currentSysPath/:id', controller.system.currentSysPath);
+    //要求对应的接口推送接口信息
+    router.get('/sys/getSystemApi/:systemId', controller.system.getSystemApi);
 
     // 系统功能
     // 获取对应系统的功能列表

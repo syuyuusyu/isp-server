@@ -125,6 +125,43 @@ class SystemController extends Controller{
             [this.ctx.params.userId]);
         this.ctx.body=result;
     }
+
+    async  getSystemApi(){
+        let [{name}] = await this.app.mysql.query(`select name from t_system where id=?`,[this.ctx.params.systemId]);
+        let result = await this.app.mysql.query(`select t.url,t.name,o.path
+            from t_system t join t_sys_operation o on o.system_id=t.id where t.id=? and o.type=7`,[this.ctx.params.systemId]);
+        if(result.length==0){
+            this.ctx.body={
+                success:false,
+                msg:`${name}没有配置请求推送服务目录接口`
+            };
+            return;
+        }
+        let [{url,path}]=result;
+        let token = await this.service.redis.get(`keyverify_token_s01`);
+        try{
+            let json=await this.app.curl(`${url}${path}`,{
+                method:'GET',
+                headers:{
+                    "Accept":"application/json",
+                    "Content-Type":"application/json;charset=UTF-8",
+                    "token":token
+                },
+                dataType:'json'
+            });
+            this.ctx.logger.info(json);
+            this.ctx.body={
+                success:true,
+                msg:`同步成功`
+            };
+        }catch (e){
+            this.ctx.body={
+                success:false,
+                msg:`调用${name}接口错误`
+            };
+        }
+
+    }
 }
 
 module.exports= SystemController;

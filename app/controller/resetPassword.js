@@ -15,6 +15,7 @@ class ResetPassword extends  Controller{
     const salt=Math.random().toString().substr(2,10);
     const hmac = crypto.createHmac('sha256', salt);
     const newPassword=hmac.update('123456').digest('hex');
+    console.log(newPassword,salt,logoinUser,new Date(),userName);
     let result=await this.app.mysql.query('update t_user set passwd=?,salt=?,update_by=?,update_time=? where user_name=?',[newPassword,salt,logoinUser,new Date(),userName]);
     const updateSuccess = result.affectedRows === 1;
     this.ctx.body={success:updateSuccess};

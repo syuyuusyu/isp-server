@@ -21,7 +21,8 @@ module.exports = (options,app) => {
             ...ctx.request.body,
             //ip:app.systemUrl['s03'],
             ip:await ctx.service.redis.getProperty('systemUrl','s03'),
-            token:bigDataToken
+            token:bigDataToken,
+            keyid:await ctx.service.redis.get(`keyverify_token_s01`),
         };
         await next();
         if(ctx.body && ctx.body.status && ctx.body.status===40101){

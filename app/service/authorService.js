@@ -15,6 +15,7 @@ class AuthorService extends Service {
 
     // 系统访问接口权限
     async invokePromiss() {
+        this.ctx.logger.info('invokePromiss');
         const systems = await this.app.mysql.query('select * from t_system where stateflag=1');
         const systemMap={},systemUrl={};
         for (const system of systems) {
@@ -27,8 +28,7 @@ class AuthorService extends Service {
             await this.service.redis.set(system.url, operations.map(m => m.path));
             //keyverify
             await this.service.redis.set(system.keyverify_token,operations.map(m => ({path:m.path,code:m.sysCode})));
-            console.log(system.keyverify_token);
-            await this.service.redis.set(`keyverify_token_${system.sysCode}`, system.keyverify_token);
+            await this.service.redis.set(`keyverify_token_${system.code}`, system.keyverify_token);
         }
         this.app.redis.set('systemMap', JSON.stringify(systemMap));
         this.app.redis.set('systemUrl', JSON.stringify(systemUrl));

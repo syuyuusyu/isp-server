@@ -14,6 +14,7 @@ class KeyverifyToken extends Subscription {
     //
     async subscribe() {
         this.app.logger.info('KeyverifyToken');
+        this.app.logger.info(ctx.service.authorService.invokePromiss);
         const ip = require("ip");
         if ( ip.address() != '10.100.30.15' && this.app.config.discription=='production'){
             return
@@ -25,7 +26,7 @@ class KeyverifyToken extends Subscription {
             await this.app.mysql.update('t_system', {id:system.id,keyverify_token:token});
         }
         // 初始化系统调用接口权限
-        await ctx.service.authorService.invokePromiss();
+        await this.service.authorService.invokePromiss();
 
 
 

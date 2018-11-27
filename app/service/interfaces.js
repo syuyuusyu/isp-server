@@ -185,7 +185,7 @@ class InterfaceService extends Service {
                 message: '成功',
                 respdata: [
                     {
-                        token: token,
+                        keyid: token,
                     }
                 ]
             };
@@ -204,12 +204,16 @@ class InterfaceService extends Service {
     }
 
     async keyverifyV2() {
-        let {system, reqdata: [{ path, token}]} = this.ctx.request.body;
+        let {system, reqdata: [{ path, token,keyid}]} = this.ctx.request.body;
+        if (!keyid && token){
+            keyid=token
+        }
         let now = new Date();
         let newStr = `${now.getFullYear()}${now.getMonth()}${now.getDay()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`;
         system = system.toLocaleLowerCase();
 
-        let operations = await this.service.redis.get(token);
+        let operations = await this.service.redis.get(keyid);
+        console.log(operations);
         if(!operations){
             return {
                 "message": "token失效",
@@ -300,8 +304,8 @@ class InterfaceService extends Service {
         try {
             for (let op of reqdata) {
                 this.ctx.logger.info(op);
-                let [result] = await this.app.mysql.query(`select id from t_sys_operation where name=? and system_id=?`,
-                    [op.name, syatemId]);
+                let [result] = await this.app.mysql.query(`select id from t_sys_operation where method=? and path=? and system_id=?`,
+                    [op.method,op.path, syatemId]);
                 if (result && result.id) {
                     let resultUpdate = await this.app.mysql.update('t_sys_operation', {
                         ...op,

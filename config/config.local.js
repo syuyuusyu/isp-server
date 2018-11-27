@@ -71,6 +71,15 @@ module.exports = appInfo => {
         },
     };
 
+    // config.redis = {
+    //     client: {
+    //         port: 6379,
+    //         host: '10.10.50.14',
+    //         password: '',
+    //         db: 0,
+    //     },
+    // };
+
 
     // config.redis = {
     //     client:{
