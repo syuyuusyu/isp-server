@@ -20,6 +20,14 @@ module.exports = agent => {
                 agent.logger.info(data);
                 exchange.publish(queueName, data);
             });
+
+            agent.messenger.on('loginMessage', data => {
+                agent.logger.info('loginMessage');
+                agent.logger.info(data);
+                exchange.publish('loginMessage', data);
+            });
+
+
         });
 
     });
