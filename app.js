@@ -17,6 +17,10 @@ module.exports = app => {
         //ctx.service.authorService.actSynUser();
         app.mysql.modify=false;
 
+        let a='components/serverList/ServiceQuery';
+        a.replace(/^((?:\/?\w+)+)\/(\w+)$/,(w,p1,p2)=>{
+            console.log(w,p1,p2);
+        });
 
         app.logger.info('app started!!!!');
     });

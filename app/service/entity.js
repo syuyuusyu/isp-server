@@ -105,7 +105,6 @@ class EntityService extends Service{
             return {
                 success:false
             };
-
         }
         //console.log(entityColumns);
         let foreignColumns=entityColumns.filter(d=>d.foreignKeyId).map(d=>({

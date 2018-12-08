@@ -465,6 +465,10 @@ class InterfaceService extends Service {
         }
     }
 
+    async service_tree(){
+        return await this.app.mysql.query(`select * from t_service_tree `);
+    }
+
     async _addsysPromision(system, user) {
         let [{count}] = await this.app.mysql.query('select count(1) count from t_user_system where user_id=? and system_id=?', [user.id, system.id]);
         if (count === 0) {
@@ -486,3 +490,8 @@ class InterfaceService extends Service {
 }
 
 module.exports = InterfaceService;
+
+
+
+
+
