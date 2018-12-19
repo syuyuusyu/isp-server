@@ -106,6 +106,10 @@ module.exports = app => {
     router.get('/sys/currentSysPath/:id', controller.system.currentSysPath);
     //要求对应的接口推送接口信息
     router.get('/sys/getSystemApi/:systemId', controller.system.getSystemApi);
+    //关联接口和服务分类树
+    router.post('/sys/updateServiceTree',controller.system.updateServiceTree);
+    //获取接口服务列表
+    router.get('/sys/synServicesList/:systemId',controller.system.synServicesList);
 
     // 系统功能
     // 获取对应系统的功能列表
@@ -329,3 +333,6 @@ module.exports = app => {
 
 
 };
+
+
+

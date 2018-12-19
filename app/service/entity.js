@@ -113,7 +113,6 @@ class EntityService extends Service{
             idCol:columns.find(c=>c.id===d.foreignKeyId),
             nameCol:columns.find(c=>c.id===d.foreignKeyNameId)
         }));
-        //console.log(foreignColumns);
         let values=`select ${entity.entityCode}.*`;
         let tables=` from ${entity.tableName} ${entity.entityCode} `;
         for(let i=0;i<foreignColumns.length;i++){
@@ -127,6 +126,22 @@ class EntityService extends Service{
         let queryValues=[];
         for(let fieldName in requestBody){
             if(fieldName==='start' || fieldName==='pageSize' || fieldName==='page') continue;
+            let opdic={
+                uneq_:'<>',
+                gt_:'>',
+                lt_:'<',
+                null_:' is null',
+                notnull_:' is not null'
+            };
+            let op='=';
+            let prefix='';
+            ['uneq_','gt_','lt_','null_','notnull_'].forEach(_=>{
+                if(fieldName.startsWith(_)){
+                    fieldName=fieldName.replace(_,'');
+                    op=opdic[_];
+                    prefix=_;
+                }
+            });
             if(!entityColumns.find(c=>c.columnName===fieldName)) continue;
             if(entityColumns.find(c=>c.columnName===fieldName).columnType==='timestamp'){
                 sql+=` and ${entity.entityCode}.${fieldName} 
@@ -136,18 +151,21 @@ class EntityService extends Service{
                 continue;
             }
             if(Object.prototype.toString.call(requestBody[fieldName])==="[object Array]"){
-                sql+=` and ${entity.entityCode}.${fieldName} in(?)`;
-                countSql+=` and ${entity.entityCode}.${fieldName} in(?)`;
+                sql+=` and ${entity.entityCode}.${fieldName} ${op=='='?'in':'not in'}(?)`;
+                countSql+=` and ${entity.entityCode}.${fieldName} ${op=='='?'in':'not in'}(?)`;
             }else{
-                sql+=` and ${entity.entityCode}.${fieldName}=?`;
-                countSql+=` and ${entity.entityCode}.${fieldName}=?`;
+                sql+=` and ${entity.entityCode}.${fieldName}${op}${(prefix=='null_' || prefix=='notnull_')?'':'?'}`;
+                countSql+=` and ${entity.entityCode}.${fieldName}${op}${(prefix=='null_' || prefix=='notnull_')?'':'?'}`;
             }
-            queryValues.push(requestBody[fieldName]?requestBody[fieldName]:null);
+            if(prefix=='null_' || prefix=='notnull_') continue;
+            queryValues.push(requestBody[prefix+fieldName]?requestBody[prefix+fieldName]:null);
         }
+
         if(entity.deleteFlagField){
             sql+=` and ${entity.entityCode}.${entity.deleteFlagField}='1'`;
             countSql+=` and ${entity.entityCode}.${entity.deleteFlagField}='1'`;
         }
+
         let pageQuery=false;
         let [{total}]=await this.app.mysql.query(countSql,queryValues);
         const {start,pageSize}=requestBody;
@@ -179,27 +197,64 @@ class EntityService extends Service{
 
     async queryCandidate(columnId,requestBody){
         //const columnId=parseInt(this.ctx.params.columnId);
+        this.ctx.logger.info(requestBody);
         const column=this.app.entityCache.columns.find(c=>c.id===columnId);
         let sql=``;
         let queryValues=[];
+        let entityColumns=[];
+        let entity;
         if(column.foreignKeyId){
             const fidCol=this.app.entityCache.columns.find(c=>c.id===column.foreignKeyId);
             const fnameCol=this.app.entityCache.columns.find(c=>c.id===column.foreignKeyNameId);
-            const entity=this.app.entityCache.entitys.find(e=>e.id===fidCol.entityId);
-            sql=`select ${fidCol.columnName} value,${fnameCol.columnName} text from ${entity.tableName} where 1=1`;
-            if(requestBody[column.columnName]){
-                sql=sql+` and ${fidCol.columnName} in(?)`;
-                queryValues.push(requestBody[column.columnName]);
+            entity=this.app.entityCache.entitys.find(e=>e.id===fidCol.entityId);
+            entityColumns=this.app.entityCache.columns.filter(c=>c.entityId===entity.id);
+            sql=`select ${fidCol.columnName} value,${fnameCol.columnName} text from ${entity.tableName} ${entity.entityCode} where 1=1`;
+            for(let fieldName in requestBody){
+                if(fieldName.endsWith(column.columnName)){
+                    let newName=fieldName.replace(/(uneq_|gt_|lt_|null_|notnull_)(?:\w+)/,(w,p)=>p+fidCol.columnName);
+                    requestBody[newName]=requestBody[fieldName];
+                    delete requestBody[fieldName];
+                }
             }
         }else{
-            const entity=this.app.entityCache.entitys.find(e=>e.id===column.entityId);
-            const currentColumns=this.app.entityCache.columns.filter(c=>c.entityId===entity.id);
-            sql=`select distinct ${column.columnName} value,${column.columnName} text from ${entity.tableName} where 1=1`;
-            for(let key in requestBody){
-                if(!currentColumns.find(c=>c.columnName===key)) continue;
-                sql=sql+` and ${key} in(?)`;
-                queryValues.push(requestBody[key]);
+            entity=this.app.entityCache.entitys.find(e=>e.id===column.entityId);
+            entityColumns=this.app.entityCache.columns.filter(c=>c.entityId===entity.id);
+            sql=`select distinct ${column.columnName} value,${column.columnName} text from ${entity.tableName} ${entity.entityCode} where 1=1`;
+        }
+        for(let fieldName in requestBody){
+            if(fieldName==='start' || fieldName==='pageSize' || fieldName==='page') continue;
+            let opdic={
+                uneq_:'<>',
+                gt_:'>',
+                lt_:'<',
+                null_:' is null',
+                notnull_:' is not null'
+            };
+            let op='=';
+            let prefix='';
+            ['uneq_','gt_','lt_','null_','notnull_'].forEach(_=>{
+                if(fieldName.startsWith(_)){
+                    fieldName=fieldName.replace(_,'');
+                    op=opdic[_];
+                    prefix=_;
+                }
+            });
+            if(!entityColumns.find(c=>c.columnName===fieldName)) continue;
+            if(entityColumns.find(c=>c.columnName===fieldName).columnType==='timestamp'){
+                sql+=` and ${entity.entityCode}.${fieldName} 
+                    BETWEEN '${requestBody[fieldName][0]}' and '${requestBody[fieldName][1]}'`;
+                continue;
             }
+            if(Object.prototype.toString.call(requestBody[fieldName])==="[object Array]"){
+                sql+=` and ${entity.entityCode}.${fieldName} ${op=='='?'in':'not in'}(?)`;
+            }else{
+                sql+=` and ${entity.entityCode}.${fieldName}${op}${(prefix=='null_' || prefix=='notnull_')?'':'?'}`;
+            }
+            if(prefix=='null_' || prefix=='notnull_') continue;
+            queryValues.push(requestBody[prefix+fieldName]?requestBody[prefix+fieldName]:null);
+        }
+        if(entity.deleteFlagField){
+            sql+=` and ${entity.entityCode}.${entity.deleteFlagField}='1'`;
         }
         this.ctx.logger.info(sql,queryValues);
         return await this.app.mysql.query(sql,queryValues);
@@ -228,7 +283,7 @@ class EntityService extends Service{
         const entity=this.app.entityCache.entitys.find(e=>e.id==entityId);
         if(entity.parentEntityId && entity.parentEntityId===entity.id){
             //id,idField,pidField,tableName
-            id=await this.ctx.service.saveOrDelete.childList(id,entity.idField,entity.pidField,entity.tableName);
+            id=await this.childList(id,entity.idField,entity.pidField,entity.tableName);
         }
         let result;
         if(entity.deleteFlagField){
@@ -307,6 +362,13 @@ class EntityService extends Service{
             }
         }
         return {success:updateSuccess};
+    }
+
+    async childList(id,idField,pidField,tableName){
+        const result=[id];
+        const sql=`select ${idField} id from ${tableName} where ${pidField} in(?)`;
+        await this._child([id],result,sql);
+        return result;
     }
 
 }

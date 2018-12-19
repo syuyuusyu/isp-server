@@ -126,6 +126,14 @@ class SystemController extends Controller{
         this.ctx.body=result;
     }
 
+    async updateServiceTree(){
+        let {treeId,ids} = this.ctx.request.body;
+        let sql=`update t_sys_operation set service_tree_id = ? where id in (?)`;
+        let data=await this.app.mysql.query(sql,[treeId,ids]);
+        const updateSuccess = data.affectedRows === ids.length;
+        this.ctx.body={success:updateSuccess};
+    }
+
     async  getSystemApi(){
         let [{name}] = await this.app.mysql.query(`select name from t_system where id=?`,[this.ctx.params.systemId]);
         let result = await this.app.mysql.query(`select t.url,t.name,o.path
@@ -160,6 +168,58 @@ class SystemController extends Controller{
                 msg:`调用${name}接口错误`
             };
         }
+    }
+
+    async synServicesList(){
+        let [{url,name,code}] = await this.app.mysql.query(`select url,name,code from t_system where id=?`,[this.ctx.params.systemId]);
+        let [op] =await this.app.mysql.query(`select * from t_sys_operation where type=7 and system_id=?`,[this.ctx.params.systemId]);
+        if(!op){
+            this.ctx.body={
+                success:false,
+                msg:`${name}没有配置服务资源目录接口`
+            };
+            return;
+        }
+        try{
+            let json=await this.app.curl(`${url}${op.path}`,{
+                method:'GET',
+                headers:{
+                    "Accept":"application/json",
+                    "Content-Type":"application/json;charset=UTF-8",
+                    "keyid":await this.ctx.service.redis.get(`keyverify_token_s01`),
+                },
+                dataType:'json'
+            });
+            if(json.length && json.length>0 && json[0].path){
+                let result=await this.service.interfaces.push_interface({system:code,reqdata:json});
+                if(result.status=='801'){
+                    this.ctx.body={
+                        success:true,
+                        msg:`${name}同步成功`
+                    };
+                    return;
+                }else{
+                    this.ctx.body={
+                        success:false,
+                        msg:`${name}同步失败`
+                    };
+                }
+            }else{
+                this.ctx.body={
+                    success:false,
+                    msg:`${name}返回数据不合法`
+                };
+                return;
+            }
+        }catch (e){
+            console.log(e);
+            this.ctx.body={
+                success:false,
+                msg:`调用接口${url}${op.path}失败!`
+            };
+        }
+
+
 
     }
 }
