@@ -165,6 +165,12 @@ class EntityService extends Service{
             sql+=` and ${entity.entityCode}.${entity.deleteFlagField}='1'`;
             countSql+=` and ${entity.entityCode}.${entity.deleteFlagField}='1'`;
         }
+        if(entity.orderField){
+            sql+=` order by `;
+            entity.orderField.split(',').forEach(key=>{
+                sql+=` ${entity.entityCode}.${key}`;
+            });
+        }
 
         let pageQuery=false;
         let [{total}]=await this.app.mysql.query(countSql,queryValues);
@@ -256,6 +262,7 @@ class EntityService extends Service{
         if(entity.deleteFlagField){
             sql+=` and ${entity.entityCode}.${entity.deleteFlagField}='1'`;
         }
+
         this.ctx.logger.info(sql,queryValues);
         return await this.app.mysql.query(sql,queryValues);
     }
@@ -316,7 +323,7 @@ class EntityService extends Service{
         if(targetDeleteFlagField){
             sql=sql+` and f.${targetDeleteFlagField}='1'`
         }
-        this.ctx.logger.info(sql);
+        this.ctx.logger.info(sql,[recordId]);
         let result=await this.app.mysql.query(sql,[recordId]);
         return {
             success,
@@ -352,11 +359,11 @@ class EntityService extends Service{
         const updateSuccess = targetIds.length===0 || result.affectedRows === targetIds.length;
         //对入库后的缓存进行刷新
         if (updateSuccess){
-            if (entityId = 1003 && monyToMonyId ==19){
+            if (entityId == 1003 && monyToMonyId ==19){
                 //接口调用权限
                 await this.service.authorService.invokePromiss();
             }
-            if (entityId = 1000 && monyToMonyId ==11){
+            if ((entityId == 1000 || entityId == 1001) && monyToMonyId ==11){
                 //用户角色
                 this.service.authorService.actSynUser();
             }
@@ -369,6 +376,14 @@ class EntityService extends Service{
         const sql=`select ${idField} id from ${tableName} where ${pidField} in(?)`;
         await this._child([id],result,sql);
         return result;
+    }
+
+    async _child(currentIds,result,sql){
+        const ids =await this.app.mysql.query(sql,[currentIds]);
+        if(ids.length>0){
+            ids.forEach(_=>result.push(_.id));
+            await this._child(ids.map(o=>o.id),result,sql);
+        }
     }
 
 }

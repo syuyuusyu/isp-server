@@ -27,7 +27,6 @@ module.exports = (options,app) => {
             //domain:await ctx.service.redis.getProperty('systemUrl','s01')
             keyid:await ctx.service.redis.get(`keyverify_token_s01`),
         };
-
         if(cloudToken) {
             await next();
             if (ctx.body && ctx.body.code && ctx.body.code === 500) {

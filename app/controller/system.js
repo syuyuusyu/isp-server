@@ -190,6 +190,7 @@ class SystemController extends Controller{
                 },
                 dataType:'json'
             });
+            json=json.data;
             if(json.length && json.length>0 && json[0].path){
                 let result=await this.service.interfaces.push_interface({system:code,reqdata:json});
                 if(result.status=='801'){

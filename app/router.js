@@ -299,6 +299,8 @@ module.exports = app => {
     router.get('/screen/business_info', controller.screen.business_info);
     // 城市建设概况接口（第三屏）
     router.get('/screen/city_info', controller.screen.city_info);
+    //接口数量统计
+    router.get('/screen/servicesStatistic',controller.screen.servicesStatistic);
 
     //获取接口配置信息
     router.get('/interfaceConfig/:flag',controller.interfaceConfig.interfaceConfig);

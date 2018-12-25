@@ -75,6 +75,19 @@ class ScreenController extends Controller{
         };
     }
 
+    //接口分类统计
+    async servicesStatistic(){
+        let top=await this.app.mysql.query(`select * from t_service_tree where pid=1`);
+        let obj={};
+        for(let i=0;i<top.length;i++){
+            let t=top[i];
+            let ids=await this.service.saveOrDelete.childList(t.id,'id','pid','t_service_tree');
+            let [{total}]=await this.app.mysql.query(`select count(1) total from t_sys_operation where type=3 and service_tree_id in(?)`,[ids] );
+            obj[t.name]=total;
+        }
+        this.ctx.body=obj;
+    }
+
 
 }
 
