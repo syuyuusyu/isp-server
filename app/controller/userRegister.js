@@ -42,8 +42,9 @@ class UserRegister extends Controller{
       let ip=this.ctx.ip;
 
       //获取前端传过来的所选择的节点的最终子节点
-      let resultOrg=await this.orgCheckedKeys(orgCheckedKeys);
-      console.log("resultOrg的值为:",resultOrg);
+      //let resultOrg=await this.orgCheckedKeys(orgCheckedKeys);
+      console.log(orgCheckedKeys);
+      //console.log("resultOrg的值为:",resultOrg);
 
       let getUserName=await this.app.mysql.query('select * from t_user',[]);
       for(const getUserNameValue of getUserName){
@@ -60,9 +61,8 @@ class UserRegister extends Controller{
         const conn = await this.app.mysql.beginTransaction();
         try {
           await conn.insert('t_user_role', {user_id:insertNewUser.insertId,role_id:20});  // 第一步操作
-          let sql=`insert into t_user_org(user_id,org_id) values ${resultOrg.map((a)=>'('+insertNewUser.insertId+','+a+')').reduce((a,b)=>a+','+b)}`;
+          let sql=`insert into t_user_org(user_id,org_id) values ${orgCheckedKeys.map((a)=>'('+insertNewUser.insertId+','+a+')').reduce((a,b)=>a+','+b)}`;
           result=await conn.query(sql);  // 第二步操作
-          console.log("result的值为:",result);
           await conn.commit(); // 提交事务
         } catch (err) {
           // error, rollback
@@ -71,7 +71,7 @@ class UserRegister extends Controller{
         }
       }
 
-      insertAllSuccess=(result.affectedRows===resultOrg.length)
+      insertAllSuccess=(result.affectedRows===resultOrg.length);
       this.ctx.body={success:insertAllSuccess};
       //存日志
       this.ctx.service.systemLog.userRegister(userName,ip)
@@ -80,7 +80,7 @@ class UserRegister extends Controller{
     async getOrg(){
       let parentId=this.ctx.params.id;
       //let content=await this.app.mysql.query('select * from t_organization where parent_id=? and stateflag=?',[parentId,1]);
-      let content=await this.app.mysql.query('select * from t_organization where stateflag=?',[1]);
+      let content=await this.app.mysql.query('select * from t_organization where stateflag=? ',[1]);
       this.ctx.body=content;
     }
 
