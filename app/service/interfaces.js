@@ -398,7 +398,7 @@ class InterfaceService extends Service {
 
     async department(body) {
         let departments = await this.app.mysql.query(
-            `select id,parent_id parentId,name,parent_name parentName,orgUser from t_organization where stateflag=1`);
+            `select id,parent_id parentId,name,parent_name parentName from t_organization where stateflag=1`);
         for (let i = 0; i < departments.length; i++) {
             departments[i].users = [];
             if (departments[i].orgUser) {

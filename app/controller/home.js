@@ -39,7 +39,10 @@ class HomeController extends Controller {
             this.app.redis.set(token, JSON.stringify({user, roles, roleMenuId}));
             this.service.systemLog.loginLog(this.ctx.request.body.user_name,this.ctx.ip);
 
-            this.app.messenger.sendToAgent('loginMessage',{type:1,name:user.name});
+            this.app.messenger.sendToAgent('loginMessage',{type:1,name:user.name,date:new Date()});
+            let userCount=parseInt(await this.service.redis.get("userCount"));
+            this.service.redis.set("userCount",userCount+1);
+
         }
         this.ctx.body = {msg, user, token, roles};
     }
@@ -55,7 +58,7 @@ class HomeController extends Controller {
     async logout() {
         const token = this.ctx.request.header['access-token'];
         const auth = await this.service.authorService.getAuthor(token);
-        this.app.messenger.sendToAgent('loginMessage',{type:0,name:auth.user.name});
+        this.app.messenger.sendToAgent('loginMessage',{type:0,name:auth.user.name,date:new Date()});
         this.service.systemLog.logoutLog(auth.user.user_name,this.ctx.ip);
         if(auth.systems){
             auth.systems.forEach(sys=>{
@@ -82,6 +85,8 @@ class HomeController extends Controller {
         }
 
         this.app.redis.del(token);
+        let userCount=parseInt(await this.service.redis.get("userCount"));
+        this.service.redis.set("userCount",userCount-1);
         setTimeout(()=>{
             this.app.redis.del(auth.user.user_name+'loginSystem');
         },5000);

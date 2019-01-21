@@ -83,9 +83,19 @@ class ScreenController extends Controller{
             let t=top[i];
             let ids=await this.service.saveOrDelete.childList(t.id,'id','pid','t_service_tree');
             let [{total}]=await this.app.mysql.query(`select count(1) total from t_sys_operation where type=3 and service_tree_id in(?)`,[ids] );
-            obj[t.name]=total;
+            let n=t.name.replace(/^(\w{4})\(\S+\)$/,(w,p)=>p);
+            obj[n]=total;
         }
         this.ctx.body=obj;
+    }
+
+    //用户总数
+    async countUser(){
+         let [{total}] =await this.app.mysql.query(`select count(1) total from t_user where stateflag=1`);
+        this.ctx.body={
+            total:total,
+            online:parseInt(await this.service.redis.get("userCount"))
+        }
     }
 
 

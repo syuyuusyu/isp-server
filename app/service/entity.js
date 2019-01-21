@@ -232,11 +232,23 @@ class EntityService extends Service{
         let queryValues=[];
         let entityColumns=[];
         let entity;
+        let numKey=(columns,body)=>{
+            for(let key in body){
+                if(/\d+/.test(key)){
+                    let col=columns.find(c=>c.id==key)
+                    if(col){
+                        body[col.columnName]=body[key];
+                    }
+                    delete body[key];
+                }
+            }
+        };
         if(column.foreignKeyId){
             const fidCol=this.app.entityCache.columns.find(c=>c.id===column.foreignKeyId);
             const fnameCol=this.app.entityCache.columns.find(c=>c.id===column.foreignKeyNameId);
             entity=this.app.entityCache.entitys.find(e=>e.id===fidCol.entityId);
             entityColumns=this.app.entityCache.columns.filter(c=>c.entityId===entity.id);
+            numKey(entityColumns,requestBody);
             sql=`select ${fidCol.columnName} value,${fnameCol.columnName} text from ${entity.tableName} ${entity.entityCode} where 1=1`;
             for(let fieldName in requestBody){
                 if(fieldName.endsWith(column.columnName)){
@@ -248,6 +260,7 @@ class EntityService extends Service{
         }else{
             entity=this.app.entityCache.entitys.find(e=>e.id===column.entityId);
             entityColumns=this.app.entityCache.columns.filter(c=>c.entityId===entity.id);
+            numKey(entityColumns,requestBody);
             sql=`select distinct ${column.columnName} value,${column.columnName} text from ${entity.tableName} ${entity.entityCode} where 1=1`;
         }
         for(let fieldName in requestBody){
@@ -382,7 +395,8 @@ class EntityService extends Service{
         const updateSuccess = targetIds.length===0 || result.affectedRows === targetIds.length;
         //对入库后的缓存进行刷新
         if (updateSuccess){
-            if (entityId == 1003 && monyToMonyId ==19){
+            console.log(entityId,monyToMonyId);
+            if ((entityId == 1003 || entityId == 1039) && monyToMonyId ==19){
                 //接口调用权限
                 await this.service.authorService.invokePromiss();
             }

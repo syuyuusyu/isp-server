@@ -301,6 +301,8 @@ module.exports = app => {
     router.get('/screen/city_info', controller.screen.city_info);
     //接口数量统计
     router.get('/screen/servicesStatistic',controller.screen.servicesStatistic);
+    //用户总数
+    router.get('/screen/countUser',controller.screen.countUser);
 
     //获取接口配置信息
     router.get('/interfaceConfig/:flag',controller.interfaceConfig.interfaceConfig);

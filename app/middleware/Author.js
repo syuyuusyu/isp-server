@@ -11,6 +11,8 @@ module.exports = (options,app) => {
             ctx.isGov=ctx.request.header['isGov'];
             await next();
         }else{
+            // let userCount=parseInt(await ctx.service.redis.get("userCount"));
+            // ctx.service.redis.set("userCount",userCount-1);
             ctx.logger.info('token失效!!!');
             ctx.status=401;
             ctx.body={status:401,message:'token失效'};

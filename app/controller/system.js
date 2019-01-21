@@ -194,6 +194,9 @@ class SystemController extends Controller{
             if(json.length && json.length>0 && json[0].path){
                 let result=await this.service.interfaces.push_interface({system:code,reqdata:json});
                 if(result.status=='801'){
+                    await this.app.mysql.query(
+                        `update t_sys_operation o join t_system t on t.id=o.system_id set o.fullPath=CONCAT(t.url,o.path) 
+                            where o.type=3 and o.system_id=?`,[this.ctx.params.systemId]);
                     this.ctx.body={
                         success:true,
                         msg:`${name}同步成功`

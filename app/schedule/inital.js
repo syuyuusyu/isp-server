@@ -32,6 +32,9 @@ class Inital extends Subscription {
         // 同步集成用户角色到流程引擎
         ctx.service.authorService.actSynUser();
 
+        ctx.service.redis.set('userCount',0);
+        //this.app.redis.set('userCount',0);
+
 
         //this.app.logger.info(111,await ctx.service.redis.get('invokeEntitys'));
         this.app.logger.info('Inital end');

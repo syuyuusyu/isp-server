@@ -16,11 +16,8 @@ module.exports = app => {
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();
         app.mysql.modify=false;
-        let ids=[9,10];
-        let id=91;
-        let sql=`update t_sys_operation set service_tree_id = ? where id in(?)`;
-        let data=await app.mysql.query(sql,[id,ids]);
-        console.log(data.affectedRows);
+
+
 
 
         app.logger.info('app started!!!!');
