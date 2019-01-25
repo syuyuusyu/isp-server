@@ -48,16 +48,17 @@ class ActivitiInterfaces extends Controller{
         let {username,applySystemCode,opType}=this.ctx.request.body;
         let result;
         try{
-            const systems=await this.app.mysql.query(
-                //`select s.*,so.path from t_system s join t_sys_operation so on s.id=so.system_id where so.type=? and s.code in(?) and s.stateflag=1`,
-                `SELECT
+            const sql= `SELECT
                     s.*, (select path from t_sys_operation so where so.system_id=s.id and so.type=?) path
                 FROM
                     t_system s
                 where 
                  s.CODE IN(?)
-                AND s.stateflag = 1`,
-                [opType==='apply'?5:6,applySystemCode.split(',')]);
+                AND s.stateflag = 1`;
+            this.ctx.logger.info(sql);
+            this.ctx.logger.info(applySystemCode);
+            this.ctx.logger.info(opType==='apply'?5:6,applySystemCode.split(','));
+            const systems=await this.app.mysql.query(sql, [opType==='apply'?5:6,applySystemCode.split(',')]);
             //const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
             //let [invokeEntity] =invokeEntitys.filter(d => d.id === 31);
             let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
@@ -72,7 +73,7 @@ class ActivitiInterfaces extends Controller{
                         });
                         continue;
                     }
-                    this.ctx.logger.info('推送用户!!');
+                        this.ctx.logger.info('推送用户!!');
                     this.ctx.logger.info(`${sys.url}${sys.path}`);
                     this.app.curl(`${sys.url}${sys.path}`,{
                         method:'POST',
