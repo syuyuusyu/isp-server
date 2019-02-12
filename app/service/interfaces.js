@@ -153,7 +153,7 @@ class InterfaceService extends Service {
         let codes = await this.service.redis.get(domain);
         //this.ctx.logger.info('接口权限认证:codes',codes);
         if (codes && codes.filter(c => {
-                let rep = /(?:\{)\w+(?:\})/;
+                let rep = /(?:\{)\w+(?:\})/g;
                 let a = c.replace(rep, (w, p) => {
                     return '.*?'
                 });
@@ -213,7 +213,7 @@ class InterfaceService extends Service {
         system = system.toLocaleLowerCase();
 
         let operations = await this.service.redis.get(keyid);
-        console.log(operations);
+        //console.log(operations);
         if(!operations){
             return {
                 "message": "token失效",
@@ -223,7 +223,7 @@ class InterfaceService extends Service {
         }
         let codes = operations.filter(o=>o.code == system).map(o=>o.path);
         if (codes && codes.filter(c => {
-                let rep = /(?:\{)\w+(?:\})/;
+                let rep = /(?:\{)\w+(?:\})/g;
                 let a = c.replace(rep, (w, p) => {
                     return '.*?'
                 });
