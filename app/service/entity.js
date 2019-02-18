@@ -101,6 +101,7 @@ class EntityService extends Service{
         const {entitys,columns,monyToMony}=this.app.entityCache;
         let entity=entitys.filter(e=>e.id==entityId)[0];
         let entityColumns=columns.filter(c=>c.entityId==entityId);
+
         if(!entity || entityColumns.length===0){
             return {
                 success:false
@@ -119,7 +120,15 @@ class EntityService extends Service{
             let fCol=foreignColumns[i];
             values=values+`,${fCol.entity.entityCode}.${fCol.nameCol.columnName} ${fCol.entity.entityCode}_${fCol.nameCol.columnName}`;
             tables=tables+` left join ${fCol.entity.tableName} ${fCol.entity.entityCode} 
-                on ${entity.entityCode}.${fCol.thisCol.columnName}=${fCol.entity.entityCode}.${fCol.idCol.columnName}`
+                on ${entity.entityCode}.${fCol.thisCol.columnName}=${fCol.entity.entityCode}.${fCol.idCol.columnName}`;
+            //当外键对应表为树结构时查询树节点下所有的ID
+            let fEntity=foreignColumns[i].entity;
+            if(fEntity.parentEntityId && fEntity.id==fEntity.parentEntityId){
+                if(requestBody[fCol.thisCol.columnName]){
+                    let ids=await this.childList(requestBody[fCol.thisCol.columnName],fEntity.idField,fEntity.pidField,fEntity.tableName);
+                    requestBody[fCol.thisCol.columnName]=ids;
+                }
+            }
         }
         for(let key in requestBody) {
             if (key.startsWith('mm')) {
@@ -194,7 +203,6 @@ class EntityService extends Service{
                 sql+=` ${entity.entityCode}.${key}`;
             });
         }
-        console.log(sql);
         let pageQuery=false;
         let [{total}]=await this.app.mysql.query(countSql,queryValues);
         const {start,pageSize}=requestBody;
