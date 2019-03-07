@@ -162,6 +162,12 @@ class EntityService extends Service{
                     prefix=_;
                 }
             });
+            if(fieldName.startsWith('fuzzy_')){
+                let fname=fieldName.replace(/^fuzzy_(\w+)/,"$1");
+                if(!entityColumns.find(c=>c.columnName===fname)) continue;
+                sql+=` and ${entity.entityCode}.${fname} like '%${requestBody[fieldName]}%'`;
+                countSql+=` and ${entity.entityCode}.${fname} like '%${requestBody[fieldName]}%'`;
+            }
             if(!entityColumns.find(c=>c.columnName===fieldName)) continue;
             if(entityColumns.find(c=>c.columnName===fieldName).columnType==='timestamp'){
                 sql+=` and ${entity.entityCode}.${fieldName} 
@@ -289,8 +295,18 @@ class EntityService extends Service{
                     prefix=_;
                 }
             });
-            if(!entityColumns.find(c=>c.columnName===fieldName)) continue;
-            if(entityColumns.find(c=>c.columnName===fieldName).columnType==='timestamp'){
+            let currentColumn=entityColumns.find(c=>c.columnName===fieldName);
+            if(!currentColumn) continue;
+            if(currentColumn.foreignKeyId){
+                const fidCol=this.app.entityCache.columns.find(c=>c.id===currentColumn.foreignKeyId);
+                const fentity=this.app.entityCache.entitys.find(e=>e.id===fidCol.entityId);
+                if(fentity.parentEntityId && fentity.id==fentity.parentEntityId){
+                    //id,idField,pidField,tableName
+                    const ids=await this.childList(requestBody[fieldName],fentity.idField,fentity.pidField,fentity.tableName);
+                    requestBody[fieldName]=ids;
+                }
+            }
+            if(currentColumn.columnType==='timestamp'){
                 sql+=` and ${entity.entityCode}.${fieldName} 
                     BETWEEN '${requestBody[fieldName][0]}' and '${requestBody[fieldName][1]}'`;
                 continue;

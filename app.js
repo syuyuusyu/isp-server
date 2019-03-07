@@ -17,7 +17,6 @@ module.exports = app => {
         //ctx.service.authorService.actSynUser();
         app.mysql.modify=false;
 
-
         app.logger.info('app started!!!!');
     });
 

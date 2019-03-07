@@ -64,59 +64,59 @@ class ActivitiInterfaces extends Controller{
             let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
             for(let i=0;i<systems.length;i++){
                 const sys=systems[i];
-                    if(!sys.path){
+                if(!sys.path){
+                    this.app.messenger.sendToAgent('rabbitmqMsg', {
+                        assigneeName:`${username}${sys.code}${opType}`,
+                        count:0,
+                        message:`${sys.name}没有配置${opType==='apply'?'推送用户':'注销用户'}接口`,
+                        type:'error'
+                    });
+                    continue;
+                }
+                this.ctx.logger.info('推送用户!!');
+                this.ctx.logger.info(`${sys.url}${sys.path}`);
+                this.app.curl(`${sys.url}${sys.path}`,{
+                    method:'POST',
+                    data:{
+                        username:username,
+                        name: user.name,
+                        phone: user.phone,
+                        email: user.email?user.email:'',
+                    },
+                    headers:{
+                        "Accept":"application/json",
+                        "Content-Type":"application/json;charset=UTF-8"
+                    },
+                    dataType:'json'
+                }).then(result=>{
+                    if(result.status>=200 && result.status<300){
+                        this.ctx.logger.info(sys.code);
                         this.app.messenger.sendToAgent('rabbitmqMsg', {
                             assigneeName:`${username}${sys.code}${opType}`,
                             count:0,
-                            message:`${sys.name}没有配置${opType==='apply'?'推送用户':'注销用户'}接口`,
-                            type:'error'
+                            message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}成功,但未获得对方平台返回信息`,
+                            type:'await'
                         });
-                        continue;
-                    }
-                        this.ctx.logger.info('推送用户!!');
-                    this.ctx.logger.info(`${sys.url}${sys.path}`);
-                    this.app.curl(`${sys.url}${sys.path}`,{
-                        method:'POST',
-                        data:{
-                            username:username,
-                            name: user.name,
-                            phone: user.phone,
-                            email: user.email?user.email:'',
-                        },
-                        headers:{
-                            "Accept":"application/json",
-                            "Content-Type":"application/json;charset=UTF-8"
-                        },
-                        dataType:'json'
-                    }).then(result=>{
-                        if(result.status>=200 && result.status<300){
-                            this.ctx.logger.info(sys.code);
-                            this.app.messenger.sendToAgent('rabbitmqMsg', {
-                                assigneeName:`${username}${sys.code}${opType}`,
-                                count:0,
-                                message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}成功,但未获得对方平台返回信息`,
-                                type:'await'
-                            });
-                        }else{
-                            this.ctx.logger.info(sys.code);
-                            this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,result);
-                            this.app.messenger.sendToAgent('rabbitmqMsg', {
-                                assigneeName:`${username}${sys.code}${opType}`,
-                                count:0,
-                                message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
-                                type:'error'
-                            });
-                        }
-                    }).catch( e=>{
+                    }else{
                         this.ctx.logger.info(sys.code);
-                        this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,e.toString());
+                        this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,result);
                         this.app.messenger.sendToAgent('rabbitmqMsg', {
                             assigneeName:`${username}${sys.code}${opType}`,
                             count:0,
                             message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
                             type:'error'
                         });
+                    }
+                }).catch( e=>{
+                    this.ctx.logger.info(sys.code);
+                    this.app.logger.error(`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,e.toString());
+                    this.app.messenger.sendToAgent('rabbitmqMsg', {
+                        assigneeName:`${username}${sys.code}${opType}`,
+                        count:0,
+                        message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
+                        type:'error'
                     });
+                });
             }
             result={success:true};
         }catch (e){

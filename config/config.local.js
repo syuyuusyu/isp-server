@@ -199,7 +199,7 @@ module.exports = appInfo => {
         queueName: 'activitiQueue'
     };
 
-    config.discription = 'local';
+    config.discription = 'local22';
 
     return config;
 
