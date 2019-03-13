@@ -302,7 +302,13 @@ class InterfaceService extends Service {
             }
         }
         try {
+            let insertCount=0,updateCount=0;
+            let allCurrent = await this.app.mysql.query(`select * from t_sys_operation where system_id=? and type=3`,[syatemId]);
             for (let op of reqdata) {
+                let current = allCurrent.find(_=> _.method==op.method && _.path==op.path);
+                if(current){
+                    allCurrent.remove(current);
+                }
                 this.ctx.logger.info(op);
                 let [result] = await this.app.mysql.query(`select id from t_sys_operation where method=? and path=? and system_id=?`,
                     [op.method,op.path, syatemId]);
@@ -313,14 +319,23 @@ class InterfaceService extends Service {
                         type: 3,
                         system_id: syatemId
                     });
+                    updateCount++;
                 } else {
                     await this.app.mysql.insert('t_sys_operation', {...op, type: 3, system_id: syatemId});
+                    insertCount++
                 }
+            }
+            this.ctx.logger.info(allCurrent.map(_=>_.id));
+            let ids=allCurrent.map(_=>_.id);
+            if(ids.length>0){
+                await this.app.mysql.delete('t_sys_operation', {
+                    id: allCurrent.map(_=>_.id),
+                });
             }
 
             return {
                 status: '801',
-                message: '同步成功'
+                message: `同步成功,新增接口${insertCount}个,跟新${updateCount}个,删除${ids.length}个`
             }
         } catch (e) {
             // 一定记得捕获异常后回滚事务！！
