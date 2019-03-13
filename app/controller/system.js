@@ -199,7 +199,7 @@ class SystemController extends Controller{
                             where o.type=3 and o.system_id=?`,[this.ctx.params.systemId]);
                     this.ctx.body={
                         success:true,
-                        msg:`${name}同步成功`
+                        msg:`${name}${result.message}`
                     };
                     return;
                 }else{
