@@ -484,6 +484,44 @@ class InterfaceService extends Service {
         return await this.app.mysql.query(`select * from t_service_tree `);
     }
 
+    async gov_area(){
+        return await this.app.mysql.query(`select id,pid,name,areaCode from t_gov_area `);
+    }
+
+    async organization(){
+        return await this.app.mysql.query(`select id,parent_id,name,areaCode from t_organization where stateflag=1 `);
+    }
+
+    async user_org({username}){
+        let [user] =await this.app.mysql.query(`select * from t_user where user_name=? and stateflag=1`,[username]);
+        if(!user){
+            return {
+                status: '806',
+                message: `用户${username}不存在`,
+            }
+        }
+        let respdata={username:username,name:user.name,organization:{}};
+        let [{org_id}] =await this.app.mysql.query(`select * from t_user_org where user_id=?`,[user.id]);
+        if(org_id){
+            let [org]=await this.app.mysql.query(`select id,parent_id,name,areaCode,null areaName from t_organization where stateflag=1 and id=?`,[org_id]);
+            if(org.areaCode){
+                let [area]=await this.app.mysql.query(`select * from t_gov_area where areaCode=?`,[org.areaCode]);
+                if(area){
+                    org.areaName=area.name;
+                }
+            }
+            respdata.organization=org;
+
+        }
+        return {
+            status: '801',
+            message: '成功',
+            respdata:respdata
+        }
+    }
+
+
+
     async _addsysPromision(system, user) {
         let [{count}] = await this.app.mysql.query('select count(1) count from t_user_system where user_id=? and system_id=?', [user.id, system.id]);
         if (count === 0) {

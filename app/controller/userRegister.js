@@ -90,8 +90,9 @@ class UserRegister extends Controller {
 
     async getOrg() {
         let parentId = this.ctx.params.id;
-        //let content=await this.app.mysql.query('select * from t_organization where parent_id=? and stateflag=?',[parentId,1]);
-        let content = await this.app.mysql.query('select * from t_organization where stateflag=? ', [1]);
+        let ids=await this.service.entity.childList(parentId,'id','parent_id','t_organization');
+        let content=await this.app.mysql.query('select * from t_organization where id in(?) and stateflag=?',[ids,1]);
+        //let content = await this.app.mysql.query('select * from t_organization where stateflag=? ', [1]);
         this.ctx.body = content;
     }
 

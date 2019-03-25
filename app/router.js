@@ -223,7 +223,7 @@ module.exports = app => {
     // 保存用户注册信息
     router.post('/userRegister/save', controller.userRegister.save);
     //获取机构
-    router.get('/userRegister/getOrg',controller.userRegister.getOrg);
+    router.get('/userRegister/getOrg/:id',controller.userRegister.getOrg);
     //获取机构名称
 
 

@@ -114,7 +114,7 @@ class EntityService extends Service{
             idCol:columns.find(c=>c.id===d.foreignKeyId),
             nameCol:columns.find(c=>c.id===d.foreignKeyNameId)
         }));
-        let values=`select ${entity.entityCode}.*`;
+        let values=`select distinct ${entity.entityCode}.*`;
         let tables=` from ${entity.tableName} ${entity.entityCode} `;
         for(let i=0;i<foreignColumns.length;i++){
             let fCol=foreignColumns[i];
@@ -138,7 +138,7 @@ class EntityService extends Service{
                 let mm=monyToMony.find(m=>m.id==mmId);
                 let fidField=mm.firstTable==entity.tableName?mm.firstIdField:mm.secondIdField;
                 let sidField=mm.firstTable==en.tableName?mm.firstIdField:mm.secondIdField;
-                tables+=` join ${mm.relationTable} ${mm.relationTable} on ${mm.relationTable}.${fidField}=${entity.entityCode}.${entity.idField}`
+                tables+=` left join ${mm.relationTable} ${mm.relationTable} on ${mm.relationTable}.${fidField}=${entity.entityCode}.${entity.idField}`
             }
         }
         let sql=`${values}${tables} where 1=1`;
@@ -199,8 +199,18 @@ class EntityService extends Service{
                 let mm=monyToMony.find(m=>m.id==mmId);
                 let fidField=mm.firstTable==entity.tableName?mm.firstIdField:mm.secondIdField;
                 let sidField=mm.firstTable==en.tableName?mm.firstIdField:mm.secondIdField;
-                sql+=` and ${mm.relationTable}.${sidField}=${requestBody[key]}`;
-                countSql+=` and ${mm.relationTable}.${sidField}=${requestBody[key]}`
+                //对端表为树结构
+                if(en.parentEntityId && en.id==en.parentEntityId){
+                    let id=requestBody[key];
+                    let ids=await this.childList(id,en.idField,en.pidField,en.tableName);
+                    requestBody[key]=ids;
+                    sql+=` and ${mm.relationTable}.${sidField} in (${requestBody[key]})`;
+                    countSql+=` and ${mm.relationTable}.${sidField} in(${requestBody[key]})`
+                }else{
+                    sql+=` and ${mm.relationTable}.${sidField}=${requestBody[key]}`;
+                    countSql+=` and ${mm.relationTable}.${sidField}=${requestBody[key]}`
+                }
+
             }
         }
         if(entity.orderField){
@@ -339,10 +349,30 @@ class EntityService extends Service{
     }
 
     async saveEntity(entityId,requestBody){
+        console.log(requestBody);
         const entity=this.app.entityCache.entitys.find(e=>e.id==entityId);
-        let result = await this.app.mysql[requestBody[entity.idField]?'update':'insert'](entity.tableName, requestBody);
+        const method=requestBody[entity.idField]?'update':'insert';
+        let result = await this.app.mysql[method](entity.tableName, requestBody);
         // 判断更新成功
         const updateSuccess = result.affectedRows === 1;
+
+        //处理不同实体的特殊情况
+        if(updateSuccess){
+            if(method=='insert'){
+                const insertId=result.insertId;
+                if (entityId == 1028){
+                    //更新机构层级
+                    let [ {hierarchy}]= await this.app.mysql.query(`select hierarchy from t_organization where id=?`,[requestBody.parent_id]);
+                    this.app.mysql.update('t_organization',{hierarchy:hierarchy+1,id:insertId});
+                }
+                if (entityId == 1045){
+                    //跟新区划层级
+                    let [ {hierarchy}]= await this.app.mysql.query(`select hierarchy from t_gov_area where id=?`,[requestBody.pid]);
+                    this.app.mysql.update('t_gov_area',{hierarchy:hierarchy+1,id:insertId});
+                }
+            }
+
+        }
         return {success:updateSuccess};
     }
 
@@ -419,7 +449,6 @@ class EntityService extends Service{
         const updateSuccess = targetIds.length===0 || result.affectedRows === targetIds.length;
         //对入库后的缓存进行刷新
         if (updateSuccess){
-            console.log(entityId,monyToMonyId);
             if ((entityId == 1003 || entityId == 1039) && monyToMonyId ==19){
                 //接口调用权限
                 await this.service.authorService.invokePromiss();

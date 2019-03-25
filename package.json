@@ -42,8 +42,7 @@
     "stop": "egg-scripts stop --title=egg-server-isp-server",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
-    "test": "npm run lint -- --fix && npm run test-local",
-    "test-local": "egg-bin test",
+    "test": "egg-bin test",
     "cov": "egg-bin cov",
     "ci": "npm run lint && npm run cov",
     "autod": "autod"
