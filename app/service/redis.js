@@ -17,7 +17,7 @@ class RedisService extends Service{
 
     async push(k,obj){
         if(!await this.containKey(k)){
-            this.app.logger.error('key:'+k+'对应对象不存在');
+            this.app.logger.error('key:'+k+'对应对象不存在1');
             return;
         }
         const json=await this.app.redis.get(k);
@@ -33,7 +33,7 @@ class RedisService extends Service{
 
     async shift(k){
         if(!await this.containKey(k)){
-            this.app.logger.error('key:'+k+'对应对象不存在');
+            this.app.logger.error('key:'+k+'对应对象不存在2');
             return;
         }
         const json=await this.app.redis.get(k);
@@ -53,7 +53,7 @@ class RedisService extends Service{
 
     async forEach(k,fn){
         if(!await this.containKey(k)){
-            this.app.logger.error('key:'+k+'对应对象不存在');
+            this.app.logger.error('key:'+k+'对应对象不存在3');
             return;
         }
         const json=await this.app.redis.get(k);
@@ -67,7 +67,7 @@ class RedisService extends Service{
 
     async setProperty(k,field,v){
         if(!await this.containKey(k)){
-            this.app.logger.error('key:'+k+'对应对象不存在');
+            this.app.logger.error('key:'+k+'对应对象不存在4');
             return;
         }
         const json=await this.app.redis.get(k);
@@ -78,7 +78,7 @@ class RedisService extends Service{
 
     async getProperty(k,field){
         if(!await this.containKey(k)){
-            this.app.logger.error('key:'+k+'对应对象不存在');
+            this.app.logger.error('key:'+k+'对应对象不存在5');
             return;
         }
         const json=await this.app.redis.get(k);
@@ -88,7 +88,7 @@ class RedisService extends Service{
 
     async splice(k,index,length){
         if(!await this.containKey(k)){
-            this.app.logger.error('key:'+k+'对应对象不存在');
+            this.app.logger.error('key:'+k+'对应对象不存在6');
             return;
         }
         const json=await this.app.redis.get(k);

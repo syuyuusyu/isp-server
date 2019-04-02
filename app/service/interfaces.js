@@ -362,14 +362,26 @@ class InterfaceService extends Service {
         }
 
         let isOk = false;
+        let isModify=await this.service.redis.containKey(`${username}${system}modify`)
+        let message='';
         if (status === '801') {
             //增加用户访问对应平台权限
             isOk = true;
+
+        }
+        if(isOk || !isModify){
             await this._addsysPromision(systementity, user);
         }
+        message = isOk? `申请${systementity.name}权限成功` : `申请${systementity.name}权限失败,对方平台拒绝申请`
+        let assigneeName=`${username}${system}apply`
+        if(isModify){
+            this.service.redis.del(`${username}${system}modify`);
+            assigneeName=`${username}${system}modify`;
+            message=isOk? `${systementity.name}修改用户信息成功` : `${systementity.name}修改用户信息失败`
+        }
         this.app.messenger.sendToAgent('rabbitmqMsg', {
-            assigneeName: `${username}${system}apply`,
-            message: isOk ? `申请${systementity.name}权限成功` : `申请${systementity.name}权限失败,对方平台拒绝申请`,
+            assigneeName: assigneeName,
+            message: message,
             count: 0,
             type: 'complate',
         });
@@ -399,6 +411,7 @@ class InterfaceService extends Service {
             isOk = true;
             await this.app.mysql.query(`delete from t_user_system where user_id=? and system_id=?`, [user.id, systementity.id]);
         }
+
         this.app.messenger.sendToAgent('rabbitmqMsg', {
             assigneeName: `${username}${system}cancel`,
             message: isOk ? `申请注销${systementity.name}权限成功` : `申请注销${systementity.name}权限失败,对方平台拒绝注销`,

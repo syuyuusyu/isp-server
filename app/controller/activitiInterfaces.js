@@ -48,17 +48,13 @@ class ActivitiInterfaces extends Controller{
         let {username,applySystemCode,opType}=this.ctx.request.body;
         let result;
         try{
-            const sql= `SELECT
-                    s.*, (select path from t_sys_operation so where so.system_id=s.id and so.type=?) path
-                FROM
-                    t_system s
-                where 
-                 s.CODE IN(?)
-                AND s.stateflag = 1`;
+            const sql=`SELECT s.*, so.path FROM t_system s join t_sys_operation so on so.system_id=s.id where so.type=? and  s.CODE IN(?) AND s.stateflag = 1`;
             this.ctx.logger.info(sql);
             this.ctx.logger.info(applySystemCode);
-            this.ctx.logger.info(opType==='apply'?5:6,applySystemCode.split(','));
-            const systems=await this.app.mysql.query(sql, [opType==='apply'?5:6,applySystemCode.split(',')]);
+            let a= opType==='apply'?5:6;
+            let b= applySystemCode.split(',');
+            this.ctx.logger.info(a,b);
+            const systems=await this.app.mysql.query(sql, [a,b]);
             //const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
             //let [invokeEntity] =invokeEntitys.filter(d => d.id === 31);
             let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
@@ -87,7 +83,7 @@ class ActivitiInterfaces extends Controller{
                         "Accept":"application/json",
                         "Content-Type":"application/json;charset=UTF-8"
                     },
-                    dataType:'json'
+                    //dataType:'json'
                 }).then(result=>{
                     if(result.status>=200 && result.status<300){
                         this.ctx.logger.info(sys.code);
@@ -114,6 +110,83 @@ class ActivitiInterfaces extends Controller{
                         assigneeName:`${username}${sys.code}${opType}`,
                         count:0,
                         message:`调用${sys.name}${opType==='apply'?'推送用户':'注销用户'}接口失败`,
+                        type:'error'
+                    });
+                });
+            }
+            result={success:true};
+        }catch (e){
+            this.ctx.logger.info(e.toString());
+            result={success:false};
+        }
+        this.ctx.body=result;
+    }
+
+    async modifyuser(){
+        let {username,applySystemCode}=this.ctx.request.body;
+        let result;
+        try{
+            const sql=`SELECT s.*, so.path FROM t_system s join t_sys_operation so on so.system_id=s.id where so.type=5 and  s.CODE IN(?) AND s.stateflag = 1`;
+            this.ctx.logger.info(sql);
+            this.ctx.logger.info(applySystemCode);
+            let a= opType==='apply'?5:6;
+            let b= applySystemCode.split(',');
+            this.ctx.logger.info(a,b);
+            const systems=await this.app.mysql.query(sql, [a,b]);
+            let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
+            for(let i=0;i<systems.length;i++){
+                const sys=systems[i];
+                if(!sys.path){
+                    this.app.messenger.sendToAgent('rabbitmqMsg', {
+                        assigneeName:`${username}${sys.code}modify`,
+                        count:0,
+                        message:`${sys.name}没有配置推送用户接口`,
+                        type:'error'
+                    });
+                    continue;
+                }
+                this.ctx.logger.info('推送用户!!');
+                this.ctx.logger.info(`${sys.url}${sys.path}`);
+                this.app.curl(`${sys.url}${sys.path}`,{
+                    method:'POST',
+                    data:{
+                        username:username,
+                        name: user.name,
+                        phone: user.phone,
+                        email: user.email?user.email:'',
+                    },
+                    headers:{
+                        "Accept":"application/json",
+                        "Content-Type":"application/json;charset=UTF-8"
+                    },
+                    //dataType:'json'
+                }).then(result=>{
+                    if(result.status>=200 && result.status<300){
+                        this.ctx.logger.info(sys.code);
+                        this.app.messenger.sendToAgent('rabbitmqMsg', {
+                            assigneeName:`${username}${sys.code}modify`,
+                            count:0,
+                            message:`调用${sys.name}推送用户成功,但未获得对方平台返回信息`,
+                            type:'await'
+                        });
+                        this.app.redis.set(`${username}${sys.code}modify`,'','Ex',60);
+                    }else{
+                        this.ctx.logger.info(sys.code);
+                        this.app.logger.error(`调用${sys.name}推送用户接口失败`,result);
+                        this.app.messenger.sendToAgent('rabbitmqMsg', {
+                            assigneeName:`${username}${sys.code}modify`,
+                            count:0,
+                            message:`调用${sys.name}接口失败`,
+                            type:'error'
+                        });
+                    }
+                }).catch( e=>{
+                    this.ctx.logger.info(sys.code);
+                    this.app.logger.error(`调用${sys.name}推送用户接口失败`,e.toString());
+                    this.app.messenger.sendToAgent('rabbitmqMsg', {
+                        assigneeName:`${username}${sys.code}modify`,
+                        count:0,
+                        message:`调用${sys.name}推送用户接口失败`,
                         type:'error'
                     });
                 });
