@@ -87,7 +87,7 @@ class RestfulController extends Controller{
             }
             result.push(cur);
         }
-        this.ctx.logger.info('集成就调用结果:',result);
+        //this.ctx.logger.info('集成就调用结果:',result);
         if(entity.parseFun){
             try {
                 let fn=evil(entity.parseFun);
@@ -99,7 +99,7 @@ class RestfulController extends Controller{
         }else{
 
         }
-        this.ctx.logger.info('运行解析函数后结果',result);
+        //this.ctx.logger.info('运行解析函数后结果',result);
         this.ctx.body=result;
     }
 

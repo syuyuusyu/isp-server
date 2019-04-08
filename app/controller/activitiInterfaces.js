@@ -48,19 +48,22 @@ class ActivitiInterfaces extends Controller{
         let {username,applySystemCode,opType}=this.ctx.request.body;
         let result;
         try{
-            const sql=`SELECT s.*, so.path FROM t_system s join t_sys_operation so on so.system_id=s.id where so.type=? and  s.CODE IN(?) AND s.stateflag = 1`;
+            //const sql=`SELECT s.*, so.path FROM t_system s join t_sys_operation so on so.system_id=s.id where so.type=?
+            // and  s.CODE IN(?) AND s.stateflag = 1`;
+            const sql=`select * from t_system where code in(?) and stateflag=1`;
             this.ctx.logger.info(sql);
             this.ctx.logger.info(applySystemCode);
-            let a= opType==='apply'?5:6;
-            let b= applySystemCode.split(',');
+            let type= opType==='apply'?5:6;
+            let codes= applySystemCode.split(',');
             this.ctx.logger.info(a,b);
-            const systems=await this.app.mysql.query(sql, [a,b]);
-            //const invokeEntitys=await this.ctx.service.redis.get('invokeEntitys');
-            //let [invokeEntity] =invokeEntitys.filter(d => d.id === 31);
+            const systems=await this.app.mysql.query(sql, [codes]);
             let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
             for(let i=0;i<systems.length;i++){
                 const sys=systems[i];
+                let [op] =await this.app.mysql.query(`select * from t_sys_operation where type=? and system_id=?`,[type,sys.id]);
+                sys.path=op.path;
                 if(!sys.path){
+                    this.ctx.logger.info(`${sys.name}没有配置${opType==='apply'?'推送用户':'注销用户'}接口`);
                     this.app.messenger.sendToAgent('rabbitmqMsg', {
                         assigneeName:`${username}${sys.code}${opType}`,
                         count:0,
@@ -126,16 +129,19 @@ class ActivitiInterfaces extends Controller{
         let {username,applySystemCode}=this.ctx.request.body;
         let result;
         try{
-            const sql=`SELECT s.*, so.path FROM t_system s join t_sys_operation so on so.system_id=s.id where so.type=5 and  s.CODE IN(?) AND s.stateflag = 1`;
+            //const sql=`SELECT s.*, so.path FROM t_system s join t_sys_operation so on so.system_id=s.id where so.type=5 and  s.CODE IN(?) AND s.stateflag = 1`;
+            const sql=`select * from t_system where code in(?) and stateflag=1`;
             this.ctx.logger.info(sql);
             this.ctx.logger.info(applySystemCode);
-            let a= opType==='apply'?5:6;
-            let b= applySystemCode.split(',');
-            this.ctx.logger.info(a,b);
-            const systems=await this.app.mysql.query(sql, [a,b]);
+            let type= 5;
+            let codes= applySystemCode.split(',');
+            this.ctx.logger.info(type,codes);
+            const systems=await this.app.mysql.query(sql, [codes]);
             let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
             for(let i=0;i<systems.length;i++){
                 const sys=systems[i];
+                let [op] =await this.app.mysql.query(`select * from t_sys_operation where type=? and system_id=?`,[type,sys.id]);
+                sys.path=op.path;
                 if(!sys.path){
                     this.app.messenger.sendToAgent('rabbitmqMsg', {
                         assigneeName:`${username}${sys.code}modify`,
