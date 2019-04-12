@@ -55,13 +55,13 @@ class ActivitiInterfaces extends Controller{
             this.ctx.logger.info(applySystemCode);
             let type= opType==='apply'?5:6;
             let codes= applySystemCode.split(',');
-            this.ctx.logger.info(a,b);
+            this.ctx.logger.info(type,codes);
             const systems=await this.app.mysql.query(sql, [codes]);
             let [user]=await this.app.mysql.query(`select * from t_user where user_name=?`,[username]);
             for(let i=0;i<systems.length;i++){
                 const sys=systems[i];
                 let [op] =await this.app.mysql.query(`select * from t_sys_operation where type=? and system_id=?`,[type,sys.id]);
-                sys.path=op.path;
+                sys.path=op?op.path:undefined;
                 if(!sys.path){
                     this.ctx.logger.info(`${sys.name}没有配置${opType==='apply'?'推送用户':'注销用户'}接口`);
                     this.app.messenger.sendToAgent('rabbitmqMsg', {
@@ -141,7 +141,7 @@ class ActivitiInterfaces extends Controller{
             for(let i=0;i<systems.length;i++){
                 const sys=systems[i];
                 let [op] =await this.app.mysql.query(`select * from t_sys_operation where type=? and system_id=?`,[type,sys.id]);
-                sys.path=op.path;
+                sys.path=op?op.path:undefined;
                 if(!sys.path){
                     this.app.messenger.sendToAgent('rabbitmqMsg', {
                         assigneeName:`${username}${sys.code}modify`,

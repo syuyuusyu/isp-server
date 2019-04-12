@@ -5,7 +5,7 @@ class Inital extends Subscription {
     // 通过 schedule 属性来设置定时任务的执行间隔等配置
     static get schedule() {
         return {
-            cron: '0 0 0 * * *',
+            cron: '0 0 0/24 * * *',
             immediate:true,
             type: 'worker',
         };
@@ -35,11 +35,7 @@ class Inital extends Subscription {
         ctx.service.redis.set('userCount',0);
         //this.app.redis.set('userCount',0);
 
-
-        //this.app.logger.info(111,await ctx.service.redis.get('invokeEntitys'));
         this.app.logger.info('Inital end');
-
-
     }
 
 
