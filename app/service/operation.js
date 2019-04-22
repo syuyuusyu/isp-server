@@ -4,7 +4,7 @@ class OperationService extends Service{
 
     //平台功能配置菜单树
     async loadPlatfrom(current,user,roles){
-        let sql=`select s.id sysId,s.name text from t_system s where stateflag=1`;
+        let sql=`select s.id sysId,s.name text from t_system s where stateflag=1 and accessType='1'`;
         //let sql=`select s.id sysId,s.name text from t_system s join t_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`
         let platfroms=await this.app.mysql.query(sql,[roles.map(r=>r.id)]);
         for(let i=0;i<platfroms.length;i++){

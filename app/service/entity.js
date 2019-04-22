@@ -142,7 +142,7 @@ class EntityService extends Service{
             }
         }
         let sql=`${values}${tables} where 1=1`;
-        let countSql=`select count(1) total ${tables} where 1=1`;
+        let countSql=`select count(distinct ${entity.entityCode}.${entity.idField}) total ${tables} where 1=1`;
         let queryValues=[];
         for(let fieldName in requestBody){
             if(fieldName==='start' || fieldName==='pageSize' || fieldName==='page') continue;

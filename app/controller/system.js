@@ -96,7 +96,7 @@ class SystemController extends Controller{
 
     async currentRoleSys(){
         //let sql=`select s.* from t_system s join t_sys_role rs on rs.system_id=s.id where rs.role_id in (?) order by s.id`;
-        let sql=`select s.* from t_system s join t_user_system us on us.system_id=s.id where us.user_id=? order by s.orderIndex`;
+        let sql=`select s.* from t_system s join t_user_system us on us.system_id=s.id where us.user_id=? and s.accessType='1' order by s.orderIndex`;
         const token =this.ctx.request.header['access-token'];
         const auth=await this.service.authorService.getAuthor(token);
         const {user,roles}=auth;

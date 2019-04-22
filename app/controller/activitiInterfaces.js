@@ -7,7 +7,7 @@ class ActivitiInterfaces extends Controller{
         const [{id}]=await this.app.mysql.query(`select * from t_user where user_name=?`,[this.ctx.params.username]);
         let data=await this.app.mysql.query(
             `select s.id,s.code,s.name,(select count(1) from t_user_system where user_id=? and system_id=s.id) count 
-            from t_system s where s.stateflag=1 and code<>'s01'`,
+            from t_system s where s.stateflag=1 and accessType='1' and code<>'s01'`,
             [id]);
         let result=[];
         data.forEach(d=>{
