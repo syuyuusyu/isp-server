@@ -24,7 +24,7 @@ class DictionaryController extends Controller{
         }else{
             let [{groupId:currentGroupId}]=await this.app.mysql.query(`select max(groupId)+1 groupId from entity_dictionary`);
             groupId=currentGroupId;
-            let result=await this.app.mysql.query(`insert into entity_dictionary (id,groupId,groupName) values(null,?,?)`,[groupId,groupName]);
+            let result=await this.app.mysql.query(`insert into entity_dictionary (groupId,groupName) values(?,?)`,[groupId,groupName]);
             affectedRows=result.affectedRows;
         }
         const updateSuccess = affectedRows >0;
@@ -44,7 +44,7 @@ class DictionaryController extends Controller{
                 let result = await this.app.mysql.update('entity_dictionary', {...this.ctx.request.body,id:isnewDic[0].id});
                 affectedRows= result.affectedRows;
             }else{
-                let result=await this.app.mysql.query(`insert into entity_dictionary (id,groupId,groupName,text,value) 
+                let result=await this.app.mysql.query(`insert into entity_dictionary (id,groupId,groupName,text,value)
                     values(null,?,?,?,?)`,[groupId,groupName,text,value]);
                 affectedRows=result.affectedRows;
             }

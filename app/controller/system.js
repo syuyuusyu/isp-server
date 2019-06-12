@@ -42,6 +42,7 @@ class SystemController extends Controller{
     // }
 
     async save() {
+        console.log(this.ctx.request.body);
         this.ctx.body = { success: await this.ctx.service.saveOrDelete.save('t_system',this.ctx.request.body)};
         this.ctx.service.authorService.invokePromiss();
     }

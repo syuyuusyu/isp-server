@@ -92,8 +92,8 @@ function smartQuery(target, name, descriptor) {
                         return '';
                     }
                 });
-                if(!/where/.test(sql)){
-                    sql=sql.replace('and','where');
+                if(!/\swhere\s/.test(sql)){
+                    //sql=sql.replace('and','where');
                 }
                 return [sql,newArg];
             });

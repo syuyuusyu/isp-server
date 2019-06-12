@@ -14,6 +14,8 @@ module.exports = app => {
         //ctx.service.authorService.actSynUser();
         app.mysql.modify=false;
 
+        //ctx.service.organization.createGovOrg();
+        //await ctx.service.organization.delete();
         app.logger.info('app started!!!!');
     });
 

@@ -15,6 +15,7 @@ module.exports = (options,app) => {
                 ispToken:ispToken
             });
             bigDataToken = result['data_token-1']['result'].token;
+            ctx.logger.info('bigDataToken',bigDataToken);
             app.redis.set(user.user_name+'-bigDataToken',bigDataToken);
         }
         ctx.request.body={
