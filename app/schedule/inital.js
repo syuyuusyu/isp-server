@@ -6,7 +6,7 @@ class Inital extends Subscription {
     static get schedule() {
         return {
             cron: '0 0 0/24 * * *',
-            immediate:false,
+            immediate:true,
             type: 'worker',
         };
     }
@@ -14,6 +14,8 @@ class Inital extends Subscription {
     //
     async subscribe() {
         this.app.logger.info('Inital');
+
+        console.log(this.app.curl);
         const ctx = this.app.createAnonymousContext();
         //清空redis
         const keys=await this.app.redis.keys('*');

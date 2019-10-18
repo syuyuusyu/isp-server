@@ -13,6 +13,7 @@
     "egg-session-redis": "^1.0.0",
     "egg-view-nunjucks": "^2.2.0",
     "jsonwebtoken": "^8.5.0",
+    "ssl-root-cas": "^1.3.1",
     "stream-wormhole": "^1.1.0"
   },
   "devDependencies": {
@@ -38,9 +39,10 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-isp-server --env=production",
-    "stop": "egg-scripts stop --title=egg-server-isp-server",
-    "dev": "egg-bin dev",
+    "start": "egg-scripts start --daemon --title=egg-server-isp --env=production",
+    "start-https": "egg-scripts start --port=7001 --https.key=/home/webapp/yndk.key --https.cert=/home/webapp/yndk.crt --daemon --title=egg-server-isp",
+    "stop": "egg-scripts stop --title=egg-server-isp",
+    "dev": "egg-bin dev --port=7001 --daemon --title=egg-server-isp",
     "debug": "egg-bin debug",
     "test": "egg-bin test",
     "cov": "egg-bin cov",

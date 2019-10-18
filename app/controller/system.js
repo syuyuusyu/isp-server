@@ -189,7 +189,8 @@ class SystemController extends Controller{
                     "Content-Type":"application/json;charset=UTF-8",
                     "keyid":await this.ctx.service.redis.get(`keyverify_token_s01`),
                 },
-                dataType:'json'
+                dataType:'json',
+                timeout:20000
             });
             json=json.data;
             if(json.length && json.length>0 && json[0].path){
@@ -217,7 +218,7 @@ class SystemController extends Controller{
                 return;
             }
         }catch (e){
-            console.log(e);
+            this.ctx.logger.info(e);
             this.ctx.body={
                 success:false,
                 msg:`调用接口${url}${op.path}失败!`

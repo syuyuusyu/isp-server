@@ -9,7 +9,7 @@ class MonitorLog extends Subscription{
   }
   // subscribe 是真正定时任务执行时被运行的函数
   async subscribe() {
-    let result=await this.ctx.curl(`127.0.0.1:7001/invoke/self_monitor_list_api`,{
+    let result=await this.app.curl(`127.0.0.1:7001/invoke/self_monitor_list_api`,{
       method:'post',
       data:{},
       headers:{

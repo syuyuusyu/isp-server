@@ -40,13 +40,14 @@ class AuthorService extends Service {
         const [invokeEntity] = invokeEntitys.filter(d => d.name === 'act_syn_user'),
             userRole = await this.app.mysql
                 .query(`select r.code g,u.user_name u from t_user_role ut JOIN t_user u on ut.user_id=u.id join t_role r on r.id=ut.role_id`),
-            usernames = await this.app.mysql.query(`select * from t_user`),
-            groupnames = await this.app.mysql.query(`select * from t_role`),
+            usernames = await this.app.mysql.query(`select * from t_user where stateflag='1'`),
+            groupnames = await this.app.mysql.query(`select * from t_role where stateflag='1'`),
             queryMap = {
                 userRole: userRole.map(ur => ur.u + ',' + ur.g),
                 usernames: usernames.map(u => u.user_name),
                 groupnames: groupnames.map(r => r.code),
             };///act/userSyn
+        console.log(queryMap);
         let result = await this.app.curl(`${this.app.config.self.activitiIp}/act/userSyn`, {
             method: 'POST',
             data: queryMap,

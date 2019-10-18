@@ -15,7 +15,8 @@ module.exports = appInfo => {
         'author',
         'swiftToken',
         'cloudToken',
-        'bigDataToken'
+        'bigDataToken',
+        'supmapToken'
     ];
 
     config.author={
@@ -32,6 +33,10 @@ module.exports = appInfo => {
 
     config.bigDataToken={
         match:  /\/invoke\/data/
+    };
+
+    config.supmapToken={
+        match:  /\/invoke\/map/
     };
 
 
@@ -89,6 +94,7 @@ module.exports = appInfo => {
             'http://10.10.50.16',
             'http://127.0.0.1',
             'http://isp.yndk.cn',
+            'https://isp.yndk.cn',
             'http://10.10.50.10:7006',
             'http://10.10.50.10:7007',
             'http://59.216.201.50:3080',

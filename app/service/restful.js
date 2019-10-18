@@ -1,5 +1,6 @@
 const Service=require('egg').Service;
 const EventEmitter = require('events').EventEmitter;
+const fs=require('fs');
 
 class RestfulService extends Service{
 
@@ -44,7 +45,7 @@ class RestfulService extends Service{
                 data:data,
                 headers:head,
                 dataType: 'json',
-                timeout:20000
+                timeout:20000,
             });
         }catch (e){
             this.ctx.logger.error('调用接口错误!!',url);

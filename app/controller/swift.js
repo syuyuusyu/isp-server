@@ -20,7 +20,7 @@ class SwiftController extends Controller {
     async createContainer() {
         let token = this.ctx.request.header['X-Auth-Token'];
         const {username} = this.ctx.request.body;
-        const result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${username}/`, {
+        const result = await this.app.curl(`${this.app.config.self.swiftBaseUrl}${username}/`, {
             headers: {
                 'X-Auth-Token': token,
                 "Content-Length": 0
@@ -34,7 +34,7 @@ class SwiftController extends Controller {
         let token = this.ctx.request.header['X-Auth-Token'];
         let result;
         try {
-            result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}?format=json`, {
+            result = await this.app.curl(`${this.app.config.self.swiftBaseUrl}?format=json`, {
                 headers: {'X-Auth-Token': token},
                 dataType: 'json',
                 timeout:400000
@@ -101,7 +101,7 @@ class SwiftController extends Controller {
         this.ctx.logger.info('start curl', filename);
         let encodeUrl = `${username}/${name}`.split('/').map(d => encodeURI(d)).join('/');
         console.log(`${this.app.config.self.swiftBaseUrl}${username}/${name}`);
-        const result = await this.ctx.curl(`${this.app.config.self.swiftBaseUrl}${encodeUrl}`, {
+        const result = await this.app.curl(`${this.app.config.self.swiftBaseUrl}${encodeUrl}`, {
             //writeStream: fs.createWriteStream('/Users/syu/Movies/test/'+filename),
             streaming: true,
             headers: {'X-Auth-Token': token}
@@ -141,7 +141,7 @@ class SwiftController extends Controller {
                 let result;
                 try {
                     ctx.logger.info(`${this.app.config.self.swiftBaseUrl}${username}${flodername.startsWith('/')?flodername:'/'+flodername}${encodeURI(part.filename)}`);
-                    result = await this.ctx.curl(
+                    result = await this.app.curl(
                         `${this.app.config.self.swiftBaseUrl}${username}${flodername.startsWith('/')?flodername:'/'+flodername}${encodeURI(part.filename)}`,
                         {
                         //writeStream: fs.createWriteStream('/Users/syu/scp/sdsd.sql'),
@@ -176,7 +176,7 @@ class SwiftController extends Controller {
         let result;
         try {
             ctx.logger.info(`${this.app.config.self.swiftBaseUrl}${username}/${flodername}${filename}`);
-            result = await this.ctx.curl(
+            result = await this.app.curl(
                 `${this.app.config.self.swiftBaseUrl}${username}/${flodername}${filename}`,
                 {
                     //writeStream: fs.createWriteStream('/Users/syu/scp/sdsd.sql'),

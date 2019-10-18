@@ -362,7 +362,7 @@ class InterfaceService extends Service {
         }
 
         let isOk = false;
-        let isModify=await this.service.redis.containKey(`${username}${system}modify`)
+        let isModify=await this.service.redis.containKey(`${username}${system}modify`);
         let message='';
         if (status === '801') {
             //增加用户访问对应平台权限
@@ -372,8 +372,8 @@ class InterfaceService extends Service {
         if(isOk || !isModify){
             await this._addsysPromision(systementity, user);
         }
-        message = isOk? `申请${systementity.name}权限成功` : `申请${systementity.name}权限失败,对方平台拒绝申请`
-        let assigneeName=`${username}${system}apply`
+        message = isOk? `申请${systementity.name}权限成功` : `申请${systementity.name}权限失败,对方平台拒绝申请`;
+        let assigneeName=`${username}${system}apply`;
         if(isModify){
             this.service.redis.del(`${username}${system}modify`);
             assigneeName=`${username}${system}modify`;
@@ -514,23 +514,33 @@ class InterfaceService extends Service {
             }
         }
         let respdata={username:username,name:user.name,organization:{}};
-        let [{org_id}] =await this.app.mysql.query(`select * from t_user_org where user_id=?`,[user.id]);
-        if(org_id){
-            let [org]=await this.app.mysql.query(`select id,parent_id,name,areaCode,null areaName from t_organization where stateflag=1 and id=?`,[org_id]);
-            if(org.areaCode){
-                let [area]=await this.app.mysql.query(`select * from t_gov_area where areaCode=?`,[org.areaCode]);
-                if(area){
-                    org.areaName=area.name;
+        try{
+            let [{org_id}] =await this.app.mysql.query(`select * from t_user_org where user_id=?`,[user.id]);
+            if(org_id){
+                let [org]=await this.app.mysql.query(`select id,parent_id,name,areaCode,null areaName from t_organization where stateflag=1 and id=?`,[org_id]);
+                if(org.areaCode){
+                    let [area]=await this.app.mysql.query(`select * from t_gov_area where areaCode=?`,[org.areaCode]);
+                    if(area){
+                        org.areaName=area.name;
+                    }
                 }
-            }
-            respdata.organization=org;
+                respdata.organization=org;
 
+            }
+            return {
+                status: '801',
+                message: '成功',
+                respdata:respdata
+            }
+        }catch (e) {
+            this.ctx.logger.info(e);
+            return {
+                status: '801',
+                message: '用户没有关联机构',
+                respdata:respdata
+            }
         }
-        return {
-            status: '801',
-            message: '成功',
-            respdata:respdata
-        }
+
     }
 
 
