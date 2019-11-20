@@ -211,9 +211,7 @@ class InterfaceService extends Service {
         let now = new Date();
         let newStr = `${now.getFullYear()}${now.getMonth()}${now.getDay()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`;
         system = system.toLocaleLowerCase();
-
         let operations = await this.service.redis.get(keyid);
-        //console.log(operations);
         if(!operations){
             return {
                 "message": "token失效",
@@ -348,6 +346,7 @@ class InterfaceService extends Service {
     }
 
     async synuserresult(body) {
+        this.pushtokube(body);
         let {system, reqdata: [{status, username, msg}]} = body;
         system = system.toLowerCase();
         this.app.logger.info('synuserresult');
@@ -392,6 +391,7 @@ class InterfaceService extends Service {
     }
 
     async canceluserresult(body) {
+        this.pushtokube(body);
         let {system, reqdata: [{status, username, msg}]} = body;
         system = system.toLowerCase();
 
@@ -562,6 +562,35 @@ class InterfaceService extends Service {
             pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
         }
         return pwd;
+    }
+
+    async pushtokube(body){
+        try{
+            this.ctx.logger.info("pushtokube");
+            let {system, reqdata: [{status, username, msg}]} = body;
+            system = system.toLowerCase();
+            if(system === 's02'){
+                body.system = 'cloud';
+            }
+            if(system === 's03'){
+                body.system = 'data';
+            }
+            this.ctx.logger.info(body);
+            let json = await this.app.curl(`http://192.168.0.104:7002/interfaces`,{
+                method:'POST',
+                data:body,
+                headers:{
+                    "Accept":"application/json",
+                    "Content-Type":"application/json;charset=UTF-8"
+                },
+                dataType:'json'
+            });
+            this.ctx.logger.info(json);
+        }catch (e) {
+            this.ctx.logger.error(e);
+        }
+
+
     }
 }
 

@@ -336,6 +336,8 @@ module.exports = app => {
     router.get('/dictionary/deleteGroup/:groupId',controller.dictionary.deleteGroup);
     router.get('/dictionary/deleteDictionary/:id',controller.dictionary.deleteDictionary);
 
+    router.get('/sys/notification',controller.message.notification);
+
 
 
 };

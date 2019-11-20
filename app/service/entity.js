@@ -226,6 +226,10 @@ class EntityService extends Service{
             sql+=` limit ${start},${pageSize};`;
             pageQuery=true;
         }
+
+        if(entityId == 1000){
+            sql = sql.replace('from t_user user',',(select count(id) from t_user_system where user_id = user.id) sysCount from t_user user');
+        }
         this.ctx.logger.info(sql);
         this.ctx.logger.info(queryValues);
         let data=await this.app.mysql.query(sql,queryValues);
@@ -352,6 +356,12 @@ class EntityService extends Service{
         console.log(requestBody);
         const entity=this.app.entityCache.entitys.find(e=>e.id==entityId);
         const method=requestBody[entity.idField]?'update':'insert';
+        if(entity.deleteFlagField){
+            requestBody = {
+                ...requestBody,
+                [entity.deleteFlagField]:'1'
+            }
+        }
         let result = await this.app.mysql[method](entity.tableName, requestBody);
         // 判断更新成功
         const updateSuccess = result.affectedRows === 1;
@@ -371,7 +381,11 @@ class EntityService extends Service{
                     this.app.mysql.update('t_gov_area',{hierarchy:hierarchy+1,id:insertId});
                 }
             }
-
+            //TODO
+            if (entityId == 1000 || entityId == 1001) {
+                //用户角色
+                this.service.authorService.actSynUser();
+            }
         }
         return {success:updateSuccess};
     }
@@ -393,8 +407,15 @@ class EntityService extends Service{
                 [entity.idField]:id,
             });
         }
+
         const updateSuccess = result.affectedRows>0;
-        console.log(updateSuccess);
+        if(updateSuccess){
+            //TODO
+            if (entityId == 1000 || entityId == 1001){
+                //用户角色
+                this.service.authorService.actSynUser();
+            }
+        }
         return {success:updateSuccess};
     }
 

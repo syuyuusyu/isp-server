@@ -100,6 +100,10 @@ class MessageController extends Controller{
         this.ctx.body={success:updateSuccess};
     }
 
+    async notification(){
+        this.ctx.body =  await this.app.mysql.query(`select * from t_notification where delete_flage ='1'`);
+    }
+
 }
 
 module.exports= MessageController;

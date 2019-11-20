@@ -38,25 +38,6 @@ module.exports = app => {
         //await ctx.service.organization.delete();
 
 
-
-        // let result = await app.curl(`https://cloud.yndk.cn/api/auth/isp/syncUser`, {
-        //     method: 'POST',
-        //     data: {
-        //         username: 'admin',
-        //         name: 'xxx',
-        //         phone: '1212121212',
-        //         email: '',
-        //     },
-        //     headers: {
-        //         "Accept": "application/json",
-        //         "Content-Type": "application/json;charset=UTF-8"
-        //     },
-        //     //rejectUnauthorized: false,
-        //     dataType:'json'
-        // });
-        // console.log(result);
-
-
     });
 
     app.once('server', async server => {
@@ -82,7 +63,6 @@ function careateTree(array) {
             }
         });
         if(leafArray.length>0 && leafArray.findIndex(_=>_['PID']===null)===-1){
-            console.log(leafArray);
             leafArray.forEach(_=>arr.remove(_));
             leafArray.forEach(_=>{
                 for(let i=0;i<arr.length;i++){
@@ -97,7 +77,7 @@ function careateTree(array) {
             _tree(arr);
         }
     }
-    const obj=array.respdata;
+    const obj=array;
     _tree(obj);
     return obj;
 }
