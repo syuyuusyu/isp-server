@@ -42,7 +42,7 @@
     "start": "egg-scripts start --daemon --title=egg-server-isp --env=production",
     "start-https": "egg-scripts start --env=production --port=7001 --https.key=/home/webapp/yndk.key --https.cert=/home/webapp/yndk.crt --daemon --title=egg-server-isp",
     "stop": "egg-scripts stop --title=egg-server-isp",
-    "dev": "egg-bin dev --port=7001 --daemon --title=egg-server-isp",
+    "dev": "egg-bin dev --port=7001  --daemon --title=egg-server-isp",
     "debug": "egg-bin debug",
     "test": "egg-bin test",
     "cov": "egg-bin cov",

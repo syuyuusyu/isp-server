@@ -59,12 +59,23 @@ module.exports = appInfo => {
     //     // 是否加载到 agent 上，默认关闭
     //     agent: false,
     // };
+    // config.mysql = {
+    //     client: {
+    //         host: '127.0.0.1',
+    //         port: '3306',
+    //         user: 'root',
+    //         password: '1234',
+    //         database: 'isp',
+    //     },
+    //     app: true,
+    //     agent: false,
+    // };
     config.mysql = {
         client: {
-            host: '127.0.0.1',
+            host: '192.168.1.11',
             port: '3306',
             user: 'root',
-            password: '1234',
+            password: '1q2w3e4r',
             database: 'isp',
         },
         app: true,

@@ -346,7 +346,6 @@ class InterfaceService extends Service {
     }
 
     async synuserresult(body) {
-        this.pushtokube(body);
         let {system, reqdata: [{status, username, msg}]} = body;
         system = system.toLowerCase();
         this.app.logger.info('synuserresult');
@@ -391,7 +390,6 @@ class InterfaceService extends Service {
     }
 
     async canceluserresult(body) {
-        this.pushtokube(body);
         let {system, reqdata: [{status, username, msg}]} = body;
         system = system.toLowerCase();
 

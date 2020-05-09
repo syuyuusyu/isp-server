@@ -44,6 +44,12 @@ class SystemController extends Controller{
     async save() {
         console.log(this.ctx.request.body);
         this.ctx.body = { success: await this.ctx.service.saveOrDelete.save('t_system',this.ctx.request.body)};
+        const { code, accessType,name} = this.ctx.request.body;
+        let content = await this.app.mysql.query('select * from t_role where code=?', ['acc-'+code]);
+        console.log(accessType == 0)
+        if (accessType == 0 && content.length===0){
+            this.ctx.service.saveOrDelete.save('t_role', { code:`acc-${code}`,name:`${name}直接访问权限` });
+        }
         this.ctx.service.authorService.invokePromiss();
     }
 

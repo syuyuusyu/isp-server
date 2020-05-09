@@ -16,34 +16,41 @@ module.exports = appInfo => {
         'swiftToken',
         'cloudToken',
         'bigDataToken',
-        'supmapToken'
+        'supmapToken',
+        'aptToken',
+        'cloudTokenNew'
     ];
 
-    config.author={
-        ignore:/\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister|^\/activiti|^\/map$|^\/doNothing$|^\/screen/,
+    config.author = {
+        ignore: /\/test|\/login|\/index|\/static|^\/invoke|^\/interfaces|^\/userRegister|^\/activiti|^\/map$|^\/doNothing$|^\/screen/,
     };
 
     config.swiftToken = {
         match: /\/swift|\/invoke\/self_monitor/,
     };
 
-    config.cloudToken={
-        match:  /\/invoke\/cloud|\/s02Url\/getS02Url/
+    config.cloudToken = {
+        match: /\/invoke\/cloud|\/s02Url\/getS02Url/
     };
 
-    config.bigDataToken={
-        match:  /\/invoke\/data/
+    config.bigDataToken = {
+        match: /\/invoke\/data/
     };
 
-    config.supmapToken={
-        match:  /\/invoke\/map/
+    config.supmapToken = {
+        match: /\/invoke\/map/
     };
 
-
+    config.aptToken = {
+        match: /\invoke\/apt/
+    }
+    config.cloudTokenNew = {
+        match: /\invoke\/newcloud/
+    }
 
     config.multipart = {
         //fileExtensions: ['.jar'],
-        whitelist:fileName=>true,
+        whitelist: fileName => true,
         fileSize: '102400mb',
     };
 
@@ -101,6 +108,7 @@ module.exports = appInfo => {
             'http://59.216.201.52:7001',
             'http://59.216.201.52:3000',
             'http://59.216.201.52',
+            'http://bdc.yndk.cn'
         ]
     };
 
@@ -109,15 +117,15 @@ module.exports = appInfo => {
         credentials: true
     };
 
-    config.self={
-        keystoneIp:'10.10.10.1:5000',
-        swiftBaseUrl :'http://10.10.10.1:8080/v1/AUTH_76feacc2ae3c45f9b280e46dd96ff2ce/',
-        activitiIp:'http://10.10.50.10:5002',
-        rabbitmqUrl:'amqp://admin:123456@10.10.50.10:5672',
+    config.self = {
+        keystoneIp: '10.10.10.1:5000',
+        swiftBaseUrl: 'http://10.10.10.1:8080/v1/AUTH_76feacc2ae3c45f9b280e46dd96ff2ce/',
+        activitiIp: 'http://10.10.50.10:5002',
+        rabbitmqUrl: 'amqp://admin:123456@10.10.50.10:5672',
         queueName: 'activitiQueue'
     };
 
-    config.discription='production';
+    config.discription = 'production';
 
     return config;
 };

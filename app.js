@@ -18,22 +18,19 @@ module.exports = app => {
         app.logger.info(app.config.discription);
         app.secret = 'n7d3t7x7';
 
-        const old=app.curl;
-        app.curl=(url,options)=>{
+        const old = app.curl;
+        app.curl = (url, options) => {
             return new Promise(function (resolve, reject) {
-                resolve(old.apply(app,[url,{...options,rejectUnauthorized : false}]))
-            } )
+                resolve(old.apply(app, [url, { ...options, rejectUnauthorized: false }]))
+            })
         };
-
 
         const ctx = app.createAnonymousContext();
 
-
-
         // 同步集成用户角色到流程引擎
         //ctx.service.authorService.actSynUser();
-        app.mysql.modify = false;
 
+        app.mysql.modify = false;
         //ctx.service.organization.createGovOrg();
         //await ctx.service.organization.delete();
 
@@ -56,19 +53,19 @@ module.exports = app => {
 
 function careateTree(array) {
     function _tree(arr) {
-        const leafArray=[];
-        arr.forEach(_=>{
-            if(arr.filter(a=>a['PID']===_['ID']).length===0){
+        const leafArray = [];
+        arr.forEach(_ => {
+            if (arr.filter(a => a['PID'] === _['ID']).length === 0) {
                 leafArray.push(_);
             }
         });
-        if(leafArray.length>0 && leafArray.findIndex(_=>_['PID']===null)===-1){
-            leafArray.forEach(_=>arr.remove(_));
-            leafArray.forEach(_=>{
-                for(let i=0;i<arr.length;i++){
-                    if(arr[i]['ID']===_['PID']){
-                        if(!arr[i].children){
-                            arr[i].children=[];
+        if (leafArray.length > 0 && leafArray.findIndex(_ => _['PID'] === null) === -1) {
+            leafArray.forEach(_ => arr.remove(_));
+            leafArray.forEach(_ => {
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i]['ID'] === _['PID']) {
+                        if (!arr[i].children) {
+                            arr[i].children = [];
                         }
                         arr[i].children.push(_);
                     }
@@ -77,7 +74,7 @@ function careateTree(array) {
             _tree(arr);
         }
     }
-    const obj=array;
+    const obj = array;
     _tree(obj);
     return obj;
 }

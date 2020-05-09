@@ -3,8 +3,6 @@ const Service = require('egg').Service;
 class SaveOrDelete extends Service {
 
     async save(tableName, entity) {
-        console.log('----save---');
-        console.log(entity);
         const authorToken = this.ctx.request.header['access-token'];
         let {user} = await this.ctx.service.authorService.getByCode(authorToken);
         if(!authorToken || !user){

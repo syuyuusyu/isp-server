@@ -17,6 +17,7 @@ class LoginService extends Service{
         const loginPwDB=result[0].passwd;//库中用户的密码
         const hmac = crypto.createHmac('sha256', salt);
         const loginPwHmac=hmac.update(user.passwd).digest('hex');//加密后的前端输入的密码
+        //const loginPwHmac=hmac.update(user.password).digest('hex');//加密后的前端输入的密码
         const comparePw=(loginPwDB===loginPwHmac);
         if(userExist===1&&comparePw===false){
           return '3'

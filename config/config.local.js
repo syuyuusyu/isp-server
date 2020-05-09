@@ -17,7 +17,9 @@ module.exports = appInfo => {
         'swiftToken',
         'cloudToken',
         'bigDataToken',
-        'supmapToken'
+        'supmapToken',
+        'aptToken',
+        'cloudTokenNew'
     ];
 
     config.author = {
@@ -35,9 +37,15 @@ module.exports = appInfo => {
     config.bigDataToken = {
         match: /\/invoke\/data/
     };
-    config.supmapToken={
-        match:  /\/invoke\/map/
+    config.supmapToken = {
+        match: /\/invoke\/map/
     };
+    config.aptToken = {
+        match: /\invoke\/apt/
+    }
+    config.cloudTokenNew = {
+        match: /\invoke\/newcloud/
+    }
 
 
     config.multipart = {
@@ -47,7 +55,7 @@ module.exports = appInfo => {
     };
 
 
-   config.mysql = {
+    config.mysql = {
         client: {
             // host
             host: '10.10.12.1',
@@ -84,90 +92,35 @@ module.exports = appInfo => {
     //     // 是否加载到 agent 上，默认关闭
     //     agent: false,
     // };
+    // config.mysql = {
+    //     client: {
+    //         host: '192.168.1.11',
+    //         port: '3306',
+    //         user: 'root',
+    //         password: '1q2w3e4r',
+    //         database: 'isp',
+    //     },
+    //     app: true,
+    //     agent: false,
+    // };
 
+    // config.redis = {
+    //     client: {
+    //         port: 6379,
+    //         host: '127.0.0.1',
+    //         password: '',
+    //         db: 0,
+    //     },
+    // };
     config.redis = {
         client: {
             port: 6379,
-            host: '127.0.0.1',
+            host: '10.10.50.14',
             password: '',
             db: 0,
         },
     };
 
-    // config.redis = {
-    //     client: {
-    //         port: 6379,
-    //         host: '10.10.50.14',
-    //         password: '',
-    //         db: 0,
-    //     },
-    // };
-
-
-    // config.redis = {
-    //     client:{
-    //         nodes:[
-    //             {
-    //                 port: 6381,
-    //                 host: '10.10.50.10',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6382,
-    //                 host: '10.10.50.10',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6383,
-    //                 host: '10.10.50.10',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //
-    //             {
-    //                 port: 6381,
-    //                 host: '10.10.50.14',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6382,
-    //                 host: '10.10.50.14',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6383,
-    //                 host: '10.10.50.14',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //
-    //             {
-    //                 port: 6381,
-    //                 host: '10.10.50.17',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6382,
-    //                 host: '10.10.50.17',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //             {
-    //                 port: 6383,
-    //                 host: '10.10.50.17',
-    //                 password: '',
-    //                 db: 0,
-    //             },
-    //         ],
-    //         cluster:true
-    //     }
-    //
-    // };
 
     config.security = {
         csrf: {
@@ -199,12 +152,22 @@ module.exports = appInfo => {
     config.self = {
         keystoneIp: '10.10.10.1:5000',
         swiftBaseUrl: 'http://10.10.10.1:8080/v1/AUTH_76feacc2ae3c45f9b280e46dd96ff2ce/',
-        //activitiIp:'http://127.0.0.1:5002',
-        activitiIp: 'https://10.10.50.10:5002',
+        activitiIp: 'http://127.0.0.1:5001',
+        //activitiIp: 'https://10.10.50.10:5002',
         //rabbitmqUrl:'amqp://admin:123456@10.10.50.10:5672',
         rabbitmqUrl: 'amqp://guest:guest@127.0.0.1:5672',
         queueName: 'activitiQueue'
     };
+
+    // config.self = {
+    //     keystoneIp: '192.168.1.10:5000',
+    //     swiftBaseUrl: 'http://192.168.1.10:8081/v1/AUTH_5cd6ec64b5504fc481de338c6e7e60fb',
+    //     activitiIp: 'http://127.0.0.1:5001',
+    //     //activitiIp: 'https://10.10.50.10:5002',
+    //     //rabbitmqUrl:'amqp://admin:123456@10.10.50.10:5672',
+    //     rabbitmqUrl: 'amqp://guest:guest@127.0.0.1:5672',
+    //     queueName: 'activitiQueue'
+    // };
 
     config.discription = 'local22';
 

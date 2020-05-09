@@ -1,48 +1,49 @@
-module.exports = (options,app) => {
+module.exports = (options, app) => {
     return async function cloudToken(ctx, next) {
         //ctx.logger.info('cloudToken');
-        const authorToken=ctx.request.header['access-token'];
-        let {user}=await ctx.service.authorService.getByCode(authorToken);
-        let cloudToken=await app.redis.get(user.user_name+'-cloudToken');
-        if(!cloudToken) {
-            const ispToken=ctx.service.interfaces.randomString(8);
-            app.redis.set(ispToken,JSON.stringify(user));
-            const invokeEntitys=await ctx.service.redis.get('invokeEntitys');
-            let [entity] =invokeEntitys.filter(d => d.id === 59);
-            let result = await ctx.service.restful.invoke(entity,{
+        const authorToken = ctx.request.header['access-token'];
+        let { user } = await ctx.service.authorService.getByCode(authorToken);
+        let cloudToken = await app.redis.get(user.user_name + '-cloudToken');
+        if (!cloudToken) {
+            const ispToken = ctx.service.interfaces.randomString(8);
+            app.redis.set(ispToken, JSON.stringify(user));
+            const invokeEntitys = await ctx.service.redis.get('invokeEntitys');
+            let [entity] = invokeEntitys.filter(d => d.id === 59);
+            let result = await ctx.service.restful.invoke(entity, {
                 //ip:app.systemUrl['s02'],
-                ip:await ctx.service.redis.getProperty('systemUrl','s02'),
-                ispToken:ispToken,
+                ip: await ctx.service.redis.getProperty('systemUrl', 's02'),
+                ispToken: ispToken,
             });
             cloudToken = result['cloud_isptoken-1']['result'].token;
-            console.log('cloudToken',cloudToken);
-            app.redis.set(user.user_name+'-cloudToken',cloudToken);
+            console.log('cloudToken', cloudToken);
+            app.redis.set(user.user_name + '-cloudToken', cloudToken);
         }
-        ctx.request.body={
+        console.log(ctx.request.body);
+        ctx.request.body = {
+            ip: await ctx.service.redis.getProperty('systemUrl', 's02'),
+            token: cloudToken,
             ...ctx.request.body,
-            //ip:app.systemUrl['s02'],
-            ip:await ctx.service.redis.getProperty('systemUrl','s02'),
-            token:cloudToken,
+            //ip:app.systemUrl['s02'],       
             //domain:app.systemUrl['s01'],
             //domain:await ctx.service.redis.getProperty('systemUrl','s01')
-            keyid:await ctx.service.redis.get(`keyverify_token_s01`),
+            keyid: await ctx.service.redis.get(`keyverify_token_s01`),
         };
-        if(cloudToken) {
+        if (cloudToken) {
             await next();
             if (ctx.body && ctx.body.code && ctx.body.code === 500) {
                 ctx.logger.info('del cloudToken');
                 app.redis.del(user.user_name + '-cloudToken');
             }
-            if(ctx.body && ctx.body.ok===false ){
+            if (ctx.body && ctx.body.ok === false) {
                 ctx.logger.info('del cloudToken');
                 app.redis.del(user.user_name + '-cloudToken');
             }
-            if(ctx.body && ctx.body.status && ctx.body.status===40101 ){
+            if (ctx.body && ctx.body.status && ctx.body.status === 40101) {
                 ctx.logger.info('del cloudToken');
                 app.redis.del(user.user_name + '-cloudToken');
             }
-        }else{
-            ctx.body={code:500,msg:'获取token失败'}
+        } else {
+            ctx.body = { code: 500, msg: '获取token失败' }
         }
 
     };

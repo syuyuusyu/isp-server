@@ -15,7 +15,8 @@ module.exports = (options,app) => {
         ctx.request.headers['X-Auth-Token']=swiftToken;
         ctx.request.body={
             ...ctx.request.body,
-            token:swiftToken
+            token:swiftToken,
+            swiftBaseUrl: app.config.self.swiftBaseUrl
         };
         await next();
         if(ctx.body && ctx.body.status && ctx.body.status===401){
